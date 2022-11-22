@@ -11,7 +11,7 @@
 # Description:       memcached - Memory caching daemon
 ### END INIT INFO
 
-# Author: Jingu <i@teddysun.com>
+# Author: Jingu <yw@jinguc.com>
  
 PORT=11211
 USER=memcached

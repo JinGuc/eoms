@@ -1,4 +1,4 @@
-# Copyright (C) 2013 - 2022 Jingu <i@teddysun.com>
+# Copyright (C) 2013 - 2022 Jingu <yw@jinguc.com>
 # 
 # This file is part of the LAMP script.
 #

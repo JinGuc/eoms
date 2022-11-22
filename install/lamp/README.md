@@ -120,7 +120,7 @@ chmod 755 *.sh
 ./lamp.sh
 ```
 
-- [Automation install mode](https://www.jinguc.com/autoinstall.html)
+- [Automation install mode](https://www.jinguc.com/oms/autoinstall.html)
 ```bash
 ./lamp.sh -h
 ```
@@ -220,7 +220,7 @@ chmod 755 *.sh
 
 ## Bugs & Issues
 
-Please feel free to report any bugs or issues to us, email to: i@teddysun.com or [open issues](/issues) on Github.
+Please feel free to report any bugs or issues to us, email to: yw@jinguc.com or [open issues](/issues) on Github.
 
 Support(Chinese only): https://www.jinguc.com/support.html
 
