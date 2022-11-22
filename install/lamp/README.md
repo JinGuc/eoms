@@ -226,6 +226,6 @@ Support(Chinese only): https://www.jinguc.com/support.html
 
 ## License
 
-Copyright (C) 2013 - 2022 [Jingu](https://teddysun.com/)
+Copyright (C) 2013 - 2022 [Jingu](https://www.jinguc.com/)
 
 Licensed under the [GPLv3](LICENSE) License.
