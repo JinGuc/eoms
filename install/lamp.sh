@@ -265,6 +265,7 @@ include mysql
 include php
 include www
 include supervisord
+include py-eoms
 include php-modules
 load_config
 rootness
