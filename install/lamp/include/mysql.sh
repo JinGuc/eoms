@@ -38,7 +38,7 @@ mysql_preinstall_settings(){
 
             #set mysql server root password
             echo
-            read -p "mysql server root password (default:Jingu, leave blank for default): " mysql_root_pass
+            read -p "mysql server root password (default:Jingu.com, leave blank for default): " mysql_root_pass
             mysql_root_pass=${mysql_root_pass:=Jingu}
             echo
             echo "mysql server root password: ${mysql_root_pass}"
@@ -54,7 +54,7 @@ mysql_preinstall_settings(){
 
             #set mariadb server root password
             echo
-            read -p "mariadb server root password (default:Jingu, leave blank for default): " mariadb_root_pass
+            read -p "mariadb server root password (default:Jingu.com, leave blank for default): " mariadb_root_pass
             mariadb_root_pass=${mariadb_root_pass:=Jingu}
             echo
             echo "mariadb server root password: $mariadb_root_pass"
