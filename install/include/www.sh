@@ -10,10 +10,10 @@ snmp_preinstall_settings(){
 }
 #Install www
 install_www(){
-name=eoms
-p=Jingu.com
+name="eoms"
+p="Jingu.com"
 password="Jingu_${name}"
-mysql -uroot -p$p << EOF
+${mysql_location}/bin/mysql -uroot -p$p << EOF
 create database $name character set utf8mb4;
 grant all privileges on $name.* to $name@'localhost' identified by "${password}";
 flush privileges;
@@ -27,8 +27,8 @@ fi
 cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
 cd ${cur_dir}
 cd ../
-cur_dir=$(pwd)
-cp -rp ${cur_dir}/${web_dir} ${web_root_dir}/
+cur_dir_=$(pwd)
+cp -rp ${cur_dir_}/${web_dir} ${web_root_dir}/
 #导入数据库文件
 DB_USERNAME=${name}
 DB_PASSWORD=${password}

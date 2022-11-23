@@ -10,8 +10,8 @@ snmp_preinstall_settings(){
 }
 #Install snmp
 install_snmp(){
-    PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
-    export PATH
+    #PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
+    #export PATH
     if check_sys packageManager apt; then
       sudo apt-get install snmpd snmp
     elif check_sys packageManager yum; then
@@ -27,11 +27,11 @@ install_snmp(){
     #make
     #make install
     #mkdir /usr/local/snmp/etc
-    mkdir /etc/snmpd/
+    mkdir /etc/snmpd
     cp -rp ${cur_dir}/conf/snmpd.conf /etc/snmpd/
     cp -rp ${cur_dir}/init.d/snmp /opt/
     #echo "PATH=/usr/local/snmp/bin:/usr/local/snmp/sbin:$PATH" >> /etc/profile
-    source /etc/profile
+    #source /etc/profile
     net-snmp-config --create-snmpv3-user -ro -A Jg123456jk -a MD5 -X jg123456jk -x DES snmpv3
     if check_sys packageManager apt; then
         sudo systemctl enable snmpd.service

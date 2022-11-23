@@ -182,6 +182,18 @@ process(){
             [ -n "$(echo ${db_manage_modules} | grep -w phpmyadmin)" ] && phpmyadmin_install="${phpmyadmin_filename}"
             [ -n "$(echo ${db_manage_modules} | grep -w adminer)" ] && phpmyadmin_install="${phpmyadmin_install} ${adminer_filename}"
             ;;
+        --supervisord_option)
+        supervisord="$2"
+        ;;
+        --www_option)
+        www="$2"
+        ;;
+        --snmp_option)
+        sump="$2"
+        ;;
+        --py-eoms_option)
+        py-eoms="$2"
+        ;;
         --kodexplorer_option)
             kodexplorer_option="$2"
             if ! is_digit ${kodexplorer_option}; then
