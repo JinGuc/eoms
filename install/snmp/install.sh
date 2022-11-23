@@ -21,5 +21,6 @@ echo "PATH=/usr/local/snmp/bin:/usr/local/snmp/sbin:$PATH" >> /etc/profile
 source /etc/profile
 net-snmp-config --create-snmpv3-user -ro -A Jg123456jk -a MD5 -X jg123456jk -x DES snmpv3
 systemctl restart snmpd
+iptables -A INPUT -p udp --dport 161 -j ACCEPT
 # cp -rp ${cur_dir}/conf/snmpd.ini /etc/supervisord.d
 # systemctl restart supervisord
