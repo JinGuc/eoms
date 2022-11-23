@@ -891,6 +891,7 @@ install_finally(){
     else
         echo "PHP Additional Extensions: do_not_install"
     fi
+    echo "SNMP: 5.7.3"
     echo
     echo "KodExplorer: ${kodexplorer}"
     [ "${kodexplorer}" != "do_not_install" ] && echo "KodExplorer Location: ${web_root_dir}/kod"
