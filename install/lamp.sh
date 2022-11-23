@@ -241,7 +241,10 @@ set_parameters(){
         mariadb_data_location=${db_data_path:=${mariadb_location}/data}
         mariadb_root_pass=${db_root_pwd:=Jingu.com}
     fi
-
+    [ -z "${supervisord_option}" ] && supervisord="do_not_install"
+    [ -z "${www_option}" ] && www="do_not_install"
+    [ -z "${snmp_option}" ] && snmp="do_not_install"
+    [ -z "${py-eoms_option}" ] && py-eoms="do_not_install"
     [ -z "${db_manage_modules}" ] && phpmyadmin_install="do_not_install"
     [ "${php}" == "do_not_install" ] && phpmyadmin_install="do_not_install"
     [ -z "${kodexplorer_option}" ] && kodexplorer="do_not_install"
