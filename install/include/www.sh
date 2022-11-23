@@ -24,7 +24,9 @@ echo "数据库创建成功"
 else
 echo "数据库创建失败"
 fi
-cd ../../
+cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
+cd ${cur_dir}
+cd ../
 cur_dir=$(pwd)
 cp -rp ${cur_dir}/${web_dir} ${web_root_dir}/
 #导入数据库文件

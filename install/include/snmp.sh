@@ -12,7 +12,6 @@ snmp_preinstall_settings(){
 install_snmp(){
     PATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin
     export PATH
-    cur_dir=$(pwd)
     if check_sys packageManager apt; then
       sudo apt-get install snmpd snmp
     elif check_sys packageManager yum; then
@@ -29,10 +28,8 @@ install_snmp(){
     #make install
     #mkdir /usr/local/snmp/etc
     mkdir /etc/snmpd/
-    cd ../
-    cur_dir=$(pwd)
-    cp -rp ${cur_dir}/snmp/conf/snmpd.conf /etc/snmpd/
-    cp -rp ${cur_dir}/snmp/init.d/snmp /opt/
+    cp -rp ${cur_dir}/conf/snmpd.conf /etc/snmpd/
+    cp -rp ${cur_dir}/init.d/snmp /opt/
     #echo "PATH=/usr/local/snmp/bin:/usr/local/snmp/sbin:$PATH" >> /etc/profile
     source /etc/profile
     net-snmp-config --create-snmpv3-user -ro -A Jg123456jk -a MD5 -X jg123456jk -x DES snmpv3
@@ -45,6 +42,6 @@ install_snmp(){
     fi
     #/usr/local/snmp/sbin/snmpd -c /usr/local/snmp/share/snmp/snmpd.conf
     iptables -A INPUT -p udp --dport 161 -j ACCEPT
-    cp -rp ${cur_dir}/snmp/conf/snmpd.ini /etc/supervisord.d
+    cp -rp ${cur_dir}/conf/snmpd.ini /etc/supervisord.d
     systemctl restart supervisord
 }
