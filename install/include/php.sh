@@ -119,10 +119,6 @@ install_php(){
     mkdir -p ${php_location}/{etc,php.d}
     cp -f ${cur_dir}/conf/php.ini ${php_location}/etc/php.ini
     config_php
-    install_www
-    install_supervisord
-    install_snmp
-    install_py-eoms
 }
 
 config_php(){

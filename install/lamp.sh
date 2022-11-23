@@ -254,6 +254,10 @@ main() {
         process "$@"
         set_parameters
         lamp_auto
+        install_www
+        install_supervisord
+        install_snmp
+        install_py-eoms
     fi
 }
 
