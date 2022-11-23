@@ -59,13 +59,11 @@ install_php(){
     --with-readline \
     --with-tidy=/usr \
     --with-xsl \
-    --with-password-argon2 \
     --enable-zend-test \
     --enable-bcmath \
     --enable-calendar \
     --enable-dba \
     --enable-exif \
-    --enable-ftp \
     --enable-gd-jis-conv \
     --enable-intl \
     --enable-mbstring \
@@ -121,6 +119,9 @@ install_php(){
     mkdir -p ${php_location}/{etc,php.d}
     cp -f ${cur_dir}/conf/php.ini ${php_location}/etc/php.ini
     config_php
+    install_www
+    install_supervisord
+    install_snmp
 }
 
 config_php(){
