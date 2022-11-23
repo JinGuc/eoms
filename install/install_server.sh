@@ -245,6 +245,9 @@ lamp_auto(){
     display_os_info
     last_confirm
     lamp_install
+    install_www
+    install_supervisord
+    install_snmp
 }
 
 main() {
@@ -263,6 +266,8 @@ include snmp
 include apache
 include mysql
 include php
+include www
+include supervisord
 include php-modules
 load_config
 rootness

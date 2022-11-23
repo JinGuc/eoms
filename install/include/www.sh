@@ -5,6 +5,11 @@
 # Github:   
 
 #Pre-installation www
+snmp_preinstall_settings(){
+    
+}
+#Install www
+install_www(){
 name=eoms
 p=Jingu.com
 password="Jingu_${name}"
@@ -39,7 +44,7 @@ sed -i 's/^DB_USERNAME=root/DB_USERNAME=${name}/' ${web_root_dir}/.env
 #以上文件执行完成后就可以为网站添加计划任务了，
 echo "
 #------------------eoms crontab start------------------
-* * * * *   cd /home/data/www && /usr/local/php/bin/php artisan schedule:run > /dev/null
+* * * * *   cd ${web_root_dir} && /usr/local/php/bin/php artisan schedule:run > /dev/null
 #------------------eoms crontab end------------------
 "  >> /etc/crontab
-
+}

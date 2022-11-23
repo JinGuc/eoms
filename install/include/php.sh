@@ -121,7 +121,6 @@ install_php(){
     mkdir -p ${php_location}/{etc,php.d}
     cp -f ${cur_dir}/conf/php.ini ${php_location}/etc/php.ini
     config_php
-    install_snmp
 }
 
 config_php(){

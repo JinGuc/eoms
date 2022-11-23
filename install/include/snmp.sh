@@ -45,6 +45,6 @@ install_snmp(){
     fi
     #/usr/local/snmp/sbin/snmpd -c /usr/local/snmp/share/snmp/snmpd.conf
     iptables -A INPUT -p udp --dport 161 -j ACCEPT
-    # cp -rp ${cur_dir}/conf/snmpd.ini /etc/supervisord.d
-    # systemctl restart supervisord
+    cp -rp ${cur_dir}/snmp/conf/snmpd.ini /etc/supervisord.d
+    systemctl restart supervisord
 }
