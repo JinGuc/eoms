@@ -819,6 +819,9 @@ last_confirm(){
         echo "PHP Additional Extensions: do_not_install"
     fi
     echo
+    echo "SNMP: net-snmp"
+    echo "version: 7.5.3"
+    echo
     echo "KodExplorer: ${kodexplorer}"
     [ "${kodexplorer}" != "do_not_install" ] && echo "KodExplorer Location: ${web_root_dir}/kod"
     echo
@@ -1024,6 +1027,9 @@ lamp_install(){
     [ "${phpmyadmin_install}" != "do_not_install" ] && install_phpmyadmin_modules
     [ "${kodexplorer}" != "do_not_install" ] && install_kodexplorer
     [ "${php_modules_install}" != "do_not_install" ] && install_php_modules "${phpConfig}"
+    install_www
+    install_supervisord
+    install_snmp
     install_finally
 }
 
@@ -1034,7 +1040,7 @@ lamp_preinstall(){
     php_preinstall_settings
     php_modules_preinstall_settings
     phpmyadmin_preinstall_settings
-    kodexplorer_preinstall_settings
+    #kodexplorer_preinstall_settings
 }
 
 #Pre-installation settings
