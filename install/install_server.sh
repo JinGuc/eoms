@@ -224,10 +224,10 @@ set_parameters(){
     [ -z "${db_option}" ] && mysql="do_not_install"
     if echo "${mysql}" | grep -qi "mysql"; then
         mysql_data_location=${db_data_path:=${mysql_location}/data}
-        mysql_root_pass=${db_root_pwd:=lamp.sh}
+        mysql_root_pass=${db_root_pwd:=Jingu.com}
     elif echo "${mysql}" | grep -qi "mariadb"; then
         mariadb_data_location=${db_data_path:=${mariadb_location}/data}
-        mariadb_root_pass=${db_root_pwd:=lamp.sh}
+        mariadb_root_pass=${db_root_pwd:=Jingu.com}
     fi
 
     [ -z "${db_manage_modules}" ] && phpmyadmin_install="do_not_install"
