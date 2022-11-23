@@ -6,7 +6,7 @@
 
 #Pre-installation py-eoms
 py-eoms_preinstall_settings(){
-    
+    echo ""
 }
 #Install py-eoms
 install_py-eoms(){

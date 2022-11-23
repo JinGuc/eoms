@@ -6,7 +6,7 @@
 
 #Pre-installation www
 snmp_preinstall_settings(){
-    
+    echo ""
 }
 #Install www
 install_www(){

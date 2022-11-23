@@ -5,8 +5,7 @@
 # Github:   
 
 #Pre-installation snmp
-snmp_preinstall_settings(){
-    
+snmp_preinstall_settings(){   
 }
 #Install snmp
 install_snmp(){

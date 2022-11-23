@@ -6,7 +6,7 @@
 
 #Pre-installation supervisord
 supervisord_preinstall_settings(){
-    
+    echo ""
 }
 #Install snmp
 install_supervisord(){
