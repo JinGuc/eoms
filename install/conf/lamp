@@ -103,7 +103,7 @@ check_email(){
 vhost_add(){
     set_apache_allow_syntax
     while true; do
-        read -p "[$(date)] Please enter server names (for example: lamp.sh www.lamp.sh): " server_names
+        read -p "[$(date)] Please enter server names (for example: jingu.com www.jingu.com): " server_names
         if [ -z "${server_names}" ]; then
             _info "$(_red "Error: server name can not be empty")"
         else
@@ -441,7 +441,7 @@ vhost_list(){
 }
 
 vhost_del(){
-    read -p "[$(date)] Please enter a domain you want to delete it (for example: www.lamp.sh): " domain
+    read -p "[$(date)] Please enter a domain you want to delete it (for example: www.jingu.com): " domain
     [ -z "${domain}" ] && _error "Error: domain can not be empty"
     if ! apache_vhost_is_exist "${domain}"; then
         _error "Error: virtual host [${domain}] not found"

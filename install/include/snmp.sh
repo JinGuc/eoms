@@ -29,10 +29,10 @@ install_snmp(){
     #make install
     #mkdir /usr/local/snmp/etc
     mkdir /etc/snmpd/
-    cd ../../
+    cd ../
     cur_dir=$(pwd)
-    cp -rp ${cur_dir}/conf/snmpd.conf /etc/snmpd/
-    cp -rp ${cur_dir}/init.d/snmp /opt/
+    cp -rp ${cur_dir}/snmp/conf/snmpd.conf /etc/snmpd/
+    cp -rp ${cur_dir}/snmp/init.d/snmp /opt/
     #echo "PATH=/usr/local/snmp/bin:/usr/local/snmp/sbin:$PATH" >> /etc/profile
     source /etc/profile
     net-snmp-config --create-snmpv3-user -ro -A Jg123456jk -a MD5 -X jg123456jk -x DES snmpv3

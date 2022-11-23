@@ -7,9 +7,10 @@
 #Pre-installation www
 name=eoms
 p=Jingu.com
+password="Jingu_${name}"
 mysql -uroot -p$p << EOF
 create database $name character set utf8;
-grant all privileges on $name.* to $name@'localhost' identified by "Jingu_${name}";
+grant all privileges on $name.* to $name@'localhost' identified by "${password}";
 flush privileges;
 EOF
  
@@ -20,10 +21,10 @@ echo "数据库创建失败"
 fi
 cd ../../
 cur_dir=$(pwd)
-cp -rp ${cur_dir}/www ${web_root_dir}
+cp -rp ${cur_dir}/${web_dir} ${web_root_dir}
 #导入数据库文件
-DB_USERNAME=root
-DB_PASSWORD="Jg_123456!@#"
+DB_USERNAME=${name}
+DB_PASSWORD=${password}
 cd ${web_root_dir}
 chmod -R 777 storage/
 chmod -R 777 bootstrap/cache/

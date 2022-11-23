@@ -122,8 +122,8 @@ EOF
 Listen 8013
 <VirtualHost _default_:8013>
 ServerName localhost:8013
-DocumentRoot ${web_root_dir}
-<Directory ${web_root_dir}>
+DocumentRoot ${web_root_dir}/public
+<Directory ${web_root_dir}/public>
     SetOutputFilter DEFLATE
     Options FollowSymLinks
     AllowOverride All

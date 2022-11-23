@@ -25,7 +25,7 @@ depends_prefix=/usr/local
 
 #Web root location
 web_root_dir=/home/data/www
-
+web_dir=www
 #Download root URL
 download_root_url="https://www.jinguc.com/download"
 

@@ -61,7 +61,7 @@ Options:
 --apache_modules [mod name]     Apache modules: mod_wsgi, mod_security, mod_jk
 --db_option [1-8]               Database version
 --db_data_path [location]       Database Data Location. for example: /data/db
---db_root_pwd [password]        Database root password. for example: lamp.sh
+--db_root_pwd [password]        Database root password. for example: Jingu.com
 --php_option [1-4]              PHP version
 --php_extensions [ext name]     PHP extensions:
                                 apcu, ioncube, pdflib, imagick, xdebug

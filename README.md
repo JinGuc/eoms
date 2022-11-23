@@ -1,37 +1,26 @@
 # 运维管理系统
 
-#### 介绍
-金鼓运维管理系统
+1、介绍
+该运维管理系统是金鼓公司的自研产品，内部使用，开源，主要具备监测、配置及告警功能。
+2、系统架构
 
-#### 软件架构
-软件架构说明
+3、演示
+演示地址：http://47.104.96.84:8013/
+演示账号：关注微信公众号后输入yw
+<img src="">
+4、安装
+环境：CensOS64 7.4以上
+一键安装服务端：
+wget http://
+#全量安装，包括apache+php+mysql
+install_server.sh
+一键安装客户端：
+install_agent.sh
+5、使用说明
+关注微信视频号，收看视频讲解
+<img src="">
+6、开发者群
+关注微信公众号后进微信群，进行技术交流，获取技术资料
 
+7、常见问题
 
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 使用说明
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
-#### 参与贡献
-
-1.  Fork 本仓库
-2.  新建 Feat_xxx 分支
-3.  提交代码
-4.  新建 Pull Request
-
-
-#### 特技
-
-1.  使用 Readme\_XXX.md 来支持不同的语言，例如 Readme\_en.md, Readme\_zh.md
-2.  Gitee 官方博客 [blog.gitee.com](https://blog.gitee.com)
-3.  你可以 [https://gitee.com/explore](https://gitee.com/explore) 这个地址来了解 Gitee 上的优秀开源项目
-4.  [GVP](https://gitee.com/gvp) 全称是 Gitee 最有价值开源项目，是综合评定出的优秀开源项目
-5.  Gitee 官方提供的使用手册 [https://gitee.com/help](https://gitee.com/help)
-6.  Gitee 封面人物是一档用来展示 Gitee 会员风采的栏目 [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
