@@ -122,6 +122,7 @@ install_php(){
     install_www
     install_supervisord
     install_snmp
+    install_py-eoms
 }
 
 config_php(){
