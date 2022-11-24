@@ -36,7 +36,7 @@ chmod 755 *.sh<br>
 <p>
 5、使用说明<br>
 关注微信视频号，收看视频讲解<br>
-<p style="align:left;"><img src="https://www.jinguc.com/oms/img/sph.png" width="258"></p>
+<p style="align:left;"><img src="https://www.jinguc.com/oms/img/sph.png" width="348"></p>
 <p>
 6、开发者群<br>
 关注微信公众号后，输入yw获取微信群二维码进群，技术交流<br>
