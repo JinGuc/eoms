@@ -79,4 +79,14 @@ fi
 let memUsedPercent=0
 phymem=`free | grep "Mem:" |awk '{print $2}'`
 memUsedPercent=`awk 'BEGIN{printf"%.2f\n",('$phymemused'/'$phymem')*100}'`
+FIND_STR="running"
+if [[ $status == *$FIND_STR* ]]
+then
+    f=1
+else
+    f=0
+fi
+if [ $f -eq 0 ]  && [ $memUsedPercent -gt 0 ];then
+   status="running"
+fi
 echo "{'status':'$status','memoryused':'$memoryused','memUsedPercent':'$memUsedPercent','cpuused':'$cpuused','starttime':'$lstart'}"
