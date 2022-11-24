@@ -51,12 +51,14 @@ uninstall_lamp(){
     _info "Success"
     echo 
     _info "uninstalling SNMP"
+    systemctl stop snmpd
     yum -y remove perl-ExtUtils-MakeMaker package libperl-dev bc sysstat net-snmp net-snmp-utils
     rm -rf /opt/snmp
     rm -rf /etc/snmp
     _info "Success"
     echo
     _info "uninstalling Supervisord"
+    systemctl stop supervisord
     yum -y remove supervisor
     rm -rf /etc/supervisord.d
     _info "Success"
