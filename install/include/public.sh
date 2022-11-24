@@ -936,7 +936,7 @@ EOF
     fi
     if [ "${mysql}" != "do_not_install" ]; then
         echo "Starting Database..."
-        /etc/init.d/mysqld start &> /dev/null
+        /etc/init.d/mysqld restart &> /dev/null
     fi
     if if_in_array "${php_memcached_filename}" "${php_modules_install}"; then
         echo "Starting Memcached..."

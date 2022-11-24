@@ -10,6 +10,7 @@ echo ""
 }
 #Install www
 install_www(){
+/etc/init.d/mysqld start > /dev/null 2>&1
 dbhost=localhost
 dbname=eoms
 p=Jingu.com
