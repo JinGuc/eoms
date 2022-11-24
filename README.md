@@ -43,4 +43,6 @@ chmod 755 *.sh<br>
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/kfq.png"></p>
 <p>
 7、常见问题<br>
+1）如获取不到主机信息，请检查snmp服务是否正常启动<br>
+
 
