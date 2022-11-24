@@ -28,8 +28,10 @@ install_snmp(){
     #make
     #make install
     #mkdir /usr/local/snmp/etc
-    mkdir /etc/snmpd
-    cp -rp ${cur_dir}/conf/snmpd.conf /etc/snmpd/
+    if [ ! -f "/etc/snmpd" ];then
+      mkdir /etc/snmpd
+    fi
+    cp -rp ${cur_dir}/conf/snmpd.conf /etc/snmp/
     cp -rp ${cur_dir}/init.d/snmp /opt/
     #echo "PATH=/usr/local/snmp/bin:/usr/local/snmp/sbin:$PATH" >> /etc/profile
     #source /etc/profile

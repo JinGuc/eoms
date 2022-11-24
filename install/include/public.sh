@@ -894,6 +894,7 @@ install_finally(){
     else
         echo "PHP Additional Extensions: do_not_install"
     fi
+    echo
     echo "SNMP: 7.5.3"
     #echo
     #echo "KodExplorer: ${kodexplorer}"
