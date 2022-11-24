@@ -49,6 +49,17 @@ uninstall_lamp(){
     _info "uninstalling PHP"
     rm -rf ${php_location} ${php_location}.bak /usr/bin/php /usr/bin/php-config /usr/bin/phpize /usr/bin/php-cgi /etc/php.ini
     _info "Success"
+    echo 
+    _info "uninstalling SNMP"
+    yum -y remove perl-ExtUtils-MakeMaker package libperl-dev bc sysstat net-snmp net-snmp-utils
+    rm -rf /opt/snmp
+    rm -rf /etc/snmp
+    _info "Success"
+    echo
+    _info "uninstalling Supervisord"
+    yum -y remove supervisor
+    rm -rf /etc/supervisord.d
+    _info "Success"
     echo
     _info "uninstalling others software"
     if [ -f /etc/init.d/memcached ] && [ $(ps -ef | grep -v grep | grep -c "memcached") -gt 0 ]; then
@@ -83,7 +94,7 @@ uninstall_lamp(){
     rm -rf ${web_root_dir}/xcache /tmp/{pcov,phpcore}
     _info "Success"
     echo
-    _info "Successfully uninstall LAMP"
+    _info "Successfully uninstall JgOms"
 }
 
 include config
