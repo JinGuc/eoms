@@ -10,6 +10,7 @@ supervisord_preinstall_settings(){
 }
 #Install snmp
 install_supervisord(){
+    yum -y remove supervisor
     yum -y install supervisor
     systemctl enable supervisord
     systemctl start supervisord

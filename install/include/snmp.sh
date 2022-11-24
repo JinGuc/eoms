@@ -5,7 +5,8 @@
 # Github:   
 
 #Pre-installation snmp
-snmp_preinstall_settings(){   
+snmp_preinstall_settings(){
+  echo ""   
 }
 #Install snmp
 install_snmp(){
@@ -14,6 +15,7 @@ install_snmp(){
     if check_sys packageManager apt; then
       sudo apt-get install snmpd snmp
     elif check_sys packageManager yum; then
+      yum -y remove perl-ExtUtils-MakeMaker package libperl-dev bc sysstat net-snmp net-snmp-utils
       yum -y install perl-ExtUtils-MakeMaker package libperl-dev bc sysstat net-snmp net-snmp-utils
     fi
     
@@ -40,7 +42,11 @@ install_snmp(){
         systemctl restart snmpd
     fi
     #/usr/local/snmp/sbin/snmpd -c /usr/local/snmp/share/snmp/snmpd.conf
-    iptables -A INPUT -p udp --dport 161 -j ACCEPT
+    n=$(iptables -nL | grep 161 | wc -l)
+    
+    if [ $n -eq 0 ]; then
+      iptables -A INPUT -p udp --dport 161 -j ACCEPT
+    fi
     cp -rp ${cur_dir}/conf/snmpd.ini /etc/supervisord.d
     systemctl restart supervisord
 }

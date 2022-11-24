@@ -259,7 +259,7 @@ display_os_info(){
     echo "+-------------------------------------------------------------------+"
     echo "| Auto Install LAMP(Linux + Apache + MySQL/MariaDB + PHP )          |"
     echo "| Website: https://www.jinguc.com                                   |"
-    echo "| Author : Jingu <yw@jinguc.com>                                 |"
+    echo "| Author : Jingu <yw@jinguc.com>                                    |"
     echo "+-------------------------------------------------------------------+"
     echo
     echo "--------------------- System Information ----------------------------"
@@ -459,7 +459,7 @@ EOF
         echo "+------------------+"
         echo "Installation ${cur_soft} failed."
         echo "The Full Log is available at ${cur_dir}/lamp.log"
-        echo "Please visit website: https://www.jinguc.com/faq.html for help"
+        echo "Please visit website: https://www.jinguc.com/eoms/faq.html for help"
         exit 1
     fi
 }
@@ -820,10 +820,10 @@ last_confirm(){
     fi
     echo
     echo "SNMP: net-snmp"
-    echo "version: 7.5.3"
-    echo
-    echo "KodExplorer: ${kodexplorer}"
-    [ "${kodexplorer}" != "do_not_install" ] && echo "KodExplorer Location: ${web_root_dir}/kod"
+    echo "Version: 7.5.3"
+    #echo
+    #echo "KodExplorer: ${kodexplorer}"
+    #[ "${kodexplorer}" != "do_not_install" ] && echo "KodExplorer Location: ${web_root_dir}/kod"
     echo
     echo "---------------------------------------------------------------------"
     echo
@@ -894,10 +894,10 @@ install_finally(){
     else
         echo "PHP Additional Extensions: do_not_install"
     fi
-    echo "SNMP: 5.7.3"
-    echo
-    echo "KodExplorer: ${kodexplorer}"
-    [ "${kodexplorer}" != "do_not_install" ] && echo "KodExplorer Location: ${web_root_dir}/kod"
+    echo "SNMP: 7.5.3"
+    #echo
+    #echo "KodExplorer: ${kodexplorer}"
+    #[ "${kodexplorer}" != "do_not_install" ] && echo "KodExplorer Location: ${web_root_dir}/kod"
     echo
     echo "---------------------------------------------------------------------"
     echo
@@ -956,6 +956,7 @@ EOF
     _info "Start time     : ${StartDate}"
     _info "Completion time: $(date "+%Y-%m-%d %H:%M:%S") (Use:$(_red $[($(date +%s)-StartDateSecond)/60]) minutes)"
     _info "Welcome to visit our website: https://www.jinguc.com"
+    _info "The JgOms visit url is: http://localhost:8013"
     _info "Enjoy it"
     exit 0
 }

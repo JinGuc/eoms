@@ -49,7 +49,7 @@ show_help(){
     echo "+-------------------------------------------------------------------+"
     echo "| Auto Install LAMP(Linux + Apache + MySQL/MariaDB + PHP )          |"
     echo "| Website: https://www.jinguc.com                                   |"
-    echo "| Author : Jingu <yw@jinguc.com>                                 |"
+    echo "| Author : Jingu <yw@jinguc.com>                                    |"
     echo "+-------------------------------------------------------------------+"
     echo
     printf "
@@ -183,16 +183,16 @@ process(){
             [ -n "$(echo ${db_manage_modules} | grep -w adminer)" ] && phpmyadmin_install="${phpmyadmin_install} ${adminer_filename}"
             ;;
         --supervisord_option)
-        supervisord="$2"
+            supervisord_option="$2"
         ;;
         --www_option)
-        www="$2"
+            www_option="$2"
         ;;
         --snmp_option)
-        sump="$2"
+            snmp_option="$2"
         ;;
-        --py-eoms_option)
-        py-eoms="$2"
+        --pyeoms_option)
+            pyeoms_option="$2"
         ;;
         --kodexplorer_option)
             kodexplorer_option="$2"
@@ -244,7 +244,7 @@ set_parameters(){
     [ -z "${supervisord_option}" ] && supervisord="do_not_install"
     [ -z "${www_option}" ] && www="do_not_install"
     [ -z "${snmp_option}" ] && snmp="do_not_install"
-    [ -z "${py-eoms_option}" ] && py-eoms="do_not_install"
+    [ -z "${pyeoms_option}" ] && pyeoms="do_not_install"
     [ -z "${db_manage_modules}" ] && phpmyadmin_install="do_not_install"
     [ "${php}" == "do_not_install" ] && phpmyadmin_install="do_not_install"
     [ -z "${kodexplorer_option}" ] && kodexplorer="do_not_install"

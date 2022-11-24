@@ -33,7 +33,7 @@ upgrade_menu(){
     echo "+-------------------------------------------------------------------+"
     echo "| Auto Update LAMP(Linux + Apache + MySQL/MariaDB + PHP )           |"
     echo "| Website: https://www.jingc.com                                    |"
-    echo "| Author : Jingu <yw@jinguc.com>                                |"
+    echo "| Author : Jingu <yw@jinguc.com>                                    |"
     echo "+-------------------------------------------------------------------+"
     echo
 
