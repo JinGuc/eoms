@@ -13,6 +13,7 @@ install_py-eoms(){
     cd /opt/snmp
     tar xvf py-eoms.tar
     cp -rp ${cur_dir}/conf/py-eoms.ini /etc/supervisord.d
+    systemctl start supervisord
     n=$(iptables -nL | grep 888 | wc -l)
     
     if [ $n -eq 0 ]; then
