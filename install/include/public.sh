@@ -1014,7 +1014,7 @@ install_tools(){
 #start install lamp
 lamp_install(){
     disable_selinux
-    [ "${apache}" != "do_not_install" ] install_tools
+    [ "${apache}" != "do_not_install" ] && install_tools
     sync_time
     remove_packages
     [ ! -d ${cur_dir}/software ] && mkdir -p ${cur_dir}/software
