@@ -51,6 +51,8 @@ sed -i "29s/\/\/ protected/protected/g" ${web_root_dir}/app/Providers/RouteServi
 /usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
 /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
 mkdir ${web_root_dir}/storage
+mkdir ${web_root_dir}/storage/logs
+chmod -R 777 ${web_root_dir}/storage/logs
 chown -R apache:apache ${web_root_dir}/storage
 cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
 systemctl restart supervisord
