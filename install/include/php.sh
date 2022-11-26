@@ -22,6 +22,12 @@ php_preinstall_settings(){
 
 #Intall PHP
 install_php(){
+    pnum=$(pgrep php)
+    if [ $pnum -gt 0 ]; then
+    _info "该主机已经安装PHP,本次安装终止........"
+    exit 0
+    fi
+
     local openssl_version=$(openssl version -v)
     local major_version=$(echo ${openssl_version} | awk '{print $2}' | grep -oE "[0-9.]+")
     is_64bit && with_libdir="--with-libdir=lib64" || with_libdir=""

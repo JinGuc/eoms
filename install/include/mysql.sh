@@ -282,7 +282,11 @@ EOF
 
 #Install mysql server
 install_mysqld(){
-
+    pnum=$(pgrep mysqld)
+    if [ $pnum -gt 0 ]; then
+    _info "该主机已经安装MySQL,本次安装终止........"
+    exit 0
+    fi
     common_install
 
     is_64bit && sys_bit=x86_64 || sys_bit=i686

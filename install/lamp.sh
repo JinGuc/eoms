@@ -47,7 +47,7 @@ show_parameters(){
 show_help(){
     echo
     echo "+-------------------------------------------------------------------+"
-    echo "| Auto Install LAMP(Linux + Apache + MySQL/MariaDB + PHP )          |"
+    echo "| Auto Install JgOms(Linux + Apache + MySQL + PHP)                  |"
     echo "| Website: https://www.jinguc.com                                   |"
     echo "| Author : Jingu <yw@jinguc.com>                                    |"
     echo "+-------------------------------------------------------------------+"

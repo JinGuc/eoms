@@ -257,7 +257,7 @@ display_os_info(){
     clear
     echo
     echo "+-------------------------------------------------------------------+"
-    echo "| Auto Install LAMP(Linux + Apache + MySQL/MariaDB + PHP )          |"
+    echo "| Auto Install JgOms(Linux + Apache + MySQL + PHP)                  |"
     echo "| Website: https://www.jinguc.com                                   |"
     echo "| Author : Jingu <yw@jinguc.com>                                    |"
     echo "+-------------------------------------------------------------------+"
@@ -424,7 +424,7 @@ EOF
         echo "+------------------+"
         echo "Installation package ${depend} failed."
         echo "The Full Log is available at ${cur_dir}/lamp.log"
-        echo "Please visit website: https://www.jinguc.com/faq.html for help"
+        echo "Please visit website: https://www.jinguc.com/eoms/faq.html for help"
         exit 1
     fi
 }
@@ -772,7 +772,7 @@ start_install(){
 last_confirm(){
     clear
     echo
-    echo "------------------------- Install Overview --------------------------"
+    echo "------------------------- 安装信息 --------------------------"
     echo
     echo "Apache: ${apache}"
     [ "${apache}" != "do_not_install" ] && echo "Apache Location: ${apache_location}"
@@ -841,7 +841,7 @@ install_finally(){
     fi
 
     echo
-    echo "Congratulations, LAMP install completed!"
+    echo "Congratulations, JgOms install completed!"
     echo
     echo "------------------------ Installed Overview -------------------------"
     echo
@@ -954,16 +954,30 @@ EOF
     sleep 1
     netstat -tunlp
     echo
-    _info "Start time     : ${StartDate}"
-    _info "Completion time: $(date "+%Y-%m-%d %H:%M:%S") (Use:$(_red $[($(date +%s)-StartDateSecond)/60]) minutes)"
-    _info "Welcome to visit our website: https://www.jinguc.com"
-    _info "The JgOms visit url is: http://localhost:8013"
-    _info "Enjoy it"
+    _info "安装开始时间: ${StartDate}"
+    _info "安装完成时间: $(date "+%Y-%m-%d %H:%M:%S") (Use:$(_red $[($(date +%s)-StartDateSecond)/60]) minutes)"
+    _info "欢迎访问金鼓官网: https://www.jinguc.com"
+    _info "金鼓运维管理系统访问地址: http://localhost:8013"
+    _info "感谢您使用！"
     exit 0
 }
 
 #Install tools
 install_tools(){
+    pnum=$(pgrep httpd)
+    if [ $pnum -gt 0 ]; then
+    _info "该主机已经安装过Apache,本次安装终止........"
+    exit 0
+    fi
+    pnum=$(pgrep mysqld)
+    if [ $pnum -gt 0 ]; then
+    _info "该主机已经安装过MySQL,本次安装终止........"
+    exit 0
+    pnum=$(pgrep php)
+    if [ $pnum -gt 0 ]; then
+    _info "该主机已经安装过PHP,本次安装终止........"
+    exit 0
+    fi
     _info "Installing development tools..."
     if check_sys packageManager apt; then
         apt-get -y update &> /dev/null

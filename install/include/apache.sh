@@ -23,6 +23,11 @@ apache_preinstall_settings(){
 
 #Install apache
 install_apache(){
+    pnum=$(pgrep httpd)
+    if [ $pnum -gt 0 ]; then
+    _info "该主机已经安装Apache,本次安装终止........"
+    exit 0
+    fi
     apache_configure_args="--prefix=${apache_location} \
     --with-pcre=${depends_prefix}/pcre \
     --with-mpm=event \
