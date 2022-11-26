@@ -26,12 +26,7 @@ echo "数据库创建成功"
 else
 echo "数据库创建失败"
 fi
-cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
-systemctl restart supervisord
-n=$(iptables -nL | grep 8804 | wc -l)
-if [ $n -eq 0 ]; then
-iptables -A INPUT -p tcp --dport 8804 -j ACCEPT
-fi
+
 cd ${cur_dir}
 cd ../
 cur_dir_=$(pwd)
@@ -41,7 +36,7 @@ cd ${web_root_dir}
 chmod -R 777 ${web_root_dir}/storage/
 chmod -R 777 ${web_root_dir}/storage/logs
 chmod -R 777 ${web_root_dir}/bootstrap/cache/
-chown -R apache:apache ${web_root_dir}/storage
+
 sed -i "s/DB_HOST=/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
 sed -i "s/DB_USERNAME=/DB_USERNAME=${dbname}/g" ${web_root_dir}/.env
 sed -i "s/DB_PASSWORD=/DB_PASSWORD=${password}/g" ${web_root_dir}/.env
@@ -56,6 +51,14 @@ sed -i "29s/\/\/ protected/protected/g" ${web_root_dir}/app/Providers/RouteServi
 /usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder
 /usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
 /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
+chown -R apache:apache ${web_root_dir}/storage
+cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
+systemctl restart supervisord
+sleep 1
+n=$(iptables -nL | grep 8804 | wc -l)
+if [ $n -eq 0 ]; then
+iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
+fi
 #以上文件执行完成后就可以为网站添加计划任务了，
 FIND_FILE="/var/spool/cron/root"
 FIND_STR="/usr/local/php/bin/php artisan schedule:run"

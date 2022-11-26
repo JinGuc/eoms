@@ -952,7 +952,7 @@ EOF
     fi
     n=$(iptables -nL | grep 8013 | wc -l)
     if [ $n -eq 0 ]; then
-        iptables -A INPUT -p tcp --dport 8013 -j ACCEPT
+        iptables -I INPUT -p tcp --dport 8013 -j ACCEPT
     fi
     sleep 1
     netstat -tunlp

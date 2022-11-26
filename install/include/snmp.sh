@@ -48,7 +48,7 @@ install_snmp(){
     n=$(iptables -nL | grep 161 | wc -l)
     
     if [ $n -eq 0 ]; then
-      iptables -A INPUT -p udp --dport 161 -j ACCEPT
+      iptables -I INPUT -p udp --dport 161 -j ACCEPT
     fi
     cp -rp ${cur_dir}/conf/snmpd.ini /etc/supervisord.d
     systemctl restart supervisord
