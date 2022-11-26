@@ -13,7 +13,7 @@ install_www(){
 /etc/init.d/mysqld start > /dev/null 2>&1
 dbhost=localhost
 dbname=eoms
-p=Jingu.com
+p=${mysql_root_password_}
 password=Jingu_${dbname}
 ${mysql_location}/bin/mysql -uroot -p$p << EOF
 create database $dbname character set utf8mb4;
@@ -27,8 +27,8 @@ else
 echo "数据库创建失败"
 fi
 cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
+systemctl restart supervisord
 n=$(iptables -nL | grep 8804 | wc -l)
-
 if [ $n -eq 0 ]; then
 iptables -A INPUT -p tcp --dport 8804 -j ACCEPT
 fi
@@ -41,6 +41,7 @@ cd ${web_root_dir}
 chmod -R 777 ${web_root_dir}/storage/
 chmod -R 777 ${web_root_dir}/storage/logs
 chmod -R 777 ${web_root_dir}/bootstrap/cache/
+chown -R apache:apache ${web_root_dir}/storage
 sed -i "s/DB_HOST=/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
 sed -i "s/DB_USERNAME=/DB_USERNAME=${dbname}/g" ${web_root_dir}/.env
 sed -i "s/DB_PASSWORD=/DB_PASSWORD=${password}/g" ${web_root_dir}/.env

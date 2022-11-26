@@ -225,10 +225,6 @@ mod_xml2enc.so
     cp -f ${cur_dir}/conf/lamp.png ${web_root_dir}
     cp -f ${cur_dir}/conf/favicon.ico ${web_root_dir}
     chown -R apache.apache ${web_root_dir}
-    n=$(iptables -nL | grep 8013 | wc -l)
-    if [ $n -eq 0 ]; then
-        iptables -A INPUT -p tcp --dport 8013 -j ACCEPT
-    fi
     boot_start httpd
 
 }

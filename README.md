@@ -26,7 +26,7 @@ chmod 755 *.sh<br>
 一键安装服务端<br>
 #全量安装，包括apache+php+mysql<br>
 注：数据库的数据位置默认为安装目录/usr/local/mysql下的 data 目录<br>
-      数据库的默认 root 密码为Jingu.com<br>
+      mysql数据库的默认 root 密码为Jingu.com<br>
       Apache的站点目录为/home/data/www<br>
 ./install_server.sh<br>
 一键安装客户端：<br>

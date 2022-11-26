@@ -38,7 +38,7 @@ uninstall_lamp(){
     rm -rf ${apache_location} ${apache_location}.bak /usr/sbin/httpd /var/log/httpd /etc/logrotate.d/httpd /var/spool/mail/apache
     _info "Success"
     echo
-    _info "uninstalling MySQL or MariaDB"
+    _info "uninstalling MySQL"
     if [ -f /etc/init.d/mysqld ] && [ $(ps -ef | grep -v grep | grep -c "mysqld") -gt 0 ]; then
         /etc/init.d/mysqld stop > /dev/null 2>&1
     fi
@@ -61,6 +61,11 @@ uninstall_lamp(){
     systemctl stop supervisord
     yum -y remove supervisor
     rm -rf /etc/supervisord.d
+    _info "Success"
+    echo
+    _info "uninstalling JgOmsWeb"
+    systemctl stop snmpd
+    rm -rf ${web_root_dir}
     _info "Success"
     echo
     _info "uninstalling others software"

@@ -262,7 +262,7 @@ display_os_info(){
     echo "| Author : Jingu <yw@jinguc.com>                                    |"
     echo "+-------------------------------------------------------------------+"
     echo
-    echo "--------------------- System Information ----------------------------"
+    echo "--------------------------- 系统信息 --------------------------------"
     echo
     echo "CPU model            : ${cname}"
     echo "Number of cores      : ${cores}"
@@ -772,7 +772,7 @@ start_install(){
 last_confirm(){
     clear
     echo
-    echo "------------------------- 安装信息 --------------------------"
+    echo "----------------------------- 安装信息 ------------------------------"
     echo
     echo "Apache: ${apache}"
     [ "${apache}" != "do_not_install" ] && echo "Apache Location: ${apache_location}"
@@ -950,33 +950,46 @@ EOF
     if [ -d "${web_root_dir}/phpmyadmin" ] && [ -f "/usr/bin/mysql" ]; then
         /usr/bin/mysql -uroot -p${dbrootpwd} < ${web_root_dir}/phpmyadmin/sql/create_tables.sql &> /dev/null
     fi
-
+    n=$(iptables -nL | grep 8013 | wc -l)
+    if [ $n -eq 0 ]; then
+        iptables -A INPUT -p tcp --dport 8013 -j ACCEPT
+    fi
     sleep 1
     netstat -tunlp
+    localIp=$(ip addr | awk '/^[0-9]+: / {}; /inet.*global/ {print gensub(/(.*)\/(.*)/, "\\1", "g", $2)}')
     echo
     _info "安装开始时间: ${StartDate}"
     _info "安装完成时间: $(date "+%Y-%m-%d %H:%M:%S") (Use:$(_red $[($(date +%s)-StartDateSecond)/60]) minutes)"
+    _info "MySQL数据库root账号密码为: ${mysql_root_password_}"
+    _info "phpMyAdmin管理登录地址为: http://${localIp}/phpmyadmin/"
     _info "欢迎访问金鼓官网: https://www.jinguc.com"
-    _info "金鼓运维管理系统访问地址: http://localhost:8013"
+    _info "金鼓运维管理系统访问地址: http://${localIp}:8013"
     _info "感谢您使用！"
     exit 0
 }
 
 #Install tools
 install_tools(){
-    pnum=$(pgrep httpd)
-    if [ $pnum -gt 0 ]; then
-    _info "该主机已经安装过Apache,本次安装终止........"
-    exit 0
+    apache_num=$(pgrep httpd | wc -l)
+    if [ $apache_num -gt 0 ];then
+        echo
+        _info "该主机已经安装过Apache,本次安装终止........"
+        echo
+        exit 0
     fi
-    pnum=$(pgrep mysqld)
-    if [ $pnum -gt 0 ]; then
-    _info "该主机已经安装过MySQL,本次安装终止........"
-    exit 0
-    pnum=$(pgrep php)
-    if [ $pnum -gt 0 ]; then
-    _info "该主机已经安装过PHP,本次安装终止........"
-    exit 0
+    mysql_num=$(pgrep mysqld | wc -l)
+    if [ $mysql_num -gt 0 ];then
+        echo
+        _info "该主机已经安装过MySQL,本次安装终止........"
+        echo
+        exit 0
+    fi
+    php_num=$(pgrep php | wc -l)
+    if [ $php_num -gt 0 ];then
+        echo
+        _info "该主机已经安装过PHP,本次安装终止........"
+        echo
+        exit 0
     fi
     _info "Installing development tools..."
     if check_sys packageManager apt; then
