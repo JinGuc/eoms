@@ -105,7 +105,7 @@ load_config
 rootness
 
 while true; do
-    read -p "Are you sure uninstall LAMP? (Default: n) (y/n)" uninstall
+    read -p "Are you sure uninstall JgOms?(此操作会卸载Apache,MySQL,PHP及删除MySQL数据库数据,请谨慎操作！) (Default: n) (y/n)" uninstall
     [ -z ${uninstall} ] && uninstall="n"
     uninstall=$(upcase_to_lowcase ${uninstall})
     case ${uninstall} in
