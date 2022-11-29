@@ -39,7 +39,7 @@ mysql_preinstall_settings(){
             #set mysql server root password
             echo
             read -p "mysql server root password (default:Jingu.com, leave blank for default): " mysql_root_pass
-            mysql_root_pass=${mysql_root_pass:=Jingu}
+            mysql_root_pass=${mysql_root_pass:=Jingu.com}
             echo
             echo "mysql server root password: ${mysql_root_pass}"
 
@@ -55,7 +55,7 @@ mysql_preinstall_settings(){
             #set mariadb server root password
             echo
             read -p "mariadb server root password (default:Jingu.com, leave blank for default): " mariadb_root_pass
-            mariadb_root_pass=${mariadb_root_pass:=Jingu}
+            mariadb_root_pass=${mariadb_root_pass:=Jingu.com}
             echo
             echo "mariadb server root password: $mariadb_root_pass"
 
@@ -282,9 +282,10 @@ EOF
 
 #Install mysql server
 install_mysqld(){
-    pnum=$(pgrep mysqld)
-    if [ $pnum -gt 0 ]; then
-    _info "该主机已经安装MySQL,本次安装终止........"
+    pnum=$(pgrep mysql)
+    findserver=$(whereis mysql |awk -F : '{print $2}' | sed '/^$/d')
+    if [ $pnum -gt 0 ] || [ -z $findserver ]; then
+    _info "该主机已经存在MySQL,本次安装退出........"
     exit 0
     fi
     common_install

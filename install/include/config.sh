@@ -16,6 +16,7 @@ load_config(){
 #Install location
 apache_location=/usr/local/apache
 mysql_location=/usr/local/mysql
+mysql_data_back_dir=/home/data/mysqlback
 mysql_root_password_=Jingu.com
 mariadb_location=/usr/local/mariadb
 php_location=/usr/local/php

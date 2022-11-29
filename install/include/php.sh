@@ -23,8 +23,9 @@ php_preinstall_settings(){
 #Intall PHP
 install_php(){
     pnum=$(pgrep php)
-    if [ $pnum -gt 0 ]; then
-    _info "该主机已经安装PHP,本次安装终止........"
+    findserver=$(whereis php |awk -F : '{print $2}' | sed '/^$/d')
+    if [ $pnum -gt 0 ] || [ -z $findserver ]; then
+    _info "该主机已经存在PHP,本次安装退出........"
     exit 0
     fi
 

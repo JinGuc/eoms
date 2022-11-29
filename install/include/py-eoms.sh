@@ -14,9 +14,9 @@ install_py-eoms(){
     tar xvf py-eoms.tar
     cp -rp ${cur_dir}/conf/py-eoms.ini /etc/supervisord.d
     systemctl restart supervisord
-    n=$(iptables -nL | grep 888 | wc -l)
     supervisorctl restart py-eoms
+    n=$(iptables -nL | grep 888 | wc -l)
     if [ $n -eq 0 ]; then
-        iptables -A INPUT -p tcp --dport 888 -j ACCEPT
+        iptables -I INPUT -p tcp --dport 888 -j ACCEPT
     fi
 }

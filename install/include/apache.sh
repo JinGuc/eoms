@@ -24,8 +24,10 @@ apache_preinstall_settings(){
 #Install apache
 install_apache(){
     pnum=$(pgrep httpd)
-    if [ $pnum -gt 0 ]; then
-    _info "该主机已经安装Apache,本次安装终止........"
+    findserverap=$(whereis apache |awk -F : '{print $2}' | sed '/^$/d')
+    findserverhp=$(whereis httpd |awk -F : '{print $2}' | sed '/^$/d')
+    if [ $pnum -gt 0 ] || [ -z $findserverap ] || [ -z $findserverhp ]; then
+    _info "该主机已经存在Apache,本次安装退出........"
     exit 0
     fi
     apache_configure_args="--prefix=${apache_location} \
