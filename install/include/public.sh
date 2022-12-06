@@ -956,7 +956,8 @@ EOF
     fi
     sleep 1
     netstat -tunlp
-    localIp=$(ip addr | awk '/^[0-9]+: / {}; /inet.*global/ {print gensub(/(.*)\/(.*)/, "\\1", "g", $2)}')
+    localIp=$(ip a  | grep inet | grep -v inet6 | grep -E 'ens|eth' | grep -v '127.0.0.1' | awk '{print $2}' | awk -F / '{print$1}'
+)
     echo
     _info "安装开始时间: ${StartDate}"
     _info "安装完成时间: $(date "+%Y-%m-%d %H:%M:%S") (Use:$(_red $[($(date +%s)-StartDateSecond)/60]) minutes)"
