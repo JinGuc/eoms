@@ -20,62 +20,66 @@ class NotifiCation{
             $operator = $params['operator'];
             $value = $params['value'];
             $now_value = $params['now_value'];
-            $p_status=$params['status'] ?? 0;
+            $p_status = $params['status'] ?? 0;
             //file_put_contents(storage_path('logs/jingu-eoms-warning.log'),var_export($params,true)."\r\n",FILE_APPEND);
             //Log::debug("==检查主机告警信息==", ["hostId" => $params["hostId"], "result" => $params]);
             if ($p_status == 1) {
                 self::updateNoticeInfo($params);
             } else {
-                switch ($operator) {
-                    case 1:
-                        if ($now_value > $value) {
-                            //告警
-                            self::insertNoticeInfo($params);
-                        } else {
-                            $params['status'] = 1;
-                            self::updateNoticeInfo($params);
-                        }
-                        break;
-                    case 2:
-                        if ($now_value >= $value) {
-                            //告警
-                            self::insertNoticeInfo($params);
-                        } else {
-                            $params['status'] = 1;
-                            self::updateNoticeInfo($params);
-                        }
-                        break;
-                    case 3:
-                        if ($now_value = $value) {
-                            //告警
-                            self::insertNoticeInfo($params);
-                        } else {
-                            $params['status'] = 1;
-                            self::updateNoticeInfo($params);
-                        }
-                        break;
-                    case 4:
-                        if ($now_value <= $value) {
-                            //告警
-                            self::insertNoticeInfo($params);
-                        } else {
-                            $params['status'] = 1;
-                            self::updateNoticeInfo($params);
-                        }
-                        break;
-                    case 5:
-                        if ($now_value < $value) {
-                            //告警
-                            self::insertNoticeInfo($params);
-                        } else {
-                            $params['status'] = 1;
-                            self::updateNoticeInfo($params);
-                        }
-                        break;
+                if ($params['type'] == 11) {
+                    self::insertNoticeInfo($params);
+                } else {
+                    switch ($operator) {
+                        case 1:
+                            if ($now_value > $value) {
+                                //告警
+                                self::insertNoticeInfo($params);
+                            } else {
+                                $params['status'] = 1;
+                                self::updateNoticeInfo($params);
+                            }
+                            break;
+                        case 2:
+                            if ($now_value >= $value) {
+                                //告警
+                                self::insertNoticeInfo($params);
+                            } else {
+                                $params['status'] = 1;
+                                self::updateNoticeInfo($params);
+                            }
+                            break;
+                        case 3:
+                            if ($now_value = $value) {
+                                //告警
+                                self::insertNoticeInfo($params);
+                            } else {
+                                $params['status'] = 1;
+                                self::updateNoticeInfo($params);
+                            }
+                            break;
+                        case 4:
+                            if ($now_value <= $value) {
+                                //告警
+                                self::insertNoticeInfo($params);
+                            } else {
+                                $params['status'] = 1;
+                                self::updateNoticeInfo($params);
+                            }
+                            break;
+                        case 5:
+                            if ($now_value < $value) {
+                                //告警
+                                self::insertNoticeInfo($params);
+                            } else {
+                                $params['status'] = 1;
+                                self::updateNoticeInfo($params);
+                            }
+                            break;
+                    }
                 }
             }
         } catch (Exception $e) {
-            file_put_contents(storage_path('logs/jingu-eoms-warning-error.log'),$e->getMessage().' at line '.$e->getLine().' in file '.$e->getFile()."\r\n",FILE_APPEND);
+            file_put_contents(storage_path('logs/jingu-eoms-warning-error.log'), $e->getMessage() . ' at line ' . $e->getLine() . ' in file ' . $e->getFile() . "\r\n", FILE_APPEND);
             //Log::debug('ERROR',['msg'=>$e->getMessage()]);
         }
         return true;
@@ -96,7 +100,7 @@ class NotifiCation{
         }else{
             return false;
         }
-        $stopNoticeTime = date('Y-m-d H:i:s', time() + ($params['continueCycle'] + 1) * 60);
+        $stopNoticeTime = date('Y-m-d H:i:s', time() + ($params['continueCycle']) * 60);
         $time = date('Y-m-d H:i:s');
         if (!empty($params['relate_table'])){
             if ($params['relate_table'] == 'url_info') {
@@ -125,10 +129,10 @@ class NotifiCation{
                     }
                 }
             }
-            $id = NotificationInfo::where('relate_id', '=', $params['relate_id'])->where('relate_table', '=', $params['relate_table'])->where('notificationType', '=', $params['type'])->where('stopNoticeTime', '>=', $time)->where('status', '=', 0)->orderBy('id', 'desc')->limit(1)->value('id');
+            $id = NotificationInfo::where('relate_id', '=', $params['relate_id'])->where('relate_table', '=', $params['relate_table'])->where('notificationType', '=', $params['type'])->where('status', '=', 0)->orderBy('id', 'desc')->limit(1)->value('id');
             $id = intval($id);
         }else{
-            $id = NotificationInfo::where('hostId', '=', $params['hostId'])->where('notificationType', '=', $params['type'])->where('stopNoticeTime', '>=', $time)->where('status', '=', 0)->orderBy('id', 'desc')->limit(1)->value('id');
+            $id = NotificationInfo::where('hostId', '=', $params['hostId'])->where('notificationType', '=', $params['type'])->where('status', '=', 0)->orderBy('id', 'desc')->limit(1)->value('id');
             $id = intval($id);
         }
         if ($id == 0) {
@@ -150,6 +154,8 @@ class NotifiCation{
             $infoId = NotificationInfo::insertGetId($data);
         } else {
             //
+            $NotificationInfo_created_at = NotificationInfo::where('id', $id)->value('created_at');
+            $stopNoticeTime = date('Y-m-d H:i:s', strtotime($NotificationInfo_created_at) + ($params['continueCycle']) * 60);
             $data = [
                 'notificationType' => $params['type'],
                 'sendType' => $params['sendType'],
@@ -227,10 +233,10 @@ class NotifiCation{
                     }
                     if($params['relate_table'] == 'url_info'){
                         $url = UrlInfo::where('id',$params['relate_id'])->value('url');
-                        $content =  $params['content'].'('.$url.')[接口状态恢复正常]';
+                        $content =  $params['content'].'('.$url.')[状态恢复]';
                     }elseif($params['relate_table'] == 'snmp_host_role'){
                         $serviceName = SnmpHostRole::where('id',$params['relate_id'])->value('type');
-                        $content =  $params['content'].'('.$serviceName.')[服务状态恢复正常]';
+                        $content =  $params['content'].'('.$serviceName.')[状态恢复]';
                     }
                 } else {
                     NotificationLog::where('notificationSettingId', $notificationSettingId)->where('status', 0)->update(['info' => $params['content'] ?? '', 'ContactId' => $params['ContactId'] ?? '', 'sendType' => $params['sendType'] ?? 1, 'sound_index' => $params['sound_index'] ?? '']);
@@ -239,6 +245,7 @@ class NotifiCation{
                 }
                 
                 if ($id > 0 &&  $params['status'] == 1) {
+                    /*
                     $ContactIds = explode(',', $ContactId);
                     $toSend = [];
                     $person = Contact::whereIn('id', $ContactIds)->get();
@@ -253,26 +260,25 @@ class NotifiCation{
                                 'content' => $content . '恢复时间[' . date('Y-m-d H:i:s') . ']',
                                 'mobile' => $vv['phone'],
                             ];
-                            $rs = NotificationRole::toSms($params);
-                            /*
-                            $pdata = [
-                                'type' => 2,
-                                'ContactId' => $vv['id'],
-                                'email' => $vv['email'],
-                                'mobile' => $vv['mobile'],
-                                'email' => $vv['email'],
-                                'hostId' => $hostId,
-                                'noticeLogId' => 0,
-                                'status' => 1,
-                                'info' => $content,
-                                'created_at' => date('Y-m-d H:i:s'),
-                                'updated_at' => date('Y-m-d H:i:s'),
-                            ];
-                            self::insertSendInfo($pdata);
+                            //$rs = NotificationRole::toSms($params);
+                            
                             $m++;
-                            */
                         }
                     }
+                    */
+                    $pdata = [
+                        'type' => $params['sendType'],
+                        'ContactId' => $ContactId,
+                        'notificationId' => $id??0,
+                        'notificationSettingId' => $notificationSettingId??0,
+                        'hostId' => $hostId??0,
+                        'noticeLogId' => 0,
+                        'status' => 0,
+                        'info' => $content,
+                        'sound_index' => $sound_index??'',
+                        'updated_at' => date('Y-m-d H:i:s'),
+                    ];
+                    self::insertSendInfo($pdata);
                 }
             }
         }

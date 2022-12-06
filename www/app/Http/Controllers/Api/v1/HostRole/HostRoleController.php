@@ -88,6 +88,7 @@ class HostRoleController extends Controller
         }
         $SnmpRoleObj->name = $request->input('name');
         $SnmpRoleObj->key = $request->input('key');
+        $SnmpRoleObj->port = $request->input('port');
         if($SnmpRoleObj->save())
         {
             $resList = [

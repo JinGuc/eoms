@@ -89,7 +89,7 @@ class UrlStatusInfo extends Command
                                 $params['url_title'] = $title;
                                 $params['status_code'] = intval($http_code);
                                 Snmp::insertUrlStatusInfo($params);
-                                UrlInfo::find($id)->update(["running" => 0,'gathering_time'=>$time,'updated_at'=>$time]);
+                                UrlInfo::find($id)->update(["running" => 0,'response_time'=>'-','gathering_time'=>$time]);
                             }else{
                                 if(!empty($starttime)&&!empty($endtime)){
                                     $thistime = $endtime[0]+$endtime[1]-($starttime[0]+$starttime[1]);
@@ -97,7 +97,7 @@ class UrlStatusInfo extends Command
                                 }else{
                                     $thistime = '-';
                                 }
-                                UrlInfo::find($id)->update(["running" => 1,'response_time'=>$thistime,'gathering_time'=>$time,'updated_at'=>$time]);
+                                UrlInfo::find($id)->update(["running" => 1,'response_time'=>$thistime,'gathering_time'=>$time]);
                                 $notificationInfo = [];
                                 $NotificationSettingResult=NotificationSetting::where("type",11)->where("status",1)->get();
                                 if(!empty($NotificationSettingResult)){
@@ -123,13 +123,13 @@ class UrlStatusInfo extends Command
                                 $noticeSettingId = $notificationInfo['id'];
                                 $sound_index = $notificationInfo['sound_index'];
                                 $now_value = 1;
-                                $params = [
+                                $params_ = [
                                     'type' => $type,
                                     'operator' => $operator,
                                     'value' => $value,
                                     'now_value' => $now_value,
                                     'sendType' => $sendType,
-                                    'content' => '{'.$content . '}(监控接口名称:'.$url_title.',监控地址:'.$url .'),响应状态码:['.$http_code.'],恢复正常。',
+                                    'content' => '{'.$content . '}(名称:'.$url_title.',地址:'.$url .'),响应状态['.$http_code.'],恢复正常',
                                     'hostId' => 0,
                                     'host' => '',
                                     'relate_table' => 'url_info',
@@ -143,7 +143,7 @@ class UrlStatusInfo extends Command
                                 ];
                                 //Log::debug("检查主机内存告警1", ["hostId" => $server_id, "data" => $params]);
                                 $server = new NotifiCation();
-                                $res = $server->warningInfo($params);  
+                                $res = $server->warningInfo($params_);  
                             }
                         }
                     }

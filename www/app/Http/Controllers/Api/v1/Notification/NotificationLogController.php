@@ -67,7 +67,7 @@ class NotificationLogController extends Controller
 
         if($NotificationLogList->exists())
         {
-            $NotificationLogList = $NotificationLogList->get(["id", "hostId as host", "notificationSettingId as notification", "ContactId as Contact", "notificationType", "info", "status" ,"created_at", "updated_at"])
+            $NotificationLogList = $NotificationLogList->get(["id", "sendType", "hostId as host", "notificationSettingId as notification", "ContactId as Contact", "notificationType", "info", "status" ,"created_at", "updated_at"])
                 ->toArray();
             foreach($NotificationLogList as $k=>$v)
             {

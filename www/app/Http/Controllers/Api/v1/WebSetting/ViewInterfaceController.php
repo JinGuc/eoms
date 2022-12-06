@@ -80,6 +80,11 @@ class ViewInterfaceController extends Controller
             $UrlInfoObj->remark = $request->input('remark');
             $UrlInfoObj->timeout = $request->input('timeout');
             $UrlInfoObj->status = $request->input('status',UrlInfo::$_status['on']['code']);
+            if(strtolower($request->input('type')) == 'mysql')
+            {
+                $UrlInfoObj->db_username = $request->input('db_username');
+                $UrlInfoObj->db_password = $request->input('db_password');
+            }
         }
         if($UrlInfoObj->save())
         {

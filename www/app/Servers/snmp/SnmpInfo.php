@@ -414,15 +414,6 @@ class SnmpInfo
         $SysInfo['system_runtime'] = str_replace(array($sysruntime_substr, 'days'), array('', 'days,'), $SysInfo['system_runtime']);
         $SysInfo['system_runtime'] = trim($SysInfo['system_runtime']);
         $SysInfo['system_time'] = $systime['result']['Data']['hrSystemDate'][0];
-        Log::debug("获取主机系统时间", ["system_time" => $SysInfo['system_time']]);
-        if (strpos($SysInfo['system_time'], '-8:0') !== false ) {
-            $system_time_arr = explode(' ',$SysInfo['system_time']);
-            if(is_array($system_time_arr)&&count($system_time_arr)>0){
-                $system_time_arr[1] = str_replace('.0','',$system_time_arr[1]??'');
-                $SysInfo['system_time'] = $system_time_arr[0].' '.$system_time_arr[1];
-            }
-            Log::debug("获取主机系统时间", ["system_time" => $SysInfo['system_time']]);
-        }
         $meminfo = self::get($host, 'memInfo');
         $SysInfo['system_version'] = trim($meminfo['result']['Data']['memInfo']['osname']);
         event(new SysInfoEvent([

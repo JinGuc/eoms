@@ -19,7 +19,7 @@ class UrlStatusInfoNotificationRole
         $url = $urlStatusInfo["url"]??'';
         $url_title = $urlStatusInfo["url_title"]??'';
         $status_code = $urlStatusInfo['status_code']??0;
-        Log::debug("获取URL接口状态告警",["url_title"=>$urlStatusInfo["url_title"]]);
+        Log::debug("获取URL接口状态告警3",["url_title"=>$urlStatusInfo["url_title"]]);
         $title = $notificationInfo['title']??'';
         $type = $notificationInfo['type']??'';
         $time1 = $notificationInfo['time1'] ?? '';
@@ -52,13 +52,14 @@ class UrlStatusInfoNotificationRole
         if ($count == $m || empty($status_code) || $status_code>=500) {
             $now_value = 0;
             try {
+                Log::debug("获取URL接口状态告警4",["url_title"=>$urlStatusInfo["url_title"]]);
                 $params = [
                     'type' => $type,
                     'operator' => $operator,
                     'value' => $value,
                     'now_value' => $now_value,
                     'sendType' => $sendType,
-                    'content' => $content . '(监控接口名称:'.$url_title.',监控地址:'.$url .'),响应状态码:['.$status_code.']。',
+                    'content' => $content . '(名称:'.$url_title.',地址:'.$url .'),响应状态:['.$status_code.']。',
                     'hostId' => 0,
                     'host' => '',
                     'relate_table' => 'url_info',
@@ -85,7 +86,7 @@ class UrlStatusInfoNotificationRole
                     'value' => $value,
                     'now_value' => $now_value,
                     'sendType' => $sendType,
-                    'content' => $content . '(监控接口名称:'.$url_title.',监控地址:'.$url .'),响应状态码:['.$status_code.'],恢复正常。',
+                    'content' => $content . '(名称:'.$url_title.',地址:'.$url .'),响应状态:['.$status_code.'],恢复正常',
                     'hostId' => 0,
                     'host' => '',
                     'relate_table' => 'url_info',

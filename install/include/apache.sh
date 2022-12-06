@@ -26,7 +26,7 @@ install_apache(){
     pnum=$(pgrep httpd)
     findserverap=$(whereis apache |awk -F : '{print $2}' | sed '/^$/d')
     findserverhp=$(whereis httpd |awk -F : '{print $2}' | sed '/^$/d')
-    if [ $pnum -gt 0 ] || [ -z $findserverap ] || [ -z $findserverhp ]; then
+    if [ $pnum -gt 0 ] || [ -n $findserverap ] || [ -n $findserverhp ]; then
     _info "该主机已经存在Apache,本次安装退出........"
     exit 0
     fi

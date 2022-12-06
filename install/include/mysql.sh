@@ -284,7 +284,7 @@ EOF
 install_mysqld(){
     pnum=$(pgrep mysql)
     findserver=$(whereis mysql |awk -F : '{print $2}' | sed '/^$/d')
-    if [ $pnum -gt 0 ] || [ -z $findserver ]; then
+    if [ $pnum -gt 0 ] || [ -n $findserver ]; then
     _info "该主机已经存在MySQL,本次安装退出........"
     exit 0
     fi
