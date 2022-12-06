@@ -22,7 +22,6 @@ class WebSetting extends Migration
                 $table->string('value',500)->comment("参数值");
                 $table->string('note',500)->comment("描述");
                 $table->index('status');
-                $table->index('fd_name');
                 $table->index('type');
                 $table->timestamps();
             });
