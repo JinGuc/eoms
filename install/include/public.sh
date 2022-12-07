@@ -1013,7 +1013,7 @@ install_tools(){
     elif check_sys packageManager yum; then
         wget -P /etc/yum.repos.d/ http://mirrors.aliyun.com/repo/epel-7.repo
         yum makecache &> /dev/null
-        yum_tools=(yum-utils tar gcc gcc-c++ make wget perl chkconfig curl bzip2 readline readline-devel net-tools crontabs ca-certificates epel-release automake)
+        yum_tools=(yum-utils tar gcc gcc-c++ make wget perl chkconfig curl bzip2 readline readline-devel net-tools crontabs ca-certificates epel-release automake python-enchant)
         # libcurl-minimal and curl-minimal will be installed by default instead of libcurl and curl
         if rpm -qa | grep -q curl-minimal; then
             yum_tools=(${yum_tools[@]#curl})

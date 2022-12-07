@@ -62,9 +62,7 @@ install_php(){
     --with-ldap \
     --with-ldap-sasl \
     --with-pspell=/usr \
-    --with-enchant=/usr \
     --with-readline \
-    --with-tidy=/usr \
     --with-xsl \
     --enable-zend-test \
     --enable-bcmath \
