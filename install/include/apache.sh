@@ -23,10 +23,10 @@ apache_preinstall_settings(){
 
 #Install apache
 install_apache(){
-    pnum=$(pgrep httpd)
+    pnum=$(pgrep httpd | wc -l)
     findserverap=$(whereis apache |awk -F : '{print $2}' | sed '/^$/d')
     findserverhp=$(whereis httpd |awk -F : '{print $2}' | sed '/^$/d')
-    if [ -n "$pnum" ] || [ -n "$findserverap" ] || [ -n "$findserverhp" ]; then
+    if [ $pnum -gt 0 ] || [ -n "$findserverap" ] || [ -n "$findserverhp" ]; then
         echo
         _info "该主机已经存在Apache,本次安装退出........"
         echo
