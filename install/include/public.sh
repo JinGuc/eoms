@@ -974,7 +974,7 @@ install_tools(){
     apache_num=$(pgrep httpd | wc -l)
     findserverap=$(whereis apache |awk -F : '{print $2}' | sed '/^$/d')
     findserverah=$(whereis httpd |awk -F : '{print $2}' | sed '/^$/d')
-    if [ -n "$apache_num" ] || [ -n "$findserverap" ] || [ -n "$findserverah" ]; then
+    if [ $apache_num -gt 0 ] || [ -n "$findserverap" ] || [ -n "$findserverah" ]; then
         echo
         _info "该主机已经存在Apache,本次安装退出........"
         echo
@@ -982,7 +982,7 @@ install_tools(){
     fi
     mysql_num=$(pgrep mysql | wc -l)
     findserver=$(whereis mysqld |awk -F : '{print $2}' | sed '/^$/d')
-    if [ -n "$mysql_num" ] || [ -n "$findserver" ]; then
+    if [ $mysql_num -gt 0 ] || [ -n "$findserver" ]; then
         echo
         _info "该主机已经存在MySQL,本次安装退出........"
         echo
@@ -990,7 +990,7 @@ install_tools(){
     fi
     php_num=$(pgrep php | wc -l)
     findserver=$(whereis php |awk -F : '{print $2}' | sed '/^$/d')
-    if [ -n "$php_num" ] || [ -n "$findserver" ]; then
+    if [ $php_num -gt 0 ] || [ -n "$findserver" ]; then
         echo
         _info "该主机已经存在PHP,本次安装退出........"
         echo
