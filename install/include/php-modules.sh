@@ -123,10 +123,9 @@ install_php_depends(){
     elif check_sys packageManager yum; then
         yum_depends=(
             cmake autoconf patch m4 bison bzip2-devel pam-devel gmp-devel libicu-devel
-            curl-devel pcre-devel libtool-libs libtool-ltdl-devel libwebp-devel libXpm-devel
-            libvpx-devel libjpeg-devel libpng-devel freetype-devel oniguruma-devel
-            aspell-devel enchant-devel readline-devel libtidy-devel sqlite-devel
-            openldap-devel libxslt-devel net-snmp net-snmp-devel krb5-devel libc-client-devel
+            curl-devel pcre-devel libtool-libs libwebp-devel libXpm-devel
+            libvpx-devel libjpeg-devel libpng-devel freetype-devel
+            aspell-devel sqlite-devel net-snmp net-snmp-devel krb5-devel libc-client-devel
         )
         if yum list 2>/dev/null | grep -q "uw-imap-devel"; then
             yum_depends=(${yum_depends[@]/#libc-client-devel/uw-imap-devel})
