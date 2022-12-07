@@ -118,6 +118,7 @@ install_php(){
     fi
     ldconfig
     error_detect "./configure ${php_configure_args}"
+    error_detect "make clean"
     error_detect "parallel_make"
     error_detect "make install"
 
