@@ -251,7 +251,7 @@ common_setup(){
     boot_start mysqld
 
     _info "Starting ${db_name}..."
-    /etc/init.d/mysqld start > /dev/null 2>&1
+    systemctl start mysqld > /dev/null 2>&1
     sleep 1
     if [ $? -eq 0 ]; then
         if [ "${mysql}" == "${mysql8_0_filename}" ]; then
@@ -276,7 +276,7 @@ EOF
     fi
 
     _info "Shutting down ${db_name}..."
-    /etc/init.d/mysqld stop > /dev/null 2>&1
+    systemctl stop mysqld > /dev/null 2>&1
 
 }
 

@@ -28,7 +28,7 @@ upgrade_apache(){
     if [[ "${upgrade_apache}" = "y" || "${upgrade_apache}" = "Y" ]]; then
         _info "Apache upgrade start..."
         if [ $(ps -ef | grep -v grep | grep -c "httpd") -gt 0 ]; then
-            /etc/init.d/httpd stop > /dev/null 2>&1
+            systemctl stop httpd > /dev/null 2>&1
         fi
 
         if [[ -d "${apache_location}".bak && -d "${apache_location}" ]]; then
@@ -97,7 +97,7 @@ upgrade_apache(){
         rm -f httpd-${latest_apache24}.tar.gz ${apr_filename}.tar.gz ${apr_util_filename}.tar.gz
         _info "Clear up completed..."
 
-        /etc/init.d/httpd start
+        systemctl start httpd
         if [ $? -eq 0 ]; then
             _info "Apache start success"
         else

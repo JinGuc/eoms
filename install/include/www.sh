@@ -10,7 +10,7 @@ echo ""
 }
 #Install www
 install_www(){
-/etc/init.d/mysqld start > /dev/null 2>&1
+systemctl start mysqld > /dev/null 2>&1
 dbhost=localhost
 dbname=eoms
 p=${mysql_root_password_}

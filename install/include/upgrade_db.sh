@@ -79,7 +79,7 @@ upgrade_db(){
         _info "${db_name} upgrade start..."
         if [ $(ps -ef | grep -v grep | grep -c "mysqld") -eq 0 ]; then
             _info "${db_name} looks like not running, Try to starting ${db_name}..."
-            /etc/init.d/mysqld start > /dev/null 2>&1
+            systemctl start mysqld > /dev/null 2>&1
             if [ $? -ne 0 ]; then
                 _error "Starting ${db_name} failed"
             fi
@@ -103,7 +103,7 @@ upgrade_db(){
             _error "${db_name} all of databases backup failed, Please check it and try again"
         fi
         _info "Stopping ${db_name}..."
-        /etc/init.d/mysqld stop > /dev/null 2>&1
+        systemctl stop mysqld > /dev/null 2>&1
         if [ $? -eq 0 ]; then
             _info "${db_name} stop success"
         else
@@ -205,7 +205,7 @@ upgrade_db(){
             ulimit -s unlimited
         fi
         _info "Starting ${db_name}..."
-        /etc/init.d/mysqld start > /dev/null 2>&1
+        systemctl start mysqld > /dev/null 2>&1
         sleep 1
         if [ $? -ne 0 ]; then
             _error "Starting ${db_name} failed, Please check it and try again"
@@ -235,11 +235,11 @@ EOF
             _warn "${db_name} all of databases restore failed, Please restore it manually"
         fi
         _info "Restart ${db_name}..."
-        /etc/init.d/mysqld restart > /dev/null 2>&1
+        systemctl restart mysqld > /dev/null 2>&1
         _info "Restart Apache..."
-        /etc/init.d/httpd stop > /dev/null 2>&1
+        systemctl stop httpd > /dev/null 2>&1
         sleep 3
-        /etc/init.d/httpd start > /dev/null 2>&1
+        systemctl start httpd > /dev/null 2>&1
         _info "Clear up start..."
         cd ${cur_dir}/software
         rm -rf mysql-* mariadb-*

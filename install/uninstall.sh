@@ -32,7 +32,7 @@ include(){
 uninstall_lamp(){
     _info "uninstalling Apache"
     if [ -f /etc/init.d/httpd ] && [ $(ps -ef | grep -v grep | grep -c "httpd") -gt 0 ]; then
-        /etc/init.d/httpd stop > /dev/null 2>&1
+        systemctl stop httpd > /dev/null 2>&1
         systemctl stop httpd > /dev/null 2>&1
     fi
     rm -f /etc/init.d/httpd
@@ -41,7 +41,7 @@ uninstall_lamp(){
     echo
     _info "uninstalling MySQL"
     if [ -f /etc/init.d/mysqld ] && [ $(ps -ef | grep -v grep | grep -c "mysqld") -gt 0 ]; then
-        /etc/init.d/mysqld stop > /dev/null 2>&1
+        systemctl stop mysqld > /dev/null 2>&1
     fi
     rm -f /etc/init.d/mysqld
     rm -rf ${mysql_location} ${mariadb_location} ${mysql_location}.bak ${mariadb_location}.bak /usr/bin/mysqldump /usr/bin/mysql /etc/my.cnf /etc/ld.so.conf.d/mysql.conf

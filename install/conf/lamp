@@ -164,7 +164,7 @@ vhost_add(){
             mysql_count=$(ps -ef | grep -v grep | grep -c "mysqld")
             if [ ${mysql_count} -eq 0 ]; then
                 _info "$(_yellow "Warning: $(db_name) looks like not running, Try to starting $(db_name)...")"
-                /etc/init.d/mysqld start > /dev/null 2>&1
+                systemctl start mysqld > /dev/null 2>&1
                 if [ $? -ne 0 ]; then
                     _error "Error: $(db_name) starting failed"
                 fi
@@ -231,7 +231,7 @@ EOF
 
     _info "Reloading the Apache config file..."
     if ${apache_location}/bin/apachectl -t > /dev/null 2>&1; then
-        /etc/init.d/httpd restart
+        systemctl restart httpd
         _info "Reload success"
     else
         _error "Error: Reload failed. Apache config file had an error, please fixed it and try again"
@@ -243,7 +243,7 @@ EOF
         add_ssl_cert
         _info "Reloading the Apache config file..."
         if ${apache_location}/bin/apachectl -t > /dev/null 2>&1; then
-            /etc/init.d/httpd restart
+            systemctl restart httpd
             _info "Reload success"
         else
             _error "Error: Reload failed. Apache config file had an error, please fixed it and try again"
@@ -453,7 +453,7 @@ vhost_del(){
         _info "You can delete it manually if necessary"
         _info "Reloading the Apache config file..."
         if ${apache_location}/bin/apachectl -t > /dev/null 2>&1; then
-            /etc/init.d/httpd restart
+            systemctl restart httpd
             _info "Reload success"
         else
             _error "Error: Reload failed. Apache config file had an error, please fixed it and try again"

@@ -932,11 +932,11 @@ EOF
     fi
     if [ "${apache}" != "do_not_install" ]; then
         echo "Starting Apache..."
-        /etc/init.d/httpd start &> /dev/null
+        systemctl start httpd &> /dev/null
     fi
     if [ "${mysql}" != "do_not_install" ]; then
         echo "Starting Database..."
-        /etc/init.d/mysqld restart &> /dev/null
+        systemctl restart mysqld &> /dev/null
     fi
     if if_in_array "${php_memcached_filename}" "${php_modules_install}"; then
         echo "Starting Memcached..."

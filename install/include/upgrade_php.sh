@@ -120,9 +120,9 @@ upgrade_php(){
             cp -pf ${php_location}.bak/php.d/* ${php_location}/php.d/
         fi
         _info "Restart Apache..."
-        /etc/init.d/httpd stop > /dev/null 2>&1
+        systemctl stop httpd > /dev/null 2>&1
         sleep 3
-        /etc/init.d/httpd start > /dev/null 2>&1
+        systemctl start httpd > /dev/null 2>&1
         _info "Clear up start..."
         cd ${cur_dir}/software
         rm -rf php-${latest_php}/
