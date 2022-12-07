@@ -1012,7 +1012,7 @@ install_tools(){
         fi
     elif check_sys packageManager yum; then
         yum makecache &> /dev/null
-        yum_tools=(yum-utils tar gcc gcc-c++ make wget perl chkconfig curl bzip2 readline readline-devel net-tools crontabs ca-certificates epel-release automake)
+        yum_tools=(yum-utils tar gcc gcc-c++ make wget perl chkconfig curl bzip2 readline readline-devel net-tools crontabs ca-certificates automake)
         # libcurl-minimal and curl-minimal will be installed by default instead of libcurl and curl
         if rpm -qa | grep -q curl-minimal; then
             yum_tools=(${yum_tools[@]#curl})
@@ -1020,7 +1020,7 @@ install_tools(){
         for tool in ${yum_tools[@]}; do
             error_detect_depends "yum -y install ${tool}"
         done
-        yum-config-manager --enable epel &> /dev/null
+        #yum-config-manager --enable epel &> /dev/null
         # Install epel-release in Amazon Linux 2
         if is_exist "amazon-linux-extras"; then
             amazon-linux-extras install -y epel &> /dev/null
