@@ -32,7 +32,7 @@ unzip eoms-master.zip<br>
 cd eoms-master/install<br>
 chmod 755  *.sh<br>
 
-一键安装服务端<br>
+一键安装服务端:<br>
 #全量安装，包括apache+php+mysql<br>
 注：数据库的数据位置默认为安装目录/usr/local/mysql下的 data 目录<br>
       mysql数据库的默认 root 密码为Jingu.com<br>
@@ -40,8 +40,11 @@ chmod 755  *.sh<br>
 ./install_server.sh<br>
 一键安装客户端：<br>
 ./install_agent.sh<br>
-<br>
-等待安装完成<br>
+
+服务端一键升级<br>
+./upgrade_server.sh<br>
+客户端一键升级<br>
+./upgrade_agent.sh<br>
 <p>
 5、使用说明<br>
 关注微信视频号，收看视频讲解<br>
