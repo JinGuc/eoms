@@ -28,7 +28,6 @@ install_php(){
     _info "该主机已经存在PHP,本次安装退出........"
     exit 0
     fi
-
     local openssl_version=$(openssl version -v)
     local major_version=$(echo ${openssl_version} | awk '{print $2}' | grep -oE "[0-9.]+")
     is_64bit && with_libdir="--with-libdir=lib64" || with_libdir=""
@@ -49,7 +48,6 @@ install_php(){
     --with-mysql-sock=/tmp/mysql.sock \
     --with-pdo-mysql=mysqlnd \
     --enable-gd \
-    --with-webp \
     --with-jpeg \
     --with-xpm \
     --with-freetype \
@@ -59,9 +57,6 @@ install_php(){
     --with-gettext \
     --with-gmp \
     --with-mhash \
-    --with-ldap \
-    --with-ldap-sasl \
-    --with-pspell=/usr \
     --with-readline \
     --with-xsl \
     --enable-zend-test \
