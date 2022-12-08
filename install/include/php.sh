@@ -91,8 +91,8 @@ install_php(){
     install_php_depends
 
     cd ${cur_dir}/software/
-    wget ${download_root_url}oniguruma-6.8.2-1.el7.x86_64.rpm
-    wget ${download_root_url}oniguruma-devel-6.8.2-1.el7.x86_64.rpm
+    wget ${download_root_url}/oniguruma-6.8.2-1.el7.x86_64.rpm
+    wget ${download_root_url}/oniguruma-devel-6.8.2-1.el7.x86_64.rpm
     rpm -ivh oniguruma*
     if [ "${php}" == "${php7_4_filename}" ]; then
         download_file  "${php7_4_filename}.tar.gz" "${php7_4_filename_url}"
