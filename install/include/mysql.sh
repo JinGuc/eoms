@@ -312,7 +312,7 @@ install_mysqld(){
         mv ${mysql_filename}/* ${mysql_location}
     else
         echo
-        _info "Mysql安装文件不存在,本安装退出........"
+        _info "Mysql安装文件不存在,本次安装退出........"
         exit 0
     fi
     
