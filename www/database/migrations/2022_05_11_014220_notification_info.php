@@ -18,7 +18,7 @@ class NotificationInfo extends Migration
                 $table->id();
                 $table->bigInteger('notificationLogId')->comment("告警日志id");
                 $table->tinyInteger('sendType')->comment("通知方式 1电话 2短信 3邮件 4电话+短信 5电话+邮件 6短信+邮件 7电话+短信+邮件 ");
-                $table->string('ContactId','1000')->comment("通讯录id 多个联系人使用英文逗号分割");
+                $table->string('ContactId','255')->comment("通讯录id 多个联系人使用英文逗号分割");
                 $table->longText('data')->comment("通知内容");
                 $table->tinyInteger('status')->comment("通知状态 0未处理 1成功 2失败")->default(0);
                 $table->index('notificationLogId');
