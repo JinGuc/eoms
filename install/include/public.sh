@@ -985,7 +985,7 @@ install_tools(){
     findserverah=$(whereis httpd |awk -F : '{print $2}' | sed '/^$/d')
     if [ $apache_num -gt 0 ] || [ -n "$findserverap" ] || [ -n "$findserverah" ]; then
         echo
-        _info "该主机已经存在Apache,跳过Apache安装........"
+        _info "该主机已经存在Apache,本次跳过Apache安装........"
         echo
         #exit 0
         apache=do_not_install
@@ -994,7 +994,7 @@ install_tools(){
     findserver=$(whereis mysqld |awk -F : '{print $2}' | sed '/^$/d')
     if [ $mysql_num -gt 0 ] || [ -n "$findserver" ]; then
         echo
-        _info "该主机已经存在MySQL,跳过MySQL安装........"
+        _info "该主机已经存在MySQL,本次跳过MySQL安装........"
         echo
         #exit 0
         mysql=do_not_install
@@ -1003,7 +1003,7 @@ install_tools(){
     findserver=$(whereis php |awk -F : '{print $2}' | sed '/^$/d')
     if [ $php_num -gt 0 ] || [ -n "$findserver" ]; then
         echo
-        _info "该主机已经存在PHP,跳过PHP安装........"
+        _info "该主机已经存在PHP,本次跳过PHP安装........"
         echo
         #exit 0
         php=do_not_install
