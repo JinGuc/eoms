@@ -985,25 +985,28 @@ install_tools(){
     findserverah=$(whereis httpd |awk -F : '{print $2}' | sed '/^$/d')
     if [ $apache_num -gt 0 ] || [ -n "$findserverap" ] || [ -n "$findserverah" ]; then
         echo
-        _info "该主机已经存在Apache,本次安装退出........"
+        _info "该主机已经存在Apache,跳过Apache安装........"
         echo
-        exit 0
+        #exit 0
+        $apache = "do_not_install"
     fi
     mysql_num=$(pgrep mysql | wc -l)
     findserver=$(whereis mysqld |awk -F : '{print $2}' | sed '/^$/d')
     if [ $mysql_num -gt 0 ] || [ -n "$findserver" ]; then
         echo
-        _info "该主机已经存在MySQL,本次安装退出........"
+        _info "该主机已经存在MySQL,跳过MySQL安装........"
         echo
-        exit 0
+        #exit 0
+        $mysql = "do_not_install"
     fi
     php_num=$(pgrep php | wc -l)
     findserver=$(whereis php |awk -F : '{print $2}' | sed '/^$/d')
     if [ $php_num -gt 0 ] || [ -n "$findserver" ]; then
         echo
-        _info "该主机已经存在PHP,本次安装退出........"
+        _info "该主机已经存在PHP,跳过PHP安装........"
         echo
-        exit 0
+        #exit 0
+        $php = "do_not_install"
     fi
     _info "Installing development tools..."
     if check_sys packageManager apt; then
