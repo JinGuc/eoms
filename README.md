@@ -16,7 +16,7 @@
 <p>
 4、安装<br>
 环境：CensOS64 7.4及 以上（需要服务器能访问外网）<br>
-1)服务器在线安装
+1)服务器在线安装<br>
 事前准备（安装 wget、git）<br>
 注意：双斜杠//后的内容不要复制输入<br>
 yum install -y wget git<br>
@@ -24,11 +24,11 @@ git clone https://gitee.com/jinguc/eoms.git<br>
 cd eoms/install<br>
 chmod 755 *.sh<br>
 
-2)本地下载ZIP安装包后上传服务器安装
+2)本地下载ZIP安装包后上传服务器安装<br>
 事前准备（安装 unzip）<br>
-yum install -y unzip
-进入压缩包同目录下解压安装包
-unzip eoms-master.zip
+yum install -y unzip<br>
+进入压缩包同目录下解压安装包<br>
+unzip eoms-master.zip<br>
 cd eoms-master/install<br>
 chmod 755 *.sh<br>
 
