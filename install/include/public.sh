@@ -958,6 +958,7 @@ EOF
     netstat -tunlp
     localIp=$(ip a  | grep inet | grep -v inet6 | grep -E 'ens|eth' | grep -v '127.0.0.1' | awk '{print $2}' | awk -F / '{print$1}'
 )
+if [ "${apache}" != "do_not_install" ]; then
     echo
     _info "安装开始时间: ${StartDate}"
     _info "安装完成时间: $(date "+%Y-%m-%d %H:%M:%S") (Use:$(_red $[($(date +%s)-StartDateSecond)/60]) minutes)"
@@ -968,6 +969,13 @@ EOF
     _info "登录用户名J_eoms 密码J_eoms_p"
     _info "感谢您使用！"
     exit 0
+else
+    echo
+    _info "安装开始时间: ${StartDate}"
+    _info "安装完成时间: $(date "+%Y-%m-%d %H:%M:%S") (Use:$(_red $[($(date +%s)-StartDateSecond)/60]) minutes)"
+    _info "感谢您使用！"
+    exit 0
+fi
 }
 
 #Install tools
