@@ -28,12 +28,7 @@ source /etc/rc.local
 #firewall-cmd --permanent --add-rich-rule="rule family="ipv4" source address="192.168.2.133" port protocol="udp" port="161" accept"
 #firewall-cmd --reload
 
-#临时关闭防火墙：/etc/init.d/iptables stop
-#永久关闭防火墙：chkconfig --level 35 iptables off
-#将161端口和162端口设置通过防火墙：
 #vi /etc/sysconfig/iptables
-
-#添加如下内容：
 
 #-A INPUT -m state --state NEW -m udp  -s 192.168.2.133 -p udp --dport 161 -j ACCEPT
 #-A INPUT -m state --state NEW -m udp  -s 192.168.2.133 -p udp --dport 162 -j ACCEPT

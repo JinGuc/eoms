@@ -33,7 +33,6 @@ uninstall_lamp(){
     _info "uninstalling Apache"
     if [ -f /etc/init.d/httpd ] && [ $(ps -ef | grep -v grep | grep -c "httpd") -gt 0 ]; then
         systemctl stop httpd > /dev/null 2>&1
-        systemctl stop httpd > /dev/null 2>&1
     fi
     rm -f /etc/init.d/httpd
     rm -rf ${apache_location} ${apache_location}.bak /usr/sbin/httpd /var/log/httpd /etc/logrotate.d/httpd /var/spool/mail/apache

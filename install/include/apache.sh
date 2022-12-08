@@ -69,7 +69,8 @@ install_apache(){
     tar zxf ${apr_filename}.tar.gz
     download_file "${apr_util_filename}.tar.gz" "${apr_util_filename_url}"
     tar zxf ${apr_util_filename}.tar.gz
-    download_file "${apache2_4_filename}.tar.gz" "${apache2_4_filename_url}"
+    #download_file "${apache2_4_filename}.tar.gz" "${apache2_4_filename_url}"
+    download_file "${apache2_4_filename}.tar.gz" "${download_root_url}/${apache2_4_filename}.tar.gz"
     tar zxf ${apache2_4_filename}.tar.gz
     cd ${apache2_4_filename}
     mv ${cur_dir}/software/${apr_filename} srclib/apr

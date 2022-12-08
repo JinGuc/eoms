@@ -146,10 +146,10 @@ opcache.fast_shutdown=1
 opcache.save_comments=1
 EOF
 
-    cp -f ${cur_dir}/conf/ocp.php ${web_root_dir}
-    cp -f ${cur_dir}/conf/jquery.js ${web_root_dir}
-    cp -f ${cur_dir}/conf/phpinfo.php ${web_root_dir}
-    wget -O ${web_root_dir}/p.php ${x_prober_url} > /dev/null 2>&1
+    #cp -f ${cur_dir}/conf/ocp.php ${web_root_dir}
+    #cp -f ${cur_dir}/conf/jquery.js ${web_root_dir}
+    #cp -f ${cur_dir}/conf/phpinfo.php ${web_root_dir}
+    #wget -O ${web_root_dir}/p.php ${x_prober_url} > /dev/null 2>&1
     if [ $? -ne 0 ]; then
         _warn "Download X-Prober failed, please manually download from ${x_prober_url} if necessary."
     fi
