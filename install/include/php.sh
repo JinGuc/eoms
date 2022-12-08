@@ -86,7 +86,6 @@ install_php(){
     Cflags: -I${includedir}
     " > /usr/lib64/pkgconfig/libjpeg.pc
 
-    yum install -y freetype freetype-devel libxslt-devel libpng-devel libxml2 libxml2-devel
     #Install PHP depends
     install_php_depends
 
