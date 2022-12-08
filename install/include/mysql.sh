@@ -302,7 +302,7 @@ install_mysqld(){
         tar Jxf ${mysql_filename}.tar.xz
     else
         #mysql_filename_url="https://cdn.mysql.com/Downloads/MySQL-${mysql_ver}/${mysql_filename}.tar.gz"
-        mysql_filename_url=${download_root_url}/${mysql_filename}.tar.gz"
+        mysql_filename_url="${download_root_url}/${mysql_filename}.tar.gz"
         download_file "${mysql_filename}.tar.gz" "${mysql_filename_url}"
         tar zxf ${mysql_filename}.tar.gz
     fi
