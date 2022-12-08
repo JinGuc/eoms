@@ -308,7 +308,14 @@ install_mysqld(){
     fi
 
     _info "Moving MySQL files..."
-    mv ${mysql_filename}/* ${mysql_location}
+    if [ -f ${mysql_filename} ]; then
+        mv ${mysql_filename}/* ${mysql_location}
+    else
+        echo
+        _info "Mysql安装文件不存在,本安装退出........"
+        exit 0
+    fi
+    
 
     config_mysql ${mysql_ver}
 
