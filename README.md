@@ -38,12 +38,14 @@ chmod 755  *.sh<br>
       mysql数据库的默认 root 密码为Jingu.com<br>
       Apache的站点目录为/home/data/www<br>
 ./install_server.sh<br>
+
 一键安装客户端：<br>
 ./install_agent.sh<br>
 
-服务端一键升级<br>
+一键升级服务端:<br>
 ./upgrade_server.sh<br>
-客户端一键升级<br>
+
+一键升级客户端:<br>
 ./upgrade_agent.sh<br>
 <p>
 5、使用说明<br>
