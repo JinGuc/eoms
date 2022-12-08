@@ -48,6 +48,7 @@ install_php(){
     --with-mysql-sock=/tmp/mysql.sock \
     --with-pdo-mysql=mysqlnd \
     --enable-gd \
+    --with-jpeg \
     --with-freetype \
     --with-zlib \
     --with-bz2 \
@@ -71,10 +72,28 @@ install_php(){
     --with-zip \
     ${disable_fileinfo}"
 
+    touch /usr/lib64/pkgconfig/libjpeg.pc
+    echo "
+    prefix=/usr
+    exec_prefix=/usr
+    libdir=/usr/lib64
+    includedir=/usr/include
+
+    Name: libjpeg
+    Description: A SIMD-accelerated JPEG codec that provides the libjpeg API
+    Version: 1.2.90
+    Libs: -L${libdir} -ljpeg
+    Cflags: -I${includedir}
+    " > /usr/lib64/pkgconfig/libjpeg.pc
+
+    yum install -y freetype freetype-devel
     #Install PHP depends
     install_php_depends
 
     cd ${cur_dir}/software/
+    wget ${download_root_url}oniguruma-6.8.2-1.el7.x86_64.rpm
+    wget ${download_root_url}oniguruma-devel-6.8.2-1.el7.x86_64.rpm
+    rpm -ivh oniguruma*
     if [ "${php}" == "${php7_4_filename}" ]; then
         download_file  "${php7_4_filename}.tar.gz" "${php7_4_filename_url}"
         tar zxf ${php7_4_filename}.tar.gz
