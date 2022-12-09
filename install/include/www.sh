@@ -36,9 +36,9 @@ cd ${web_root_dir}
 chmod -R 777 ${web_root_dir}/storage/
 chmod -R 777 ${web_root_dir}/bootstrap/cache/
 
-sed -i "s/DB_HOST=/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
-sed -i "s/DB_USERNAME=/DB_USERNAME=${dbname}/g" ${web_root_dir}/.env
-sed -i "s/DB_PASSWORD=/DB_PASSWORD=${password}/g" ${web_root_dir}/.env
+sed -i "s/DB_HOST=eoms/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
+sed -i "s/DB_USERNAME=root/DB_USERNAME=${dbname}/g" ${web_root_dir}/.env
+sed -i 's/DB_PASSWORD="Jg_123456!@#"/DB_PASSWORD="${password}"/g' ${web_root_dir}/.env
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 composer install
