@@ -25,6 +25,8 @@ cd eoms/install<br>
 chmod 755  *.sh<br>
 
 2)本地下载ZIP安装包后上传服务器安装<br>
+压缩包可以下载指引<br>
+<p style="align:left;"><img src="https://www.jinguc.com/oms/img/download_zip.png"></p>
 事前准备（安装 wget、unzip）<br>
 yum install -y wget unzip<br>
 进入压缩包同目录下解压安装包<br>
