@@ -36,8 +36,8 @@ class ServerInfo extends Migration
                 $table->longText('udp_port')->comment("已开放udp端口");
                 $table->string('net_speed',255)->comment("当前网络速度");
                 $table->longText('hrswrunname')->comment("运行的进程名称");
-                $table->datetime('system_time')->comment("系统时间");
-                $table->string('system_runtime',500)->comment("系统以运行时间");
+                $table->datetime('system_time')->comment("系统当前时间");
+                $table->string('system_runtime',500)->comment("系统已运行时长");
                 $table->integer('today_login_error_totalCount')->comment("今日用户登陆失败次数")->default(0);
                 $table->integer('today_login_success_totalCount')->comment("今日用户登陆成功次数")->default(0);
                 $table->index('hostId');
