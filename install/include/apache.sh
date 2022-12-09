@@ -230,6 +230,10 @@ mod_xml2enc.so
     cp -f ${cur_dir}/conf/lamp.png ${web_root_dir}
     cp -f ${cur_dir}/conf/favicon.ico ${web_root_dir}
     chown -R apache.apache ${web_root_dir}
+    if [ ! -d "/home/apache" ]; then
+        mkdir /home/apache
+        chown -R apache.apache /home/apache
+    fi
     boot_start httpd
 
 }

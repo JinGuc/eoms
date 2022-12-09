@@ -35,7 +35,8 @@ uninstall_lamp(){
         systemctl stop httpd > /dev/null 2>&1
     fi
     rm -f /etc/init.d/httpd
-    rm -rf ${apache_location} ${apache_location}.bak /usr/sbin/httpd /var/log/httpd /etc/logrotate.d/httpd /var/spool/mail/apache
+    rm -rf ${apache_location} ${apache_location}.bak /usr/sbin/httpd /var/log/httpd /etc/logrotate.d/httpd /var/spool/mail/apache /home/apache
+    crontab -u apache -r
     _info "Success"
     echo
     _info "uninstalling MySQL"

@@ -62,15 +62,15 @@ if [ $n -eq 0 ]; then
     iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
 fi
 #以上文件执行完成后就可以为网站添加计划任务了，
-FIND_FILE="/var/spool/cron/root"
-FIND_STR="/usr/local/php/bin/php artisan schedule:run"
+FIND_FILE="/var/spool/cron/apache"
+FIND_STR="/usr/local/php/bin/php ${web_root_dir}/artisan schedule:run"
 # 判断匹配函数，匹配函数不为0，则包含给定字符
 f=`grep -c "$FIND_STR" $FIND_FILE`
 if [ -z $f ] || [ $f -eq 0 ] || [ ! -f "$FIND_FILE" ];then
 echo "
 #------------------eoms crontab start------------------
-* * * * *  apache /usr/local/php/bin/php ${web_root_dir}/artisan schedule:run > /dev/null
+* * * * * /usr/local/php/bin/php ${web_root_dir}/artisan schedule:run > /dev/null
 #------------------eoms crontab end------------------
-"  >> /var/spool/cron/root
+"  >> ${FIND_FILE}
 fi 
 }
