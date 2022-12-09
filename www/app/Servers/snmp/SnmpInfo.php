@@ -413,7 +413,7 @@ class SnmpInfo
         $sysruntime_substr = substr($SysInfo['system_runtime'], $st, $et + 1);
         $SysInfo['system_runtime'] = str_replace(array($sysruntime_substr, 'days'), array('', 'days,'), $SysInfo['system_runtime']);
         $SysInfo['system_runtime'] = trim($SysInfo['system_runtime']);
-        $SysInfo['system_time'] = $systime['result']['Data']['hrSystemDate'][0];
+        $SysInfo['system_time'] = $systime['result']['Data']['hrSystemDate'][0]??'';
         if(strpos($SysInfo['system_time'],' ')!==false){
             $SysInfo['system_time'] = str_replace('.0','',$SysInfo['system_time']);
             $stime = explode(' ',$SysInfo['system_time']);
