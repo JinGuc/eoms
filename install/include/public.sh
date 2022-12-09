@@ -935,7 +935,7 @@ EOF
         systemctl start httpd &> /dev/null
     fi
     if [ "${mysql}" != "do_not_install" ]; then
-        echo "Starting Database..."
+        echo "Starting MySql..."
         systemctl restart mysqld &> /dev/null
     fi
     if if_in_array "${php_memcached_filename}" "${php_modules_install}"; then

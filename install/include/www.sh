@@ -69,7 +69,7 @@ f=`grep -c "$FIND_STR" $FIND_FILE`
 if [ -z $f ] || [ $f -eq 0 ] || [ ! -f "$FIND_FILE" ];then
 echo "
 #------------------eoms crontab start------------------
-* * * * *   cd ${web_root_dir} && /usr/local/php/bin/php artisan schedule:run > /dev/null
+* * * * *  apache /usr/local/php/bin/php ${web_root_dir}/artisan schedule:run > /dev/null
 #------------------eoms crontab end------------------
 "  >> /var/spool/cron/root
 fi 

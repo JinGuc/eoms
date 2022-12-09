@@ -28,7 +28,7 @@ install_snmp(){
     #make
     #make install
     #mkdir /usr/local/snmp/etc
-    if [ ! -f "/etc/snmp" ];then
+    if [ ! -d "/etc/snmp" ];then
       mkdir /etc/snmp
     fi
     cp -rp ${cur_dir}/conf/snmpd.conf /etc/snmp/
