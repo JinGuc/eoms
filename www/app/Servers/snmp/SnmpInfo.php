@@ -414,6 +414,14 @@ class SnmpInfo
         $SysInfo['system_runtime'] = str_replace(array($sysruntime_substr, 'days'), array('', 'days,'), $SysInfo['system_runtime']);
         $SysInfo['system_runtime'] = trim($SysInfo['system_runtime']);
         $SysInfo['system_time'] = $systime['result']['Data']['hrSystemDate'][0];
+        if(strpos($SysInfo['system_time'],',')!==false){
+            $SysInfo['system_time'] = str_replace('.0','',$SysInfo['system_time']);
+            $stime = explode(',',$SysInfo['system_time']);
+            $SysInfo['system_time'] = $stime[0]??''.$stime[1]??'';
+        }
+        if(empty($SysInfo['system_time'])){
+            $SysInfo['system_time'] = '1900-01-01';
+        }
         $meminfo = self::get($host, 'memInfo');
         $SysInfo['system_version'] = trim($meminfo['result']['Data']['memInfo']['osname']);
         event(new SysInfoEvent([
