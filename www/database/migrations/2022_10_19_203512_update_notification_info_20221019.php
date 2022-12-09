@@ -20,7 +20,7 @@ class UpdateNotificationInfo20221019 extends Migration
             }
             if(!Schema::hasColumn('notification_info','relate_id'))
             {
-                $table->integer('relate_id')->comment('关联表名ID');
+                $table->integer('relate_id')->default('0')->comment('关联表名ID');
                 $table->index(['relate_table','relate_id']);
             }
         });

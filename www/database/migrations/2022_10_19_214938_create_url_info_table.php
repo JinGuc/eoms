@@ -21,7 +21,7 @@ class CreateUrlInfoTable extends Migration
                 $table->string('port',8)->comment("端口号");
                 $table->tinyInteger('status')->comment("状态 1启用 2禁用")->default('1');
                 $table->string('type')->comment("协议类型");
-                $table->string('remark',300)->comment("备注");
+                $table->string('remark',300)->nullable()->comment("备注");
                 $table->timestamps();
             });
         }

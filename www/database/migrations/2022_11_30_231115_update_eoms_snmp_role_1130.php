@@ -16,11 +16,11 @@ class UpdateEomsSnmpRole1130 extends Migration
         Schema::table('snmp_role', function (Blueprint $table) {
             if(!Schema::hasColumn('snmp_role','user'))
             {
-                $table->string('user','100')->default('')->comment('授权用户'); 
+                $table->string('user','100')->nullable()->comment('授权用户'); 
             }
             if(!Schema::hasColumn('snmp_role','password'))
             {
-                $table->string('password','200')->default('')->comment('授权密码'); 
+                $table->string('password','200')->nullable()->comment('授权密码'); 
             }
         });
     }

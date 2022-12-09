@@ -16,7 +16,7 @@ class UpdateUrlInfo20221117 extends Migration
         Schema::table('url_info', function (Blueprint $table) {
             if(!Schema::hasColumn('url_info','response_time'))
             {
-                $table->string('response_time','30')->comment('响应时长（单位s）');  
+                $table->string('response_time','30')->nullable()->comment('响应时长（单位s）');  
             }
         });
         

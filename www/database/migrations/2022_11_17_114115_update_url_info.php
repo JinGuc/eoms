@@ -20,11 +20,11 @@ class UpdateUrlInfo extends Migration
             }
             if(!Schema::hasColumn('url_info','response_time'))
             {
-                $table->string('response_time','30')->comment('响应时长（单位s）');  
+                $table->string('response_time','30')->nullable()->comment('响应时长（单位s）');  
             }
             if(!Schema::hasColumn('url_info','gathering_time'))
             {
-                $table->dateTime('gathering_time')->nullable()->comment('最后采集时间');  
+                $table->dateTime('gathering_time')->nullable()->nullable()->comment('最后采集时间');  
             }
         });
     }
