@@ -44,7 +44,6 @@ mv composer.phar /usr/local/bin/composer
 composer install
 sed -i "29s/\/\/ protected/protected/g" ${web_root_dir}/app/Providers/RouteServiceProvider.php
 /usr/local/php/bin/php artisan migrate
-/usr/local/php/bin/php artisan migrate
 #导入默认数据
 /usr/local/php/bin/php artisan db:seed --class=UserSeeder
 /usr/local/php/bin/php artisan db:seed --class=ipListSeeder
