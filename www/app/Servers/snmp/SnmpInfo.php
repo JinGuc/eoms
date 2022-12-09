@@ -417,7 +417,9 @@ class SnmpInfo
         if(strpos($SysInfo['system_time'],' ')!==false){
             $SysInfo['system_time'] = str_replace('.0','',$SysInfo['system_time']);
             $stime = explode(' ',$SysInfo['system_time']);
-            $SysInfo['system_time'] = $stime[0]??''.$stime[1]??'';
+            $stime[0] = $stime[0]??'';
+            $stime[1] = $stime[1]??'';
+            $SysInfo['system_time'] = $stime[0].' '.$stime[1];
         }
         if(empty($SysInfo['system_time'])){
             $SysInfo['system_time'] = '1900-01-01';
