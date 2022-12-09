@@ -88,7 +88,8 @@ else
 fi
 if [ $f -eq 0 ]  && [ $phymemused -gt 0 ];then
    status="running"
-   else
+fi
+if [ $f -eq 0 ]  && [ $phymemused -eq 0 ];then
    status="stop"
 fi
 echo "{'status':'$status','memoryused':'$memoryused','memUsedPercent':'$memUsedPercent','cpuused':'$cpuused','starttime':'$lstart'}"
