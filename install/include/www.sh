@@ -57,10 +57,6 @@ chown -R apache:apache ${web_root_dir}/storage
 cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
 systemctl restart supervisord
 sleep 1
-n=$(iptables -nL | grep 8804 | wc -l)
-if [ $n -eq 0 ]; then
-    iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
-fi
 #以上文件执行完成后就可以为网站添加计划任务了，
 FIND_FILE="/var/spool/cron/apache"
 FIND_STR="/usr/local/php/bin/php ${web_root_dir}/artisan schedule:run"
@@ -73,4 +69,8 @@ echo "
 #------------------eoms crontab end------------------
 "  >> ${FIND_FILE}
 fi 
+n=$(iptables -nL | grep 8804 | wc -l)
+if [ $n -eq 0 ]; then
+    iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
+fi
 }
