@@ -65,7 +65,6 @@ uninstall_lamp(){
     _info "Success"
     echo
     _info "uninstalling JgOmsWeb"
-    systemctl stop snmpd
     rm -rf ${web_root_dir}
     _info "Success"
     echo
