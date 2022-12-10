@@ -16,7 +16,7 @@
 
 # 4、安装
 环境：CensOS64 7.4及 以上（需要服务器能访问外网）<br>
-# 1)服务器在线安装<br>
+## 1)服务器在线安装<br>
 事前准备（安装 wget、git）<br>
 注意：双斜杠//后的内容不要复制输入<br>
 yum install -y wget git<br>
@@ -24,7 +24,7 @@ git clone https://gitee.com/jinguc/eoms.git<br>
 cd eoms/install<br>
 chmod 755  *.sh<br>
 
-# 2)本地下载ZIP安装包后上传服务器安装<br>
+## 2)本地下载ZIP安装包后上传服务器安装<br>
 安装包下载指引<br>
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/download_zip.png"></p>
 事前准备（安装 wget、unzip）<br>
@@ -61,6 +61,6 @@ chmod 755  *.sh<br>
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/kfq.png"></p>
 
 # 7、常见问题
-# 1）如获取不到主机信息，请检查snmp服务是否正常启动<br>
+## 1）如获取不到主机信息，请检查snmp服务是否正常启动<br>
 
 
