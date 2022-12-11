@@ -10,11 +10,12 @@ echo ""
 }
 #Install www
 install_www(){
-systemctl start mysqld > /dev/null 2>&1
 dbhost=localhost
 dbname=eoms
-p=${mysql_root_password_}
 password=Jingu_${dbname}
+if [ "${only_install_www}" == "no" ]; then   
+systemctl start mysqld > /dev/null 2>&1
+p=${mysql_root_password_}
 ${mysql_location}/bin/mysql -uroot -p$p << EOF
 create database $dbname character set utf8mb4;
 grant all privileges on $dbname.* to $dbname@'${dbhost}' identified by "${password}";
@@ -24,9 +25,23 @@ EOF
 if [ $? -eq 0 ];then
 echo "数据库创建成功"
 else
-echo "数据库创建失败"
+echo "数据库创建失败,本次安装退出........"
+exit 0
 fi
+else
+read -p "请输入MySql的root账号密码：" root_password
+mysql -uroot -p$root_password << EOF
+create database $dbname character set utf8mb4;
+grant all privileges on $dbname.* to $dbname@'${dbhost}' identified by "${password}";
+flush privileges;
+EOF
 
+if [ $? -eq 0 ];then
+echo "数据库创建成功"
+else
+echo "数据库创建失败,本次安装退出........"
+exit 0
+fi
 cd ${cur_dir}
 cd ../
 cur_dir_=$(pwd)

@@ -13,10 +13,23 @@
 
 #Pre-installation php
 php_preinstall_settings(){
-    if [ "${apache}" == "do_not_install" ]; then
-        php="do_not_install"
+    if [ "${only_install_www}" == "no" ]; then
+        if [ "${apache}" == "do_not_install" ]; then
+            php="do_not_install"
+        else
+            display_menu php 1
+        fi
     else
-        display_menu php 1
+        FINDSTR=7.4
+        phpV=$(php -v | grep PHP |grep -v 'Copyright')
+        if [[ $phpV =~ $FINDSTR ]];then
+        echo
+        else
+        echo
+        _info $phpV
+        echo "金鼓运维管理系统运行环境需要PHP版本为7.4,本次安装退出........"
+        exit 0
+        fi    
     fi
 }
 

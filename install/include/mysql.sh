@@ -13,52 +13,63 @@
 
 #Pre-installation mysql or mariadb
 mysql_preinstall_settings(){
+    if [ "${only_install_www}" == "no" ]; then
+        if version_lt $(get_libc_version) 2.14; then
+            mysql_arr=(${mysql_arr[@]#${mariadb10_3_filename}})
+            mysql_arr=(${mysql_arr[@]#${mariadb10_4_filename}})
+            mysql_arr=(${mysql_arr[@]#${mariadb10_5_filename}})
+            mysql_arr=(${mysql_arr[@]#${mariadb10_6_filename}})
+            mysql_arr=(${mysql_arr[@]#${mariadb10_7_filename}})
+        fi
+        # mariadb 10.6, 10.7 not support 32 bit
+        is_64bit || mysql_arr=(${mysql_arr[@]#${mariadb10_6_filename}})
+        is_64bit || mysql_arr=(${mysql_arr[@]#${mariadb10_7_filename}})
+        display_menu mysql 1
 
-    if version_lt $(get_libc_version) 2.14; then
-        mysql_arr=(${mysql_arr[@]#${mariadb10_3_filename}})
-        mysql_arr=(${mysql_arr[@]#${mariadb10_4_filename}})
-        mysql_arr=(${mysql_arr[@]#${mariadb10_5_filename}})
-        mysql_arr=(${mysql_arr[@]#${mariadb10_6_filename}})
-        mysql_arr=(${mysql_arr[@]#${mariadb10_7_filename}})
-    fi
-    # mariadb 10.6, 10.7 not support 32 bit
-    is_64bit || mysql_arr=(${mysql_arr[@]#${mariadb10_6_filename}})
-    is_64bit || mysql_arr=(${mysql_arr[@]#${mariadb10_7_filename}})
-    display_menu mysql 1
+        if [ "${mysql}" != "do_not_install" ];then
+            if echo "${mysql}" | grep -qi "mysql"; then
+                #mysql data
+                echo
+                read -p "mysql data location(default:${mysql_location}/data, leave blank for default): " mysql_data_location
+                mysql_data_location=${mysql_data_location:=${mysql_location}/data}
+                mysql_data_location=$(filter_location "${mysql_data_location}")
+                echo
+                echo "mysql data location: ${mysql_data_location}"
 
-    if [ "${mysql}" != "do_not_install" ];then
-        if echo "${mysql}" | grep -qi "mysql"; then
-            #mysql data
-            echo
-            read -p "mysql data location(default:${mysql_location}/data, leave blank for default): " mysql_data_location
-            mysql_data_location=${mysql_data_location:=${mysql_location}/data}
-            mysql_data_location=$(filter_location "${mysql_data_location}")
-            echo
-            echo "mysql data location: ${mysql_data_location}"
+                #set mysql server root password
+                echo
+                read -p "mysql server root password (default:Jingu.com, leave blank for default): " mysql_root_pass
+                mysql_root_pass=${mysql_root_pass:=Jingu.com}
+                echo
+                echo "mysql server root password: ${mysql_root_pass}"
 
-            #set mysql server root password
-            echo
-            read -p "mysql server root password (default:Jingu.com, leave blank for default): " mysql_root_pass
-            mysql_root_pass=${mysql_root_pass:=Jingu.com}
-            echo
-            echo "mysql server root password: ${mysql_root_pass}"
+            elif echo "${mysql}" | grep -qi "mariadb"; then
+                #mariadb data
+                echo
+                read -p "mariadb data location(default:${mariadb_location}/data, leave blank for default): " mariadb_data_location
+                mariadb_data_location=${mariadb_data_location:=${mariadb_location}/data}
+                mariadb_data_location=$(filter_location "${mariadb_data_location}")
+                echo
+                echo "mariadb data location: ${mariadb_data_location}"
 
-        elif echo "${mysql}" | grep -qi "mariadb"; then
-            #mariadb data
-            echo
-            read -p "mariadb data location(default:${mariadb_location}/data, leave blank for default): " mariadb_data_location
-            mariadb_data_location=${mariadb_data_location:=${mariadb_location}/data}
-            mariadb_data_location=$(filter_location "${mariadb_data_location}")
-            echo
-            echo "mariadb data location: ${mariadb_data_location}"
+                #set mariadb server root password
+                echo
+                read -p "mariadb server root password (default:Jingu.com, leave blank for default): " mariadb_root_pass
+                mariadb_root_pass=${mariadb_root_pass:=Jingu.com}
+                echo
+                echo "mariadb server root password: $mariadb_root_pass"
 
-            #set mariadb server root password
-            echo
-            read -p "mariadb server root password (default:Jingu.com, leave blank for default): " mariadb_root_pass
-            mariadb_root_pass=${mariadb_root_pass:=Jingu.com}
-            echo
-            echo "mariadb server root password: $mariadb_root_pass"
-
+            fi
+        fi
+    else
+        FINDSTR=5.7
+        mysqlV=$(mysql -V)
+        if [[ $mysqlV =~ $FINDSTR ]];then
+        echo
+        else
+        _info $mysqlV
+        _info "金鼓运维管理系统运行环境需要MySql版本为5.7,本次安装退出........"
+        exit 0
         fi
     fi
 }
