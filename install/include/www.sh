@@ -37,7 +37,7 @@ else
             _info "Apache版本一致,安装继续........"
             check_port
         else
-             _info "金鼓运维管理系统运行环境需要Apache版本为2.4,本次安装退出........"
+             _info "${www_app_name}运行环境需要Apache版本为2.4,本次安装退出........"
             echo
             exit 0
         fi 
@@ -48,7 +48,7 @@ else
         if [[ $mysqlV =~ $FINDSTR ]];then
             _info "MySql版本一致,安装继续........"
         else
-            _info "金鼓运维管理系统运行环境需要MySql版本为5.7,本次安装退出........"
+            _info "${www_app_name}运行环境需要MySql版本为5.7,本次安装退出........"
             exit 0
         fi
         FINDSTR=7.4
@@ -58,7 +58,7 @@ else
         if [[ $phpV =~ $FINDSTR ]];then
             _info "PHP版本一致,安装继续........"
         else
-            echo "金鼓运维管理系统运行环境需要PHP版本为7.4,本次安装退出........"
+            echo "${www_app_name}运行环境需要PHP版本为7.4,本次安装退出........"
             exit 0
         fi 
 read -p "请输入MySql的root账号密码：" root_password
@@ -84,7 +84,7 @@ if [[ -d "${www_home_dir}" ]]; then
     cd ${web_root_dir}
     else
         echo
-        _info "复制金鼓运维管理系统文件失败,本次安装退出........"
+        _info "复制${www_app_name}文件失败,本次安装退出........"
         exit 0
 fi
 chmod -R 777 ${web_root_dir}/storage/
@@ -102,7 +102,7 @@ sed -i "29s/\/\/ protected/protected/g" ${web_root_dir}/app/Providers/RouteServi
 migrate_command=$(/usr/local/php/bin/php artisan migrate)
 FINDSTR="SQL"
 if [[ $migrate_command =~ $FINDSTR ]];then
-    echo "金鼓运维系统数据表导入失败,本次安装退出........"
+    echo "${www_app_name}数据表导入失败,本次安装退出........"
     exit 0
 else
     #导入默认数据

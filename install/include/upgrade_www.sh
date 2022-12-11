@@ -32,20 +32,28 @@ cd ${web_root_dir}
 chmod -R 777 ${web_root_dir}/storage/
 chmod -R 777 ${web_root_dir}/bootstrap/cache/
 
-sed -i "s/DB_HOST=/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
-sed -i "s/DB_USERNAME=/DB_USERNAME=${dbname}/g" ${web_root_dir}/.env
-sed -i "s/DB_PASSWORD=/DB_PASSWORD=${password}/g" ${web_root_dir}/.env
+sed -i "s|APP_URL=http://47.104.96.84|APP_URL=http://127.0.0.1|g" ${web_root_dir}/.env
+sed -i "s/DB_HOST=127.0.0.1/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
+sed -i "s/DB_USERNAME=root/DB_USERNAME=${dbname}/g" ${web_root_dir}/.env
+sed -i "s/Jg_123456!@#/DB_PASSWORD=${password}/g" ${web_root_dir}/.env
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 composer install
 sed -i "29s/\/\/ protected/protected/g" ${web_root_dir}/app/Providers/RouteServiceProvider.php
-/usr/local/php/bin/php artisan migrate
-#导入默认数据
-/usr/local/php/bin/php artisan db:seed --class=UserSeeder
-/usr/local/php/bin/php artisan db:seed --class=ipListSeeder
-/usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder
-/usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
-/usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
+
+migrate_command=$(/usr/local/php/bin/php artisan migrate)
+FINDSTR="SQL"
+if [[ $migrate_command =~ $FINDSTR ]];then
+    echo "${www_app_name}数据表导入失败,本次安装退出........"
+    exit 0
+else
+    #导入默认数据
+    /usr/local/php/bin/php artisan db:seed --class=UserSeeder
+    /usr/local/php/bin/php artisan db:seed --class=ipListSeeder
+    /usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder
+    /usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
+    /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
+fi
 if [ ! -d "${web_root_dir}/storage" ]; then
     mkdir ${web_root_dir}/storage
 fi
