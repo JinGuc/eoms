@@ -31,11 +31,11 @@ include(){
 
 upgrade(){
     echo
-    _info "开始升级金鼓运维管理系统客户端"
+    _info "开始升级${www_app_name}客户端"
     upgrade_snmp 2>&1 | tee ${cur_dir}/upgrade_snmp.log
     upgrade_py-eoms 2>&1 | tee ${cur_dir}/upgrade_py-eoms.log
     echo
-    _info "金鼓运维管理系统客户端升级成功！"
+    _info "${www_app_name}客户端升级成功！"
 }
 
 include config

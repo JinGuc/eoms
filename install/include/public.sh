@@ -965,7 +965,7 @@ if [ "${apache}" != "do_not_install" ] || [ "${only_install_www}" == "yes" ]; th
     _info "MySQL数据库root账号密码为: ${mysql_root_password_}"
     _info "phpMyAdmin管理登录地址为: http://${localIp}/phpmyadmin/"
     _info "欢迎访问金鼓官网: https://www.jinguc.com"
-    _info "金鼓运维管理系统访问地址: http://${localIp}:8013"
+    _info "${www_app_name}访问地址: http://${localIp}:8013"
     _info "登录用户名J_eoms 密码J_eoms_p"
     _info "感谢您使用！"
     exit 0

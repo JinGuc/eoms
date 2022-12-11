@@ -79,8 +79,14 @@ cd ${cur_dir}
 cd ../
 cur_dir_=$(pwd)
 cp -rp ${cur_dir_}/${web_dir} ${www_home_dir}
-#导入数据库文件
-cd ${web_root_dir}
+if [[ -d "${www_home_dir}" ]]; then
+    #导入数据库文件
+    cd ${web_root_dir}
+    else
+        echo
+        _info "复制金鼓运维管理系统文件失败,本次安装退出........"
+        exit 0
+fi
 chmod -R 777 ${web_root_dir}/storage/
 chmod -R 777 ${web_root_dir}/bootstrap/cache/
 
