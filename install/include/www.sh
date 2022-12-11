@@ -5,7 +5,7 @@
 # Github:   
 
 #Pre-installation www
-snmp_preinstall_settings(){
+www_preinstall_settings(){
 echo ""
 }
 #Install www
@@ -41,6 +41,7 @@ echo "数据库创建成功"
 else
 echo "数据库创建失败,本次安装退出........"
 exit 0
+fi
 fi
 cd ${cur_dir}
 cd ../
