@@ -54,7 +54,7 @@ else
         FINDSTR=7.4
         phpV=$(php -v | grep PHP |grep -v 'Copyright')
         echo
-        _info $mysqlV
+        _info $phpV
         if [[ $phpV =~ $FINDSTR ]];then
             _info "PHP版本一致,安装继续........"
         else
@@ -87,18 +87,26 @@ chmod -R 777 ${web_root_dir}/bootstrap/cache/
 sed -i "s|APP_URL=http://47.104.96.84|APP_URL=http://127.0.0.1|g" ${web_root_dir}/.env
 sed -i "s/DB_HOST=127.0.0.1/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
 sed -i "s/DB_USERNAME=root/DB_USERNAME=${dbname}/g" ${web_root_dir}/.env
-sed -i 's/DB_PASSWORD="Jg_123456!@#"/DB_PASSWORD=${password}/g' ${web_root_dir}/.env
+sed -i "s/Jg_123456!@#/DB_PASSWORD=${password}/g" ${web_root_dir}/.env
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 composer install
 sed -i "29s/\/\/ protected/protected/g" ${web_root_dir}/app/Providers/RouteServiceProvider.php
-/usr/local/php/bin/php artisan migrate
-#导入默认数据
-/usr/local/php/bin/php artisan db:seed --class=UserSeeder
-/usr/local/php/bin/php artisan db:seed --class=ipListSeeder
-/usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder
-/usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
-/usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
+
+migrate_command=$(/usr/local/php/bin/php artisan migrate)
+FINDSTR="SQL"
+if [[ $migrate_command =~ $FINDSTR ]];then
+    echo "金鼓运维系统数据表导入失败,本次安装退出........"
+    exit 0
+else
+    #导入默认数据
+    /usr/local/php/bin/php artisan db:seed --class=UserSeeder
+    /usr/local/php/bin/php artisan db:seed --class=ipListSeeder
+    /usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder
+    /usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
+    /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
+fi
+
 mkdir ${web_root_dir}/storage
 mkdir ${web_root_dir}/storage/logs
 chmod -R 777 ${web_root_dir}/storage/logs
@@ -126,9 +134,12 @@ fi
 check_port(){
 if [ "${only_install_www}" == "yes" ]; then 
 read -p "请输入Apache站点配置文件绝对路径：" virtual_site_conf_file
-
-FIND_FILE=$virtual_site_conf_file
-FIND_STR=":8013"
+if [ -d "${virtual_site_conf_file}" ]; then
+    echo "Apache站点配置文件不存在,本次安装退出........"
+    exit 0
+fi
+FIND_FILE=${virtual_site_conf_file}
+FIND_STR="localhost:8013"
 # 判断匹配函数，匹配函数不为0，则包含给定字符
 f=`grep -c "$FIND_STR" $FIND_FILE`
 $findport=$(netstat -ntlp | grep 8013)
@@ -150,7 +161,7 @@ DocumentRoot ${web_root_dir}/public
 </VirtualHost>
 EOF
 else
-echo "Apache端口8013已被占用,请先关闭8013端口........"
+echo "Apache端口8013已被占用,请先关闭8013端口,本次安装退出........"
 exit 0
 fi
 fi
