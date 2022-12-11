@@ -15,7 +15,7 @@
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/gzh.png"></p>
 
 # 4、安装
-<em><font color="#ff0000"><a href="#5">注：详看视频讲解“金鼓运维管理系统的安装”(关注微信视频号，收看视频讲解)</a></font></em><br>
+<em><a href="#5使用说明">注：详看视频讲解“金鼓运维管理系统的安装”(关注微信视频号，收看视频讲解)</a></em><br>
 环境：CensOS64 7.4及 以上（需要服务器能访问外网）<br>
 ## 1）服务器在线安装<br>
 事前准备（安装 wget、git）<br>
