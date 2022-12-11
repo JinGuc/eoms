@@ -36,7 +36,7 @@ apache_preinstall_settings(){
     fi
 }
 check_port(){
-if [ "${only_install_www}" == "no" ]; then 
+if [ "${only_install_www}" == "yes" ]; then 
 read -p "请输入Apache站点配置文件：" virtual_site_conf_file
 
 FIND_FILE=$virtual_site_conf_file

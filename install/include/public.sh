@@ -947,7 +947,7 @@ EOF
         /etc/init.d/redis-server start &> /dev/null
     fi
     # Install phpmyadmin database
-    if [ -d "${web_root_dir}/phpmyadmin" ] && [ -f "/usr/bin/mysql" ]; then
+    if [ -d "${web_root_dir}/phpmyadmin" ] && [ -f "/usr/bin/mysql" ] && [ "${only_install_www}" == "no" ]; then
         /usr/bin/mysql -uroot -p${dbrootpwd} < ${web_root_dir}/phpmyadmin/sql/create_tables.sql &> /dev/null
     fi
     n=$(iptables -nL | grep 8013 | wc -l)
@@ -958,7 +958,7 @@ EOF
     netstat -tunlp
     localIp=$(ip a  | grep inet | grep -v inet6 | grep -E 'ens|eth' | grep -v '127.0.0.1' | awk '{print $2}' | awk -F / '{print$1}'
 )
-if [ "${apache}" != "do_not_install" ]; then
+if [ "${apache}" != "do_not_install" ] || [ "${only_install_www}" == "yes" ]; then
     echo
     _info "安装开始时间: ${StartDate}"
     _info "安装完成时间: $(date "+%Y-%m-%d %H:%M:%S") (Use:$(_red $[($(date +%s)-StartDateSecond)/60]) minutes)"
