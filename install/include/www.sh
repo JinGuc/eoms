@@ -36,9 +36,10 @@ cd ${web_root_dir}
 chmod -R 777 ${web_root_dir}/storage/
 chmod -R 777 ${web_root_dir}/bootstrap/cache/
 
-sed -i "s/DB_HOST=eoms/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
+sed -i "s|APP_URL=http://47.104.96.84|APP_URL=http://127.0.0.1|g" ${web_root_dir}/.env
+sed -i "s/DB_HOST=127.0.0.1/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
 sed -i "s/DB_USERNAME=root/DB_USERNAME=${dbname}/g" ${web_root_dir}/.env
-sed -i 's/DB_PASSWORD="Jg_123456!@#"/DB_PASSWORD="${password}"/g' ${web_root_dir}/.env
+sed -i 's/DB_PASSWORD="Jg_123456!@#"/DB_PASSWORD=${password}/g' ${web_root_dir}/.env
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 composer install
@@ -57,6 +58,10 @@ chown -R apache:apache ${web_root_dir}/storage
 cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
 systemctl restart supervisord
 sleep 1
+n=$(iptables -nL | grep 8804 | wc -l)
+if [ $n -eq 0 ]; then
+iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
+fi
 #以上文件执行完成后就可以为网站添加计划任务了，
 FIND_FILE="/var/spool/cron/apache"
 FIND_STR="/usr/local/php/bin/php ${web_root_dir}/artisan schedule:run"
@@ -68,9 +73,5 @@ echo "
 * * * * * /usr/local/php/bin/php ${web_root_dir}/artisan schedule:run > /dev/null
 #------------------eoms crontab end------------------
 "  >> ${FIND_FILE}
-fi 
-n=$(iptables -nL | grep 8804 | wc -l)
-if [ $n -eq 0 ]; then
-    iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
 fi
 }
