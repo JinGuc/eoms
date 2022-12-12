@@ -62,7 +62,7 @@ install_apache(){
 
     check_installed "install_pcre" "${depends_prefix}/pcre"
     check_installed "install_openssl" "${openssl_location}"
-    #install_nghttp2
+    install_nghttp2
 
     cd ${cur_dir}/software/
     download_file "${apr_filename}.tar.gz" "${apr_filename_url}"
@@ -171,7 +171,7 @@ mod_deflate.so
 mod_echo.so
 mod_expires.so
 mod_ext_filter.so
-#mod_http2.so
+mod_http2.so
 mod_include.so
 mod_info.so
 mod_proxy.so
@@ -180,7 +180,7 @@ mod_proxy_fcgi.so
 mod_proxy_ftp.so
 mod_proxy_html.so
 mod_proxy_http.so
-#mod_proxy_http2.so
+mod_proxy_http2.so
 mod_proxy_scgi.so
 mod_ratelimit.so
 mod_reflector.so
