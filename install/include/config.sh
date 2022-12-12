@@ -30,7 +30,7 @@ web_root_dir=/home/data/www
 www_home_dir=/home/data
 web_dir=www
 #Download root URL
-download_root_url="https://www.jinguc.com/download"
+download_root_url="http://117.160.193.241:8801/eoms/files"
 
 #parallel compile option,1:enable,0:disable
 parallel_compile=1
@@ -38,13 +38,15 @@ parallel_compile=1
 ##Software version
 #nghttp2
 nghttp2_filename="nghttp2-1.51.0"
-nghttp2_filename_url="https://github.com/nghttp2/nghttp2/releases/download/v1.51.0/nghttp2-1.51.0.tar.gz"
+#nghttp2_filename_url="https://github.com/nghttp2/nghttp2/releases/download/v1.51.0/nghttp2-1.51.0.tar.gz"
+nghttp2_filename_url="${download_root_url}/nghttp2-1.51.0.tar.gz"
 #openssl
 openssl_filename="openssl-1.1.1s"
 openssl_filename_url="https://www.openssl.org/source/openssl-1.1.1s.tar.gz"
 #apache2.4
 apache2_4_filename="httpd-2.4.54"
-apache2_4_filename_url="https://dlcdn.apache.org//httpd/httpd-2.4.54.tar.gz"
+#apache2_4_filename_url="https://dlcdn.apache.org//httpd/httpd-2.4.54.tar.gz"
+apache2_4_filename_url="${download_root_url}/httpd-2.4.54.tar.gz"
 #mysql5.7
 mysql5_7_filename="mysql-5.7.40"
 #mysql8.0
@@ -61,7 +63,8 @@ mariadb10_6_filename="mariadb-10.6.11"
 mariadb10_7_filename="mariadb-10.7.7"
 #php7.4
 php7_4_filename="php-7.4.33"
-php7_4_filename_url="https://www.php.net/distributions/php-7.4.33.tar.gz"
+#php7_4_filename_url="https://www.php.net/distributions/php-7.4.33.tar.gz"
+php7_4_filename_url="${download_root_url}/php-7.4.33.tar.gz"
 #php8.0
 php8_0_filename="php-8.0.25"
 php8_0_filename_url="https://www.php.net/distributions/php-8.0.25.tar.gz"
