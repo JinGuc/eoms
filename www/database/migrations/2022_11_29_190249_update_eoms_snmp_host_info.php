@@ -16,11 +16,7 @@ class UpdateEomsSnmpHostInfo extends Migration
         Schema::table('snmp_host_info', function (Blueprint $table) {
             if(!Schema::hasColumn('snmp_host_info','es_health_info'))
             {
-<<<<<<< HEAD
                 $table->longText('es_health_info')->nullable()->default('')->comment('es健康监控信息'); 
-=======
-                $table->longText('es_health_info')->nullable()->comment('es健康监控信息'); 
->>>>>>> 9a1ad94cb8ad48aafebee8b5b06a665c23f572ee
             }
         });
     }
