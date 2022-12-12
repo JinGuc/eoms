@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class UpdateEomsSnmpRole extends Migration
+class UpdateEomsSnmpHostInfo extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class UpdateEomsSnmpRole extends Migration
      */
     public function up()
     {
-        Schema::table('snmp_role', function (Blueprint $table) {
-            if(!Schema::hasColumn('snmp_role','port'))
+        Schema::table('snmp_host_info', function (Blueprint $table) {
+            if(!Schema::hasColumn('snmp_host_info','es_health_info'))
             {
-                $table->integer('port')->nullable()->comment('端口号'); 
+                $table->longText('es_health_info')->nullable()->default('')->comment('es健康监控信息'); 
+
             }
         });
     }
