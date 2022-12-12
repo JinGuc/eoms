@@ -29,9 +29,8 @@ depends_prefix=/usr/local
 web_root_dir=/home/data/www
 www_home_dir=/home/data
 web_dir=www
-www_app_name="金鼓运维管理系统"
 #Download root URL
-download_root_url="http://117.160.193.241:8801/eoms/files"
+download_root_url="https://www.jinguc.com/download"
 
 #parallel compile option,1:enable,0:disable
 parallel_compile=1

@@ -38,6 +38,7 @@ install_apache(){
     --with-mpm=event \
     --with-included-apr \
     --with-ssl \
+    --with-nghttp2 \
     --enable-modules=reallyall \
     --enable-mods-shared=reallyall"
 
@@ -62,7 +63,7 @@ install_apache(){
 
     check_installed "install_pcre" "${depends_prefix}/pcre"
     check_installed "install_openssl" "${openssl_location}"
-    #install_nghttp2
+    install_nghttp2
 
     cd ${cur_dir}/software/
     download_file "${apr_filename}.tar.gz" "${apr_filename_url}"
