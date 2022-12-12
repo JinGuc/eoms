@@ -16,7 +16,7 @@
 
 # 4、安装
 <em><a href="#5使用说明">注：详看视频讲解“金鼓运维管理系统的安装”(关注微信视频号，收看视频讲解)</a></em><br>
-环境：CensOS64 7.4及 以上（需要服务器能访问外网）<br>
+环境：CensOS64 7.4及以上（需要服务器能访问外网）<br>
 ## 1）服务器在线安装<br>
 事前准备（安装 wget、git）<br>
 注意：双斜杠//后的内容不要复制输入<br>
@@ -41,6 +41,14 @@ chmod 755  *.sh<br>
       mysql数据库的默认 root 密码为Jingu.com<br>
       Apache的站点目录为/home/data/www<br>
 ./install_server.sh<br>
+
+一键安装金鼓运维管理系统：(仅安装金鼓运维管理系统及监控采集服务机脚本。适用于已经安装过Apahce、PHP、MySql的服务器)<br>
+系统运行环境要求：（如运行环境版本不一致可能会导致系统程序不兼容）<br>
+Apache 2.4<br>
+PHP 7.4（PHP需要开启snmp扩展）<br>
+MySql 5.7<br>
+
+./install_server.sh www<br>
 
 一键安装客户端：<br>
 ./install_agent.sh<br>
