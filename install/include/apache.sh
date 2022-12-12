@@ -38,10 +38,9 @@ install_apache(){
     --with-mpm=event \
     --with-included-apr \
     --with-ssl \
-    --with-nghttp2 \
     --enable-modules=reallyall \
     --enable-mods-shared=reallyall"
-
+#   --with-nghttp2 \
     _info "Installing dependencies for Apache..."
     local apt_list=(zlib1g-dev openssl libssl-dev libxml2-dev lua-expat-dev)
     local yum_list=(zlib-devel openssl-devel libxml2-devel expat-devel lua)
@@ -63,7 +62,7 @@ install_apache(){
 
     check_installed "install_pcre" "${depends_prefix}/pcre"
     check_installed "install_openssl" "${openssl_location}"
-    install_nghttp2
+    #install_nghttp2
 
     cd ${cur_dir}/software/
     download_file "${apr_filename}.tar.gz" "${apr_filename_url}"
@@ -172,7 +171,7 @@ mod_deflate.so
 mod_echo.so
 mod_expires.so
 mod_ext_filter.so
-mod_http2.so
+#mod_http2.so
 mod_include.so
 mod_info.so
 mod_proxy.so

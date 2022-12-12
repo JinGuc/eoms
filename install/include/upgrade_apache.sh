@@ -46,10 +46,9 @@ upgrade_apache(){
             --with-mpm=event \
             --with-included-apr \
             --with-ssl \
-            --with-nghttp2 \
             --enable-modules=reallyall \
             --enable-mods-shared=reallyall"
-
+#   --with-nghttp2 \
         download_file "${apr_filename}.tar.gz" "${apr_filename_url}"
         tar zxf ${apr_filename}.tar.gz
         download_file "${apr_util_filename}.tar.gz" "${apr_util_filename_url}"
