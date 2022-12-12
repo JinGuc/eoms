@@ -141,9 +141,6 @@ check_port(){
 if [ "${only_install_www}" == "yes" ]; then 
 read -p "请输入Apache站点配置文件绝对路径：" virtual_site_conf_file
 if [ -d "${virtual_site_conf_file}" ]; then
-    echo "Apache站点配置文件不存在,本次安装退出........"
-    exit 0
-fi
 FIND_FILE=${virtual_site_conf_file}
 FIND_STR="localhost:8013"
 # 判断匹配函数，匹配函数不为0，则包含给定字符
@@ -169,6 +166,10 @@ EOF
 else
 echo "Apache端口8013已被占用,请先关闭8013端口,本次安装退出........"
 exit 0
+fi
+else
+    echo "Apache站点配置文件不存在,本次安装退出........"
+    exit 0
 fi
 fi
 }
