@@ -180,7 +180,7 @@ mod_proxy_fcgi.so
 mod_proxy_ftp.so
 mod_proxy_html.so
 mod_proxy_http.so
-mod_proxy_http2.so
+#mod_proxy_http2.so
 mod_proxy_scgi.so
 mod_ratelimit.so
 mod_reflector.so
