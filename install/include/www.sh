@@ -140,7 +140,7 @@ fi
 check_port(){
 if [ "${only_install_www}" == "yes" ]; then 
 read -p "请输入Apache站点配置文件绝对路径：" virtual_site_conf_file
-if [ -d "${virtual_site_conf_file}" ]; then
+if [ -f "${virtual_site_conf_file}" ]; then
 FIND_FILE=${virtual_site_conf_file}
 FIND_STR="localhost:8013"
 # 判断匹配函数，匹配函数不为0，则包含给定字符
