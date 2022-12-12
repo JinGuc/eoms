@@ -32,7 +32,7 @@ else
         FINDSTR=2.4
         httpdV=$(httpd -v | grep version)
         echo
-        _info $httpdV
+        echo $httpdV
         if [[ $httpdV =~ $FINDSTR ]];then
             _info "Apache版本一致,安装继续........"
             check_port
@@ -44,7 +44,7 @@ else
         FINDSTR=5.7
         mysqlV=$(mysql -V)
         echo
-        _info $mysqlV
+        echo $mysqlV
         if [[ $mysqlV =~ $FINDSTR ]];then
             _info "MySql版本一致,安装继续........"
         else
@@ -54,9 +54,16 @@ else
         FINDSTR=7.4
         phpV=$(php -v | grep PHP |grep -v 'Copyright')
         echo
-        _info $phpV
+        echo $phpV
         if [[ $phpV =~ $FINDSTR ]];then
             _info "PHP版本一致,安装继续........"
+            findsnmp=$(php -m | grep snmp)
+            if [ -n "$findsnmp" ]; then
+            _info "PHP已开启snmp扩展,安装继续........"
+            else
+            _info "PHP未开启snmp扩展,请先安装snmp扩展,本次安装退出........"
+            exit 0
+            fi
         else
             echo "${www_app_name}运行环境需要PHP版本为7.4,本次安装退出........"
             exit 0
