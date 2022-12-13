@@ -98,6 +98,8 @@ process(){
     db_root_pwd=""
     db_manage_modules=""
     kodexplorer_option=""
+    apache_installed=""
+    mysql_installed=""
     while [ ${#} -gt 0 ]; do
         case "$1" in
         -h|--help)

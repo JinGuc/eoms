@@ -930,11 +930,11 @@ EOF
 EOF
         fi
     fi
-    if [ "${apache}" != "do_not_install" ]; then
+    if [ "${apache}" != "do_not_install" ] || [ "${apache_installed}" == "yes" ]; then
         echo "Starting Apache..."
-        systemctl start httpd &> /dev/null
+        systemctl restart httpd &> /dev/null
     fi
-    if [ "${mysql}" != "do_not_install" ]; then
+    if [ "${mysql}" != "do_not_install" ] || [ "${mysql_installed}" == "yes" ]; then
         echo "Starting MySql..."
         systemctl restart mysqld &> /dev/null
     fi
@@ -958,7 +958,7 @@ EOF
     netstat -tunlp
     localIp=$(ip a  | grep inet | grep -v inet6 | grep -E 'ens|eth' | grep -v '127.0.0.1' | awk '{print $2}' | awk -F / '{print$1}'
 )
-if [ "${apache}" != "do_not_install" ] || [ "${only_install_www}" == "yes" ]; then
+if [ "${apache}" != "do_not_install" ] || [ "${only_install_www}" == "yes" ] || [ "${apache_installed}" == "yes" ]; then
     echo
     _info "安装开始时间: ${StartDate}"
     _info "安装完成时间: $(date "+%Y-%m-%d %H:%M:%S") (Use:$(_red $[($(date +%s)-StartDateSecond)/60]) minutes)"
@@ -989,7 +989,7 @@ install_tools(){
         echo
         #exit 0
         apache=do_not_install
-        only_install_www=yes
+        apache_installed=yes
     fi
     mysql_num=$(pgrep mysql | wc -l)
     findserver=$(whereis mysqld |awk -F : '{print $2}' | sed '/^$/d')
@@ -999,6 +999,7 @@ install_tools(){
         echo
         #exit 0
         mysql=do_not_install
+        mysql_installed=yes
     fi
     php_num=$(pgrep php | wc -l)
     findserver=$(whereis php |awk -F : '{print $2}' | sed '/^$/d')
