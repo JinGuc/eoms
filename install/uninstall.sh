@@ -29,15 +29,7 @@ include(){
     fi
 }
 uninstall_jgoms(){
-    echo
-    _info "卸载金鼓数据库"
-    read -p "请输入MySql的root账号密码：" root_password
-mysql -uroot -p$root_password << EOF
-DROP DATABASE IF EXISTS ${dbname};
-drop user ${dbuser};
-flush privileges;
-EOF
-    _info "Success"
+    uninstall_eoms_mysql
     echo 
     _info "卸载SNMP"
     systemctl stop snmpd
@@ -69,14 +61,7 @@ uninstall_lamp(){
     _info "Success"
     echo
     _info "uninstalling MySQL"
-    echo
-    _info "卸载${www_app_name}数据库"
-    read -p "请输入MySql的root账号密码：" root_password
-    mysql -uroot -p$root_password << EOF
-    DROP DATABASE IF EXISTS ${dbname};
-    drop user ${dbuser};
-    flush privileges;
-EOF
+    uninstall_eoms_mysql
     if [ -f /etc/init.d/mysqld ] && [ $(ps -ef | grep -v grep | grep -c "mysqld") -gt 0 ]; then
         systemctl stop mysqld > /dev/null 2>&1
     fid/
@@ -140,7 +125,17 @@ EOF
     echo
     _info "Successfully uninstall JgOms"
 }
-
+uninstall_eoms_mysql(){
+echo
+_info "卸载${www_app_name}数据库"
+read -p "请输入MySql的root账号密码：" root_password
+mysql -uroot -p$root_password << EOF
+    DROP DATABASE IF EXISTS ${dbname};
+    drop user ${dbuser};
+    flush privileges;
+EOF
+    _info "Success"
+}
 include config
 include public
 load_config
