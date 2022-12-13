@@ -105,14 +105,16 @@ curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 composer install
 sed -i "29s/\/\/ protected/protected/g" ${web_root_dir}/app/Providers/RouteServiceProvider.php
-
 sleep 1
 #/usr/local/php/bin/php artisan migrate:reset
 migrate_command=$(/usr/local/php/bin/php artisan migrate)
 FINDSTR="SQL"
 if [[ $migrate_command =~ $FINDSTR ]];then
-    echo "${www_app_name}数据表创建失败,本次安装退出........"
-    exit 0
+    migrate_command=$(/usr/local/php/bin/php artisan migrate)
+    if [[ $migrate_command =~ $FINDSTR ]];then
+        echo "${www_app_name}数据表创建失败,本次安装退出........"
+        exit 0
+    fi
 else
     #导入默认数据
     
