@@ -116,17 +116,16 @@ if [[ $migrate_command =~ $FINDSTR ]];then
         exit 0
     fi
 fi
-    #导入默认数据
-    
-    #/usr/local/php/bin/php artisan db:seed --class=ipListSeeder
-    #/usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder
-    #/usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
-    #/usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
-    seed_command=$(/usr/local/php/bin/php artisan db:seed --class=UserSeeder && /usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder && /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder)
-    if [[ $seed_command =~ $FINDSTR ]];then
-        echo "${www_app_name}数据表导入数据失败,本次安装退出........"
-        exit 0
-    fi
+#导入默认数据
+#/usr/local/php/bin/php artisan db:seed --class=ipListSeeder
+#/usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder
+#/usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
+#/usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
+seed_command=$(/usr/local/php/bin/php artisan db:seed --class=UserSeeder && /usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder && /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder)
+if [[ $seed_command =~ $FINDSTR ]];then
+    echo "${www_app_name}数据表导入数据失败,本次安装退出........"
+    exit 0
+fi
 if [ ! -d ${web_root_dir}/storage ]; then
     mkdir ${web_root_dir}/storage
 fi
