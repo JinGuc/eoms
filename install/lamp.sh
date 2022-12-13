@@ -88,7 +88,7 @@ process(){
     php_option=""
     php_extensions=""
     db_option=""
-    only_install_www="yes"
+    only_install_www="no"
     only_install_www_option=""
     supervisord_option=""
     www_option=""
@@ -253,7 +253,7 @@ set_parameters(){
         mariadb_root_pass=${db_root_pwd:=Jingu.com}
     fi
     [ -z "${supervisord_option}" ] && supervisord="do_not_install"
-    [ -z "${only_install_www_option}" ] && only_install_www="no"
+    [ ${only_install_www_option} -eq 1 ] && only_install_www="yes"
     [ -z "${www_option}" ] && www="do_not_install"
     [ -z "${snmp_option}" ] && snmp="do_not_install"
     [ -z "${pyeoms_option}" ] && pyeoms="do_not_install"

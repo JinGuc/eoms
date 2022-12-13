@@ -25,7 +25,7 @@ install_php(){
     pnum=$(pgrep php | wc -l)
     findserver=$(whereis php |awk -F : '{print $2}' | sed '/^$/d')
     if [ $pnum -gt 0 ] || [ -n "$findserver" ]; then
-    _info "该主机已经存在PHP,本次安装退出........"
+    _info "此主机已经存在PHP,本次安装退出........"
     exit 0
     fi
     local openssl_version=$(openssl version -v)
