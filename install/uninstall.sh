@@ -28,7 +28,36 @@ include(){
         exit 1
     fi
 }
-
+uninstall_jgoms(){
+    echo
+    _info "卸载金鼓数据库"
+    read -p "请输入MySql的root账号密码：" root_password
+mysql -uroot -p$root_password << EOF
+DROP DATABASE IF EXISTS ${dbname};
+drop user ${dbuser};
+flush privileges;
+EOF
+    _info "Success"
+    echo 
+    _info "卸载SNMP"
+    systemctl stop snmpd
+    yum -y remove perl-ExtUtils-MakeMaker package libperl-dev bc sysstat net-snmp net-snmp-utils
+    rm -rf /opt/snmp
+    rm -rf /etc/snmp
+    _info "Success"
+    echo
+    _info "卸载Supervisord"
+    systemctl stop supervisord
+    yum -y remove supervisor
+    rm -rf /etc/supervisord.d
+    _info "Success"
+    echo
+    _info "卸载JgOmsWeb"
+    rm -rf ${web_root_dir}
+    _info "Success"
+    echo
+    _info "Successfully uninstall JgOms"
+}
 uninstall_lamp(){
     _info "uninstalling Apache"
     if [ -f /etc/init.d/httpd ] && [ $(ps -ef | grep -v grep | grep -c "httpd") -gt 0 ]; then
@@ -40,10 +69,18 @@ uninstall_lamp(){
     _info "Success"
     echo
     _info "uninstalling MySQL"
+    echo
+    _info "卸载金鼓数据库"
+    read -p "请输入MySql的root账号密码：" root_password
+mysql -uroot -p$root_password << EOF
+DROP DATABASE IF EXISTS ${dbname};
+drop user ${dbuser};
+flush privileges;
+EOF
     if [ -f /etc/init.d/mysqld ] && [ $(ps -ef | grep -v grep | grep -c "mysqld") -gt 0 ]; then
         systemctl stop mysqld > /dev/null 2>&1
-    fi
-    rm -f /etc/init.d/mysqld
+    fid/
+    rm -f /etc/init.mysqld
     rm -rf ${mysql_location} ${mariadb_location} ${mysql_location}.bak ${mariadb_location}.bak /usr/bin/mysqldump /usr/bin/mysql /etc/my.cnf /etc/ld.so.conf.d/mysql.conf
     _info "Success"
     echo
@@ -110,12 +147,14 @@ load_config
 rootness
 
 while true; do
-    read -p "Are you sure uninstall JgOms?(此操作会卸载Apache,MySQL,PHP及删除MySQL数据库数据,请谨慎操作！) (Default: n) (y/n)" uninstall
-    [ -z ${uninstall} ] && uninstall="n"
-    uninstall=$(upcase_to_lowcase ${uninstall})
+    echo "确定要卸载${www_app_name}?"
+    echo "1.只卸载${www_app_name}"
+    echo "2.运行环境（Apache、Mysql、PHP）及${www_app_name}全部卸载"
+    read -p "请选择 (默认: 1) " uninstall
+    [ -z ${uninstall} ] && uninstall="1"
     case ${uninstall} in
-        y) uninstall_lamp ; break;;
-        n) _info "Uninstall cancelled, nothing to do" ; break;;
-        *) _warn "Input error, Please only input y or n";;
+        1) uninstall_jgoms ; break;;
+        2) uninstall_lamp ; break;;
+        *) _warn "Input error, Please only input 1 or 2";;
     esac
 done

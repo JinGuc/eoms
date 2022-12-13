@@ -11,14 +11,13 @@ echo ""
 #Install www
 install_www(){
 dbhost=localhost
-dbname=eoms
 password=Jingu_${dbname}
 if [ "${only_install_www}" == "no" ]; then
 systemctl start mysqld > /dev/null 2>&1
 p=${mysql_root_password_}
 ${mysql_location}/bin/mysql -uroot -p$p << EOF
 create database $dbname character set utf8mb4;
-grant all privileges on $dbname.* to $dbname@'${dbhost}' identified by "${password}";
+grant all privileges on $dbuser.* to $dbname@'${dbhost}' identified by "${password}";
 flush privileges;
 EOF
 
@@ -110,18 +109,16 @@ sleep 1
 migrate_command=$(/usr/local/php/bin/php artisan migrate)
 FINDSTR="SQL"
 if [[ $migrate_command =~ $FINDSTR ]];then
-    migrate_command=$(/usr/local/php/bin/php artisan migrate)
-    if [[ $migrate_command =~ $FINDSTR ]];then
-        echo "${www_app_name}数据表创建失败,本次安装退出........"
-        exit 0
-    fi
+    echo "${www_app_name}数据表创建失败,本次安装退出........"
+    exit 0
 fi
 #导入默认数据
+#/usr/local/php/bin/php artisan db:seed --class=UserSeeder
 #/usr/local/php/bin/php artisan db:seed --class=ipListSeeder
 #/usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder
 #/usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
 #/usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
-seed_command=$(/usr/local/php/bin/php artisan db:seed --class=UserSeeder && /usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder && /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder)
+seed_command=$(/usr/local/php/bin/php artisan db:seed --class=UserSeeder && /usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder && /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder && /usr/local/php/bin/php artisan db:seed --class=ipListSeeder)
 if [[ $seed_command =~ $FINDSTR ]];then
     echo "${www_app_name}数据表导入数据失败,本次安装退出........"
     exit 0
