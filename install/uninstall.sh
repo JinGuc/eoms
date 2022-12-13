@@ -64,7 +64,7 @@ uninstall_lamp(){
     uninstall_eoms_mysql
     if [ -f /etc/init.d/mysqld ] && [ $(ps -ef | grep -v grep | grep -c "mysqld") -gt 0 ]; then
         systemctl stop mysqld > /dev/null 2>&1
-    fid/
+    fi
     rm -f /etc/init.mysqld
     rm -rf ${mysql_location} ${mariadb_location} ${mysql_location}.bak ${mariadb_location}.bak /usr/bin/mysqldump /usr/bin/mysql /etc/my.cnf /etc/ld.so.conf.d/mysql.conf
     _info "Success"
