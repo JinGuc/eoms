@@ -115,19 +115,18 @@ if [[ $migrate_command =~ $FINDSTR ]];then
         echo "${www_app_name}数据表创建失败,本次安装退出........"
         exit 0
     fi
-else
+fi
     #导入默认数据
     
-    /usr/local/php/bin/php artisan db:seed --class=ipListSeeder
-    /usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder
+    #/usr/local/php/bin/php artisan db:seed --class=ipListSeeder
+    #/usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder
     #/usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
-    /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
+    #/usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
     seed_command=$(/usr/local/php/bin/php artisan db:seed --class=UserSeeder && /usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder && /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder)
     if [[ $seed_command =~ $FINDSTR ]];then
         echo "${www_app_name}数据表导入数据失败,本次安装退出........"
         exit 0
     fi
-fi
 if [ ! -d ${web_root_dir}/storage ]; then
     mkdir ${web_root_dir}/storage
 fi
@@ -152,7 +151,7 @@ fi
 FIND_FILE="/var/spool/cron/apache"
 FIND_STR="/usr/local/php/bin/php ${web_root_dir}/artisan schedule:run"
 # 判断匹配函数，匹配函数不为0，则包含给定字符
-f=`grep -c "$FIND_STR" $FIND_FILE`
+f=$(grep -c "$FIND_STR" $FIND_FILE)
 if [ -z $f ] || [ $f -eq 0 ] || [ ! -f "$FIND_FILE" ];then
 echo "
 #------------------eoms crontab start------------------
