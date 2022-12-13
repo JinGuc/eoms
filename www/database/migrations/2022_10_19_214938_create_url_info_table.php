@@ -22,6 +22,9 @@ class CreateUrlInfoTable extends Migration
                 $table->tinyInteger('status')->comment("状态 1启用 2禁用")->default('1');
                 $table->string('type')->comment("协议类型");
                 $table->string('remark',300)->nullable()->comment("备注");
+                $table->tinyInteger('timeout')->nullable()->default('60')->comment('超时时长');
+                $table->string('response_time','30')->nullable()->default('')->comment('响应时长（单位s）');
+                $table->dateTime('gathering_time')->nullable()->default('1900-01-01')->comment('最后采集时间');
                 $table->timestamps();
             });
         }

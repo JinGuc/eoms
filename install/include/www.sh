@@ -101,10 +101,10 @@ sed -i "s|APP_URL=http://47.104.96.84|APP_URL=http://127.0.0.1|g" ${web_root_dir
 sed -i "s/DB_HOST=127.0.0.1/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
 sed -i "s/DB_USERNAME=root/DB_USERNAME=${dbname}/g" ${web_root_dir}/.env
 sed -i "s/Jg_123456!@#/${password}/g" ${web_root_dir}/.env
-curl -sS https://getcomposer.org/installer | php
-mv composer.phar /usr/local/bin/composer
-composer install
-sed -i "29s/\/\/ protected/protected/g" ${web_root_dir}/app/Providers/RouteServiceProvider.php
+#curl -sS https://getcomposer.org/installer | php
+#mv composer.phar /usr/local/bin/composer
+#composer install
+#sed -i "29s/\/\/ protected/protected/g" ${web_root_dir}/app/Providers/RouteServiceProvider.php
 
 migrate_command=$(/usr/local/php/bin/php artisan migrate)
 FINDSTR="SQL"

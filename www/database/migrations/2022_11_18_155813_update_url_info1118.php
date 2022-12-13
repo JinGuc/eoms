@@ -16,7 +16,7 @@ class UpdateUrlInfo1118 extends Migration
         Schema::table('url_info', function (Blueprint $table) {
             if(!Schema::hasColumn('url_info','gathering_time'))
             {
-                $table->dateTime('gathering_time')->nullable()->default('')->comment('最后采集时间');  
+                $table->dateTime('gathering_time')->nullable()->comment('最后采集时间');  
             }
         });
     }
