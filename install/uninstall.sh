@@ -72,10 +72,10 @@ uninstall_lamp(){
     echo
     _info "卸载${www_app_name}数据库"
     read -p "请输入MySql的root账号密码：" root_password
-mysql -uroot -p$root_password << EOF
-DROP DATABASE IF EXISTS ${dbname};
-drop user ${dbuser};
-flush privileges;
+    mysql -uroot -p$root_password << EOF
+    DROP DATABASE IF EXISTS ${dbname};
+    drop user ${dbuser};
+    flush privileges;
 EOF
     if [ -f /etc/init.d/mysqld ] && [ $(ps -ef | grep -v grep | grep -c "mysqld") -gt 0 ]; then
         systemctl stop mysqld > /dev/null 2>&1
