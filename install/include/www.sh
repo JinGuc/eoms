@@ -150,9 +150,9 @@ FIND_STR="/usr/local/php/bin/php ${web_root_dir}/artisan schedule:run"
 f=$(grep -c "$FIND_STR" $FIND_FILE)
 if [ -z $f ] || [ $f -eq 0 ] || [ ! -f "$FIND_FILE" ];then
 echo "
-#------------------eoms crontab start------------------
+#------------------jgoms crontab start------------------
 * * * * * /usr/local/php/bin/php ${web_root_dir}/artisan schedule:run > /dev/null
-#------------------eoms crontab end------------------
+#------------------jgoms crontab end------------------
 "  >> ${FIND_FILE}
 fi
 }
