@@ -123,15 +123,15 @@ if [[ $seed_command =~ $FINDSTR ]];then
     echo "${www_app_name}数据表导入数据失败,本次安装退出........"
     exit 0
 fi
-if [ ! -d ${web_root_dir}/storage ]; then
+if [ ! -d "${web_root_dir}/storage" ]; then
     mkdir ${web_root_dir}/storage
 fi
-if [ ! -d ${web_root_dir}/storage/logs ]; then
+if [ ! -d "${web_root_dir}/storage/logs" ]; then
     mkdir ${web_root_dir}/storage/logs
 fi
 chmod -R 777 ${web_root_dir}/storage/logs
 chown -R apache:apache ${web_root_dir}/storage
-if [ -f ${cur_dir}/conf/laravel-websock.ini ]; then
+if [ -f "${cur_dir}/conf/laravel-websock.ini" ]; then
     cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
     systemctl restart supervisord
 else

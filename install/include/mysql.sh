@@ -306,7 +306,7 @@ install_mysqld(){
     fi
 
     _info "Moving MySQL files..."
-    if [ -d ${mysql_filename} ]; then
+    if [ -d "${mysql_filename}" ]; then
         mv ${mysql_filename}/* ${mysql_location}
     else
         echo
