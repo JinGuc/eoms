@@ -36,61 +36,61 @@ uninstall_jgoms(){
     yum -y remove perl-ExtUtils-MakeMaker package libperl-dev bc sysstat net-snmp net-snmp-utils
     rm -rf /opt/snmp
     rm -rf /etc/snmp
-    _info "Success"
+    _info "成功"
     echo
     _info "卸载Supervisord"
     systemctl stop supervisord
     yum -y remove supervisor
     rm -rf /etc/supervisord.d
-    _info "Success"
+    _info "成功"
     echo
     _info "卸载JgOmsWeb"
     rm -rf ${web_root_dir}
-    _info "Success"
+    _info "成功"
     echo
-    _info "Successfully uninstall JgOms"
+    _info "成功卸载${www_app_name}"
 }
 uninstall_lamp(){
-    _info "uninstalling Apache"
+    _info "开始卸载Apache"
     if [ -f /etc/init.d/httpd ] && [ $(ps -ef | grep -v grep | grep -c "httpd") -gt 0 ]; then
         systemctl stop httpd > /dev/null 2>&1
     fi
     rm -f /etc/init.d/httpd
     rm -rf ${apache_location} ${apache_location}.bak /usr/sbin/httpd /var/log/httpd /etc/logrotate.d/httpd /var/spool/mail/apache /home/apache
     crontab -u apache -r
-    _info "Success"
+    _info "成功"
     echo
-    _info "uninstalling MySQL"
+    _info "开始卸载MySQL"
     uninstall_eoms_mysql
     if [ -f /etc/init.d/mysqld ] && [ $(ps -ef | grep -v grep | grep -c "mysqld") -gt 0 ]; then
         systemctl stop mysqld > /dev/null 2>&1
     fi
     rm -f /etc/init.mysqld
     rm -rf ${mysql_location} ${mariadb_location} ${mysql_location}.bak ${mariadb_location}.bak /usr/bin/mysqldump /usr/bin/mysql /etc/my.cnf /etc/ld.so.conf.d/mysql.conf
-    _info "Success"
+    _info "成功"
     echo
-    _info "uninstalling PHP"
+    _info "开始卸载PHP"
     rm -rf ${php_location} ${php_location}.bak /usr/bin/php /usr/bin/php-config /usr/bin/phpize /usr/bin/php-cgi /etc/php.ini
-    _info "Success"
+    _info "成功"
     echo 
-    _info "uninstalling SNMP"
+    _info "开始卸载SNMP"
     systemctl stop snmpd
     yum -y remove perl-ExtUtils-MakeMaker package libperl-dev bc sysstat net-snmp net-snmp-utils
     rm -rf /opt/snmp
     rm -rf /etc/snmp
-    _info "Success"
+    _info "成功"
     echo
-    _info "uninstalling Supervisord"
+    _info "开始卸载Supervisord"
     systemctl stop supervisord
     yum -y remove supervisor
     rm -rf /etc/supervisord.d
-    _info "Success"
+    _info "成功"
     echo
-    _info "uninstalling JgOmsWeb"
+    _info "开始卸载${www_app_name}"
     rm -rf ${web_root_dir}
-    _info "Success"
+    _info "成功"
     echo
-    _info "uninstalling others software"
+    _info "开始卸载其他依赖软件"
     if [ -f /etc/init.d/memcached ] && [ $(ps -ef | grep -v grep | grep -c "memcached") -gt 0 ]; then
         /etc/init.d/memcached stop > /dev/null 2>&1
     fi
@@ -121,9 +121,9 @@ uninstall_lamp(){
     rm -rf ${web_root_dir}/phpmyadmin
     rm -rf ${web_root_dir}/kod
     rm -rf ${web_root_dir}/xcache /tmp/{pcov,phpcore}
-    _info "Success"
+    _info "成功"
     echo
-    _info "Successfully uninstall JgOms"
+    _info "成功卸载${www_app_name}"
 }
 uninstall_eoms_mysql(){
 echo
@@ -131,10 +131,16 @@ _info "卸载${www_app_name}数据库"
 read -p "请输入MySql的root账号密码：" root_password
 mysql -uroot -p$root_password << EOF
     DROP DATABASE IF EXISTS ${dbname};
-    drop user ${dbuser};
+    use mysql;
+    delete from user where user='${dbuser}';
+    delete from db where user='${dbuser}' and db='${dbname}';
     flush privileges;
 EOF
-    _info "Success"
+if [ $? -eq 0 ];then
+echo "卸载${www_app_name}数据库成功"
+else
+echo "卸载${www_app_name}数据库失败,请手动操作........"
+fi
 }
 include config
 include public
@@ -142,10 +148,10 @@ load_config
 rootness
 
 while true; do
-    echo "确定要卸载${www_app_name}?"
+    echo "确定要卸载${www_app_name}吗?"
     echo "1.只卸载${www_app_name}及${www_app_name}所使用的数据库"
     echo "2.运行环境（Apache、Mysql、PHP）及${www_app_name}全部卸载"
-    read -p "请选择 (默认: 1) " uninstall
+    read -p "请选择[1-2] (默认: 1) " uninstall
     [ -z ${uninstall} ] && uninstall="1"
     case ${uninstall} in
         1) uninstall_jgoms ; break;;
