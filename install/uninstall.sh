@@ -149,8 +149,8 @@ rootness
 
 while true; do
     echo "确定要卸载${www_app_name}吗?"
-    echo "1.只卸载${www_app_name}及${www_app_name}所使用的数据库"
-    echo "2.运行环境（Apache、Mysql、PHP）及${www_app_name}全部卸载"
+    echo "1.只卸载${www_app_name}及${www_app_name}所使用的数据库;"
+    echo "2.全部卸载(运行环境（Apache、Mysql、PHP）及${www_app_name});"
     read -p "请选择[1-2] (默认: 1) " uninstall
     [ -z ${uninstall} ] && uninstall="1"
     case ${uninstall} in
