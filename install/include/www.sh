@@ -110,23 +110,36 @@ sed -i "29s/\/\/ protected/protected/g" ${web_root_dir}/app/Providers/RouteServi
 migrate_command=$(/usr/local/php/bin/php artisan migrate)
 FINDSTR="SQL"
 if [[ $migrate_command =~ $FINDSTR ]];then
-    echo "${www_app_name}数据表导入失败,本次安装退出........"
+    echo "${www_app_name}数据表创建失败,本次安装退出........"
     exit 0
 else
     #导入默认数据
-    /usr/local/php/bin/php artisan db:seed --class=UserSeeder
+    
     /usr/local/php/bin/php artisan db:seed --class=ipListSeeder
     /usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder
-    /usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
+    #/usr/local/php/bin/php artisan db:seed --class=SnmpOidSeeder
     /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder
+    seed_command=$(/usr/local/php/bin/php artisan db:seed --class=UserSeeder && /usr/local/php/bin/php artisan db:seed --class=WebSettingSeeder && /usr/local/php/bin/php artisan db:seed --class=SnmpRoleSeeder)
+    if [[ $seed_command =~ $FINDSTR ]];then
+        echo "${www_app_name}数据表导入数据失败,本次安装退出........"
+        exit 0
+    fi
 fi
-
-mkdir ${web_root_dir}/storage
-mkdir ${web_root_dir}/storage/logs
+if [ ! -d ${web_root_dir}/storage ]; then
+    mkdir ${web_root_dir}/storage
+fi
+if [ ! -d ${web_root_dir}/storage/logs ]; then
+    mkdir ${web_root_dir}/storage/logs
+fi
 chmod -R 777 ${web_root_dir}/storage/logs
 chown -R apache:apache ${web_root_dir}/storage
-cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
-systemctl restart supervisord
+if [ -f ${cur_dir}/conf/laravel-websock.ini ]; then
+    cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
+    systemctl restart supervisord
+else
+        echo "${cur_dir}/conf/laravel-websock.ini文件不存在,本次安装退出........"
+        exit 0
+fi
 sleep 1
 n=$(iptables -nL | grep 8804 | wc -l)
 if [ $n -eq 0 ]; then
