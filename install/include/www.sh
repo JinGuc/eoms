@@ -135,8 +135,8 @@ if [ -f ${cur_dir}/conf/laravel-websock.ini ]; then
     cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
     systemctl restart supervisord
 else
-        echo "${cur_dir}/conf/laravel-websock.ini文件不存在,本次安装退出........"
-        exit 0
+    echo "${cur_dir}/conf/laravel-websock.ini文件不存在,本次安装退出........"
+    exit 0
 fi
 sleep 1
 n=$(iptables -nL | grep 8804 | wc -l)

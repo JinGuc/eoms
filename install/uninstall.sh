@@ -70,7 +70,7 @@ uninstall_lamp(){
     echo
     _info "uninstalling MySQL"
     echo
-    _info "卸载金鼓数据库"
+    _info "卸载${www_app_name}数据库"
     read -p "请输入MySql的root账号密码：" root_password
 mysql -uroot -p$root_password << EOF
 DROP DATABASE IF EXISTS ${dbname};
@@ -148,7 +148,7 @@ rootness
 
 while true; do
     echo "确定要卸载${www_app_name}?"
-    echo "1.只卸载${www_app_name}"
+    echo "1.只卸载${www_app_name}及${www_app_name}所使用的数据库"
     echo "2.运行环境（Apache、Mysql、PHP）及${www_app_name}全部卸载"
     read -p "请选择 (默认: 1) " uninstall
     [ -z ${uninstall} ] && uninstall="1"
