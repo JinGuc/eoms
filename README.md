@@ -14,7 +14,7 @@
 演示账号：关注微信公众号后，输入ywdemo获取演示账号<br>
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/gzh.png"></p>
 
-# 4、安装
+# 4、安装与卸载
 <em><a href="#5使用说明">注：详看视频讲解“金鼓运维管理系统的安装”(关注微信视频号，收看视频讲解)</a></em><br>
 环境：CensOS64 7.4及以上（需要服务器能访问外网）<br>
 ## 1）服务器在线安装<br>
@@ -59,6 +59,12 @@ MySql 5.7<br>
 
 一键升级客户端:<br>
 运行脚本 ./upgrade_agent.sh<br>
+
+一键卸载服务端:<br>
+运行脚本 ./uninstsll.sh server<br>
+
+一键卸载客户端:<br>
+运行脚本 ./uninstsll.sh agent<br>
 <p>
 
 # 5、使用说明

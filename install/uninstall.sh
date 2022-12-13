@@ -39,6 +39,7 @@ uninstall_jgoms(){
     _info "成功"
     echo
     _info "卸载Supervisord"
+    supervisorctl stop py-eoms
     systemctl stop supervisord
     yum -y remove supervisor
     rm -rf /etc/supervisord.d
@@ -81,6 +82,7 @@ uninstall_lamp(){
     _info "成功"
     echo
     _info "开始卸载Supervisord"
+    supervisorctl stop py-eoms
     systemctl stop supervisord
     yum -y remove supervisor
     rm -rf /etc/supervisord.d
@@ -142,11 +144,28 @@ else
 echo "卸载${www_app_name}数据库失败,请手动操作........"
 fi
 }
+uninstall_jgoms_agent(){
+    echo 
+    _info "卸载SNMP"
+    systemctl stop snmpd
+    yum -y remove perl-ExtUtils-MakeMaker package libperl-dev bc sysstat net-snmp net-snmp-utils
+    rm -rf /opt/snmp
+    rm -rf /etc/snmp
+    _info "成功"
+    echo
+    _info "卸载Supervisord"
+    supervisorctl stop py-eoms
+    systemctl stop supervisord
+    yum -y remove supervisor
+    rm -rf /etc/supervisord.d
+    _info "成功"
+    _info "成功卸载${www_app_name}客户端"    
+}
 include config
 include public
 load_config
 rootness
-
+if [ "$1" = "server" ]; then
 while true; do
     echo "确定要卸载${www_app_name}吗?"
     echo "1.只卸载${www_app_name}及${www_app_name}所使用的数据库;"
@@ -159,3 +178,14 @@ while true; do
         *) _warn "Input error, Please only input 1 or 2";;
     esac
 done
+elif [ "$1" = "agent" ]; then
+    read -p "确定要卸载${www_app_name}客户端吗?请选择[y or n] (默认: n) " uninstall
+    [ -z ${uninstall} ] && uninstall="n"
+    case ${uninstall} in
+        y) uninstall_jgoms_agent ; break;;
+        n) _info "退出卸载${www_app_name}客户端"; break;;
+        *) _warn "Input error, Please only input 1 or 2";;
+    esac
+else
+_warn "Input error!";;
+fi
