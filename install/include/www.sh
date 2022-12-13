@@ -147,7 +147,11 @@ fi
 FIND_FILE="/var/spool/cron/apache"
 FIND_STR="/usr/local/php/bin/php ${web_root_dir}/artisan schedule:run"
 # 判断匹配函数，匹配函数不为0，则包含给定字符
-f=$(grep -c "$FIND_STR" $FIND_FILE)
+if [ -f "$FIND_FILE" ];then
+    f=$(grep -c "$FIND_STR" $FIND_FILE)
+else
+    f=0
+fi
 if [ -z $f ] || [ $f -eq 0 ] || [ ! -f "$FIND_FILE" ];then
 echo "
 #------------------jgoms crontab start------------------
@@ -163,7 +167,11 @@ if [ -f "${virtual_site_conf_file}" ]; then
 FIND_FILE=${virtual_site_conf_file}
 FIND_STR="localhost:8013"
 # 判断匹配函数，匹配函数不为0，则包含给定字符
-f=`grep -c "$FIND_STR" $FIND_FILE`
+if [ -f "$FIND_FILE" ];then
+    f=$(grep -c "$FIND_STR" $FIND_FILE)
+else
+    f=0
+fi
 $findport=$(netstat -ntlp | grep 8013)
 if [ -z $f ] || [ $f -eq 0 ] || [ ! -f "$FIND_FILE" ] || [ -n "$findport" ] ;then
 
