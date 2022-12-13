@@ -106,6 +106,7 @@ mv composer.phar /usr/local/bin/composer
 composer install
 sed -i "29s/\/\/ protected/protected/g" ${web_root_dir}/app/Providers/RouteServiceProvider.php
 
+/usr/local/php/bin/php artisan migrate:reset
 migrate_command=$(/usr/local/php/bin/php artisan migrate)
 FINDSTR="SQL"
 if [[ $migrate_command =~ $FINDSTR ]];then
