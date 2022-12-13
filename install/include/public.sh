@@ -1076,8 +1076,8 @@ lamp_install(){
     [ "${phpmyadmin_install}" != "do_not_install" ] && install_phpmyadmin_modules
     [ "${kodexplorer}" != "do_not_install" ] && install_kodexplorer
     [ "${php_modules_install}" != "do_not_install" ] && install_php_modules "${phpConfig}"
-    [ "${www}" != "do_not_install" ] && install_www
     [ "${supervisord}" != "do_not_install" ] && install_supervisord
+    [ "${www}" != "do_not_install" ] && install_www
     [ "${snmp}" != "do_not_install" ] && install_snmp
     [ "${py-eoms}" != "do_not_install" ] && install_py-eoms
     install_finally

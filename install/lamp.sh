@@ -290,8 +290,8 @@ include snmp
 include apache
 include mysql
 include php
-include www
 include supervisord
+include www
 include py-eoms
 include php-modules
 load_config
