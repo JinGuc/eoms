@@ -130,7 +130,7 @@ systemctl restart supervisord
 sleep 1
 n=$(iptables -nL | grep 8804 | wc -l)
 if [ $n -eq 0 ]; then
-iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
+    iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
 fi
 #以上文件执行完成后就可以为网站添加计划任务了，
 FIND_FILE="/var/spool/cron/apache"

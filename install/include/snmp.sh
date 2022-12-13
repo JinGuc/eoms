@@ -36,7 +36,7 @@ install_snmp(){
     chmod a+x /opt/snmp/process
     #echo "PATH=/usr/local/snmp/bin:/usr/local/snmp/sbin:$PATH" >> /etc/profile
     #source /etc/profile
-    net-snmp-config --create-snmpv3-user -ro -A Jg123456jk -a MD5 -X jg123456jk -x DES snmpv3
+    #net-snmp-config --create-snmpv3-user -ro -A Jg123456jk -a MD5 -X jg123456jk -x DES snmpv3
     if check_sys packageManager apt; then
         sudo systemctl enable snmpd.service
         service snmpd restart

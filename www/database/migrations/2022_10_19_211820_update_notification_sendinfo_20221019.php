@@ -14,7 +14,7 @@ class UpdateNotificationSendinfo20221019 extends Migration
     public function up()
     {
         Schema::table('notification_sendinfo', function (Blueprint $table) {
-            if(!Schema::hasColumn('notification_sendinfo','relate_table'))
+            if(!Schema::hasColumn('notification_sendinfo','notificationId'))
             {
                 $table->bigInteger('notificationId')->comment("告警设置id");
                 $table->index('notificationId');
