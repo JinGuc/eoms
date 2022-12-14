@@ -140,6 +140,7 @@ else
     exit 0
 fi
 sleep 1
+if [ ! -f "${apache_location}/conf/vhost/jgoms.conf" ]; then
 cat > ${apache_location}/conf/vhost/jgoms.conf <<EOF
 Listen 8013
 <VirtualHost _default_:8013>
@@ -155,6 +156,7 @@ DocumentRoot ${web_root_dir}/public
 </Directory>
 </VirtualHost>
 EOF
+fi
 n=$(iptables -nL | grep 8804 | wc -l)
 if [ $n -eq 0 ]; then
     iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
@@ -180,21 +182,17 @@ check_port(){
 if [ "${only_install_www}" == "yes" ]; then 
 read -p "请输入Apache虚拟站点配置目录绝对路径(如配置文件只有httpd.conf,请按回车键跳过此项设置)：" virtual_site_conf_dir
 if [ -z ${virtual_site_conf_dir} ];then
-    echo "手动修改httpd.conf,添加虚拟站点并监听8013端口"
+    if [ ! -d ${apache_location}/conf/vhost ];then
+        mkdir -p ${apache_location}/conf/vhost/
+    fi
+    cat > ${apache_location}/conf/extra/httpd-vhosts.conf <<EOF
+Include ${apache_location}/conf/vhost/*.conf
+EOF
+virtual_site_conf_file=${apache_location}/conf/vhost/jgoms.conf
 else
-virtual_site_conf_file = ${virtual_site_conf_dir}/jgoms.conf
-if [ ! -f "${virtual_site_conf_file}" ]; then
-FIND_FILE=${virtual_site_conf_file}
-FIND_STR="localhost:8013"
-# 判断匹配函数，匹配函数不为0，则包含给定字符
-if [ -f "$FIND_FILE" ];then
-    f=$(grep -c "$FIND_STR" $FIND_FILE)
-else
-    f=0
+virtual_site_conf_file=${virtual_site_conf_dir}/jgoms.conf
 fi
-findport=$(netstat -ntlp | grep 8013)
-if [ -z $f ] || [ $f -eq 0 ] || [ ! -f "$FIND_FILE" ] || [ -n "$findport" ] ;then
-
+if [ ! -f "${virtual_site_conf_file}" ]; then
 cat > ${virtual_site_conf_file} <<EOF
 Listen 8013
 <VirtualHost _default_:8013>
@@ -211,11 +209,19 @@ DocumentRoot ${web_root_dir}/public
 </VirtualHost>
 EOF
 else
+echo "${www_app_name}虚拟站点配置文件已存在,安装继续........"
+FIND_FILE=${virtual_site_conf_file}
+FIND_STR="localhost:8013"
+# 判断匹配函数，匹配函数不为0，则包含给定字符
+if [ -f "$FIND_FILE" ];then
+    f=$(grep -c "$FIND_STR" $FIND_FILE)
+else
+    f=0
+fi
+findport=$(netstat -ntlp | grep 8013)
+if [ -z $f ] || [ $f -eq 0 ] || [ ! -f "$FIND_FILE" ] || [ -n "$findport" ] ;then
 echo "8013端口已被占用,请先关闭8013端口,本次安装退出........"
 exit 0
-fi
-else
-    echo "${www_app_name}虚拟站点配置文件已存在,安装继续........"
 fi
 fi
 fi
