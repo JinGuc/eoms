@@ -31,22 +31,27 @@ include(){
 uninstall_jgoms(){
     uninstall_eoms_mysql
     echo 
-    _info "卸载SNMP"
+    _info "开始卸载SNMP"
     systemctl stop snmpd
     yum -y remove perl-ExtUtils-MakeMaker package libperl-dev bc sysstat net-snmp net-snmp-utils
     rm -rf /opt/snmp
     rm -rf /etc/snmp
     _info "成功"
     echo
-    _info "卸载Supervisord"
+    _info "开始卸载Supervisord"
     supervisorctl stop py-eoms
     systemctl stop supervisord
     yum -y remove supervisor
     rm -rf /etc/supervisord.d
     _info "成功"
     echo
-    _info "卸载JgOmsWeb"
+    _info "开始卸载${www_app_name}"
     rm -rf ${web_root_dir}
+    FIND_FILE="/var/spool/cron/apache"
+    if [ -f "$FIND_FILE" ];then
+        sed -i '/jgoms/d' ${FIND_FILE}
+        sed -i '/schedule:run/d' ${FIND_FILE} 
+    fi
     _info "成功"
     echo
     _info "成功卸载${www_app_name}"
@@ -90,6 +95,11 @@ uninstall_lamp(){
     echo
     _info "开始卸载${www_app_name}"
     rm -rf ${web_root_dir}
+    FIND_FILE="/var/spool/cron/apache"
+    if [ -f "$FIND_FILE" ];then
+        sed -i '/jgoms/d' ${FIND_FILE}
+        sed -i '/schedule:run/d' ${FIND_FILE} 
+    fi
     _info "成功"
     echo
     _info "开始卸载其他依赖软件"
@@ -129,8 +139,8 @@ uninstall_lamp(){
 }
 uninstall_eoms_mysql(){
 echo
-_info "卸载${www_app_name}数据库"
-read -p "请输入MySql的root账号密码：" root_password
+_info "开始卸载${www_app_name}数据库"
+read -p "请输入MySQL的root账号密码：" root_password
 mysql -uroot -p$root_password << EOF
     DROP DATABASE IF EXISTS ${dbname};
     use mysql;
@@ -146,14 +156,14 @@ fi
 }
 uninstall_jgoms_agent(){
     echo 
-    _info "卸载SNMP"
+    _info "开始卸载SNMP"
     systemctl stop snmpd
     yum -y remove perl-ExtUtils-MakeMaker package libperl-dev bc sysstat net-snmp net-snmp-utils
     rm -rf /opt/snmp
     rm -rf /etc/snmp
     _info "成功"
     echo
-    _info "卸载Supervisord"
+    _info "开始卸载Supervisord"
     supervisorctl stop py-eoms
     systemctl stop supervisord
     yum -y remove supervisor
@@ -169,7 +179,7 @@ if [ "$1" = "server" ]; then
 while true; do
     echo "确定要卸载${www_app_name}吗?"
     echo "1.只卸载${www_app_name}及${www_app_name}所使用的数据库;"
-    echo "2.全部卸载(运行环境（Apache、Mysql、PHP）及${www_app_name});"
+    echo "2.全部卸载(运行环境（Apache、MySQL、PHP）及${www_app_name});"
     read -p "请选择[1-2] (默认: 1) " uninstall
     [ -z ${uninstall} ] && uninstall="1"
     case ${uninstall} in

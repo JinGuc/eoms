@@ -45,9 +45,9 @@ else
         echo
         echo $mysqlV
         if [[ $mysqlV =~ $FINDSTR ]];then
-            _info "MySql版本一致,安装继续........"
+            _info "MySQL版本一致,安装继续........"
         else
-            _info "${www_app_name}运行环境需要MySql版本为5.7,本次安装退出........"
+            _info "${www_app_name}运行环境需要MySQL版本为5.7,本次安装退出........"
             exit 0
         fi
         FINDSTR=7.4
@@ -67,7 +67,7 @@ else
             echo "${www_app_name}运行环境需要PHP版本为7.4,本次安装退出........"
             exit 0
         fi 
-read -p "请输入MySql的root账号密码：" root_password
+read -p "请输入MySQL的root账号密码：" root_password
 mysql -uroot -p$root_password << EOF
 create database $dbname character set utf8mb4;
 grant all privileges on $dbname.* to $dbname@'${dbhost}' identified by "${password}";
@@ -162,7 +162,7 @@ fi
 }
 check_port(){
 if [ "${only_install_www}" == "yes" ]; then 
-read -p "请输入Apache站点配置文件绝对路径：" virtual_site_conf_file
+read -p "请输入Apache虚拟站点配置文件绝对路径：" virtual_site_conf_file
 if [ -f "${virtual_site_conf_file}" ]; then
 FIND_FILE=${virtual_site_conf_file}
 FIND_STR="localhost:8013"
