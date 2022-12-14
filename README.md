@@ -61,10 +61,10 @@ MySql 5.7<br>
 运行脚本 ./upgrade_agent.sh<br>
 
 一键卸载服务端:<br>
-运行脚本 ./uninstsll.sh server<br>
+运行脚本 ./uninstall.sh server<br>
 
 一键卸载客户端:<br>
-运行脚本 ./uninstsll.sh agent<br>
+运行脚本 ./uninstall.sh agent<br>
 <p>
 
 # 5、使用说明
