@@ -189,6 +189,7 @@ while true; do
     esac
 done
 elif [ "$1" = "agent" ]; then
+while true; do
     read -p "确定要卸载${www_app_name}客户端吗?请选择[y or n] (默认: n) " uninstall
     [ -z ${uninstall} ] && uninstall="n"
     case ${uninstall} in
@@ -196,6 +197,8 @@ elif [ "$1" = "agent" ]; then
         n) _info "退出卸载${www_app_name}客户端"; break;;
         *) _warn "Input error, Please only input 1 or 2";;
     esac
+done
 else
-_warn "Input error!";;
+    echo "Input error!"
+    exit 0
 fi
