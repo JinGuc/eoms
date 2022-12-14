@@ -933,14 +933,6 @@ EOF
     if [ "${apache}" != "do_not_install" ] || [ "${apache_installed}" == "yes" ]; then
         echo "Starting Apache..."
         systemctl restart httpd &> /dev/null
-        n=$(iptables -nL | grep 8013 | wc -l)
-        if [ $n -eq 0 ]; then
-            iptables -I INPUT -p tcp --dport 8013 -j ACCEPT
-        fi
-        n=$(iptables -nL | grep 8804 | wc -l)
-        if [ $n -eq 0 ]; then
-            iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
-        fi
     fi
     if [ "${mysql}" != "do_not_install" ] || [ "${mysql_installed}" == "yes" ]; then
         echo "Starting MySQl..."
@@ -958,6 +950,19 @@ EOF
     if [ -d "${web_root_dir}/phpmyadmin" ] && [ -f "/usr/bin/mysql" ] && [ "${only_install_www}" == "no" ]; then
         if [ "${apache}" != "do_not_install" ]; then
             /usr/bin/mysql -uroot -p${dbrootpwd} < ${web_root_dir}/phpmyadmin/sql/create_tables.sql &> /dev/null
+        fi
+    fi
+    apache_num=$(pgrep httpd | wc -l)
+    findserverap=$(whereis apache |awk -F : '{print $2}' | sed '/^$/d')
+    findserverah=$(whereis httpd |awk -F : '{print $2}' | sed '/^$/d')
+    if [ $apache_num -gt 0 ] || [ -n "$findserverap" ] || [ -n "$findserverah" ]; then
+        n=$(iptables -nL | grep 8013 | wc -l)
+        if [ $n -eq 0 ]; then
+            iptables -I INPUT -p tcp --dport 8013 -j ACCEPT
+        fi
+        n=$(iptables -nL | grep 8804 | wc -l)
+        if [ $n -eq 0 ]; then
+            iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
         fi
     fi
     iptables-save > /etc/sysconfig/iptables

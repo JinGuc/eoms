@@ -103,7 +103,7 @@ config_apache(){
     sed -i '$aInclude conf/extra/httpd-vhosts.conf' ${apache_location}/conf/httpd.conf
     sed -i 's/^User.*/User apache/i' ${apache_location}/conf/httpd.conf
     sed -i 's/^Group.*/Group apache/i' ${apache_location}/conf/httpd.conf
-    sed -i 's/^#ServerName www.example.com:80/ServerName 0.0.0.0:8013/' ${apache_location}/conf/httpd.conf
+    #sed -i 's/^#ServerName www.example.com:80/ServerName 0.0.0.0:8013/' ${apache_location}/conf/httpd.conf
     sed -i 's/^ServerAdmin you@example.com/ServerAdmin admin@localhost/' ${apache_location}/conf/httpd.conf
     sed -i 's@^#Include conf/extra/httpd-info.conf@Include conf/extra/httpd-info.conf@' ${apache_location}/conf/httpd.conf
     sed -i 's@DirectoryIndex index.html@DirectoryIndex index.html index.php@' ${apache_location}/conf/httpd.conf
