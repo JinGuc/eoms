@@ -131,6 +131,7 @@ if [ ! -d "${web_root_dir}/storage/logs" ]; then
 fi
 chmod -R 777 ${web_root_dir}/storage/logs
 chown -R apache:apache ${web_root_dir}/storage
+cp -rp ${cur_dir}/conf/favicon.ico ${web_root_dir}/public/
 if [ -f "${cur_dir}/conf/laravel-websock.ini" ]; then
     cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
     systemctl restart supervisord
