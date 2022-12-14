@@ -185,9 +185,19 @@ if [ -z ${virtual_site_conf_dir} ];then
     if [ ! -d ${apache_location}/conf/vhost ];then
         mkdir -p ${apache_location}/conf/vhost/
     fi
-    cat > ${apache_location}/conf/extra/httpd-vhosts.conf <<EOF
-Include ${apache_location}/conf/vhost/*.conf
-EOF
+    FIND_FILE=${apache_location}/conf/extra/httpd-vhosts.conf
+    FIND_STR="conf/vhost/*.conf"
+    # 判断匹配函数，匹配函数不为0，则包含给定字符
+    if [ -f "$FIND_FILE" ];then
+        f=$(grep -c "$FIND_STR" $FIND_FILE)
+    else
+        f=0
+    fi
+    if [ $f -eq 0 ];then
+    echo "
+    Include ${apache_location}/conf/vhost/*.conf
+    "  >> ${FIND_FILE}
+    fi
 virtual_site_conf_file=${apache_location}/conf/vhost/jgoms.conf
 else
 virtual_site_conf_file=${virtual_site_conf_dir}/jgoms.conf
