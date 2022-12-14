@@ -62,8 +62,8 @@ DocumentRoot /home/data/www/public<br>
     Order Deny,Allow<br>
     Allow from All<br>
     DirectoryIndex index.php index.html index.htm<br>
-</Directory><br>
-</VirtualHost><br>
+<\/Directory><br>
+<\/VirtualHost><br>
 运行脚本 ./install_server.sh www<br>
 
 ### 一键安装客户端：<br>
