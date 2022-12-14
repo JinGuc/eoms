@@ -57,6 +57,7 @@ uninstall_jgoms(){
     _info "成功卸载${www_app_name}"
 }
 uninstall_lamp(){
+    echo
     _info "开始卸载Apache"
     if [ -f /etc/init.d/httpd ] && [ $(ps -ef | grep -v grep | grep -c "httpd") -gt 0 ]; then
         systemctl stop httpd > /dev/null 2>&1
