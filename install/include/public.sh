@@ -1091,7 +1091,7 @@ lamp_install(){
     [ "${supervisord}" != "do_not_install" ] && install_supervisord
     [ "${www}" != "do_not_install" ] && install_www
     [ "${snmp}" != "do_not_install" ] && install_snmp
-    [ "${py-eoms}" != "do_not_install" ] && install_py-eoms
+    [ "${pyeoms}" != "do_not_install" ] && install_py-eoms
     install_finally
 }
 
