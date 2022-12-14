@@ -50,7 +50,20 @@ chmod 755  *.sh<br>
 Apache 2.4<br>
 PHP 7.4（PHP需要开启snmp扩展）<br>
 MySql 5.7<br>
-
+注：如果Apache虚拟站点配置文件只有一个在httpd.conf,请将以下代码复制到httpd.conf文件中，然后保存。<br>
+Listen 8013<br>
+<VirtualHost _default_:8013><br>
+ServerName localhost:8013<br>
+DocumentRoot /home/data/www/public<br>
+<Directory /home/data/www/public><br>
+    SetOutputFilter DEFLATE<br>
+    Options FollowSymLinks<br>
+    AllowOverride All<br>
+    Order Deny,Allow<br>
+    Allow from All<br>
+    DirectoryIndex index.php index.html index.htm<br>
+</Directory><br>
+</VirtualHost><br>
 运行脚本 ./install_server.sh www<br>
 
 ### 一键安装客户端：<br>

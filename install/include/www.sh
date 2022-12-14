@@ -180,7 +180,7 @@ check_port(){
 if [ "${only_install_www}" == "yes" ]; then 
 read -p "请输入Apache虚拟站点配置目录绝对路径：" virtual_site_conf_dir
 virtual_site_conf_file = ${virtual_site_conf_dir}/jgoms.conf
-if [ -f "${virtual_site_conf_file}" ]; then
+if [ ! -f "${virtual_site_conf_file}" ]; then
 FIND_FILE=${virtual_site_conf_file}
 FIND_STR="localhost:8013"
 # 判断匹配函数，匹配函数不为0，则包含给定字符
@@ -212,8 +212,7 @@ echo "Apache端口8013已被占用,请先关闭8013端口,本次安装退出....
 exit 0
 fi
 else
-    echo "Apache站点配置文件不存在,本次安装退出........"
-    exit 0
+    echo "${www_app_name}虚拟站点配置文件已存在,安装继续........"
 fi
 fi
 }
