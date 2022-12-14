@@ -178,7 +178,10 @@ fi
 }
 check_port(){
 if [ "${only_install_www}" == "yes" ]; then 
-read -p "请输入Apache虚拟站点配置目录绝对路径：" virtual_site_conf_dir
+read -p "请输入Apache虚拟站点配置目录绝对路径(如配置文件只有httpd.conf,请按回车键跳过此项设置)：" virtual_site_conf_dir
+if [ -z ${virtual_site_conf_dir} ];then
+    echo "手动修改httpd.conf,添加虚拟站点并监听8013端口"
+else
 virtual_site_conf_file = ${virtual_site_conf_dir}/jgoms.conf
 if [ ! -f "${virtual_site_conf_file}" ]; then
 FIND_FILE=${virtual_site_conf_file}
@@ -208,11 +211,12 @@ DocumentRoot ${web_root_dir}/public
 </VirtualHost>
 EOF
 else
-echo "Apache端口8013已被占用,请先关闭8013端口,本次安装退出........"
+echo "8013端口已被占用,请先关闭8013端口,本次安装退出........"
 exit 0
 fi
 else
     echo "${www_app_name}虚拟站点配置文件已存在,安装继续........"
+fi
 fi
 fi
 }
