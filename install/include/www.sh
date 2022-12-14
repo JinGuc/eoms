@@ -173,7 +173,7 @@ if [ -f "$FIND_FILE" ];then
 else
     f=0
 fi
-$findport=$(netstat -ntlp | grep 8013)
+findport=$(netstat -ntlp | grep 8013)
 if [ -z $f ] || [ $f -eq 0 ] || [ ! -f "$FIND_FILE" ] || [ -n "$findport" ] ;then
 
 cat > ${virtual_site_conf_file} <<EOF
