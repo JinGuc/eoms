@@ -47,7 +47,9 @@ uninstall_jgoms(){
     echo
     _info "开始卸载${www_app_name}"
     rm -rf ${web_root_dir}
-    rm ${apache_location}/conf/vhost/jgoms.conf 
+    if [ -f ${apache_location}/conf/vhost/jgoms.conf ];then
+        rm ${apache_location}/conf/vhost/jgoms.conf 
+    fi
     FIND_FILE="/var/spool/cron/apache"
     if [ -f "$FIND_FILE" ];then
         sed -i '/jgoms/d' ${FIND_FILE}
@@ -97,7 +99,9 @@ uninstall_lamp(){
     echo
     _info "开始卸载${www_app_name}"
     rm -rf ${web_root_dir}
-    rm ${apache_location}/conf/vhost/jgoms.conf 
+    if [ -f ${apache_location}/conf/vhost/jgoms.conf ];then
+        rm ${apache_location}/conf/vhost/jgoms.conf 
+    fi
     FIND_FILE="/var/spool/cron/apache"
     if [ -f "$FIND_FILE" ];then
         sed -i '/jgoms/d' ${FIND_FILE}
