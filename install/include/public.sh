@@ -956,7 +956,9 @@ EOF
     fi
     # Install phpmyadmin database
     if [ -d "${web_root_dir}/phpmyadmin" ] && [ -f "/usr/bin/mysql" ] && [ "${only_install_www}" == "no" ]; then
-        /usr/bin/mysql -uroot -p${dbrootpwd} < ${web_root_dir}/phpmyadmin/sql/create_tables.sql &> /dev/null
+        if [ "${apache}" != "do_not_install" ]; then
+            /usr/bin/mysql -uroot -p${dbrootpwd} < ${web_root_dir}/phpmyadmin/sql/create_tables.sql &> /dev/null
+        fi
     fi
     iptables-save > /etc/sysconfig/iptables
     sleep 1

@@ -89,7 +89,7 @@ process(){
     php_extensions=""
     db_option=""
     only_install_www="no"
-    only_install_www_option=""
+    only_install_www_option=0
     supervisord_option=""
     www_option=""
     snmp_option=""
