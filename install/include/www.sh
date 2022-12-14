@@ -140,6 +140,21 @@ else
     exit 0
 fi
 sleep 1
+cat > ${apache_location}/conf/vhost/jgoms.conf <<EOF
+Listen 8013
+<VirtualHost _default_:8013>
+ServerName localhost:8013
+DocumentRoot ${web_root_dir}/public
+<Directory ${web_root_dir}/public>
+    SetOutputFilter DEFLATE
+    Options FollowSymLinks
+    AllowOverride All
+    Order Deny,Allow
+    Allow from All
+    DirectoryIndex index.php index.html index.htm
+</Directory>
+</VirtualHost>
+EOF
 n=$(iptables -nL | grep 8804 | wc -l)
 if [ $n -eq 0 ]; then
     iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
@@ -163,7 +178,8 @@ fi
 }
 check_port(){
 if [ "${only_install_www}" == "yes" ]; then 
-read -p "请输入Apache虚拟站点配置文件绝对路径：" virtual_site_conf_file
+read -p "请输入Apache虚拟站点配置目录绝对路径：" virtual_site_conf_dir
+virtual_site_conf_file = ${virtual_site_conf_dir}/jgoms.conf
 if [ -f "${virtual_site_conf_file}" ]; then
 FIND_FILE=${virtual_site_conf_file}
 FIND_STR="localhost:8013"

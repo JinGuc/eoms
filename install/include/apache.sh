@@ -128,21 +128,7 @@ EOF
     cat > ${apache_location}/conf/extra/httpd-vhosts.conf <<EOF
 Include ${apache_location}/conf/vhost/*.conf
 EOF
-    cat > ${apache_location}/conf/vhost/default.conf <<EOF
-Listen 8013
-<VirtualHost _default_:8013>
-ServerName localhost:8013
-DocumentRoot ${web_root_dir}/public
-<Directory ${web_root_dir}/public>
-    SetOutputFilter DEFLATE
-    Options FollowSymLinks
-    AllowOverride All
-    Order Deny,Allow
-    Allow from All
-    DirectoryIndex index.php index.html index.htm
-</Directory>
-</VirtualHost>
-EOF
+   
 
 # httpd modules array
 httpd_mod_list=(
