@@ -93,6 +93,7 @@ DocumentRoot /home/data/www/public<br>
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/kfq.png"></p>
 
 # 7、常见问题
-## 1）如获取不到主机信息，请检查snmp服务是否正常启动<br>
+
+1）如获取不到主机信息，请检查snmp服务是否正常启动<br>
 
 
