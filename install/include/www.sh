@@ -45,9 +45,9 @@ else
         echo
         echo $mysqlV
         if [[ $mysqlV =~ $FINDSTR ]];then
-            _info "MySql版本一致,安装继续........"
+            _info "MySQL版本一致,安装继续........"
         else
-            _info "${www_app_name}运行环境需要MySql版本为5.7,本次安装退出........"
+            _info "${www_app_name}运行环境需要MySQL版本为5.7,本次安装退出........"
             exit 0
         fi
         FINDSTR=7.4
@@ -67,7 +67,7 @@ else
             echo "${www_app_name}运行环境需要PHP版本为7.4,本次安装退出........"
             exit 0
         fi 
-read -p "请输入MySql的root账号密码：" root_password
+read -p "请输入MySQL的root账号密码：" root_password
 mysql -uroot -p$root_password << EOF
 create database $dbname character set utf8mb4;
 grant all privileges on $dbname.* to $dbname@'${dbhost}' identified by "${password}";
@@ -131,6 +131,7 @@ if [ ! -d "${web_root_dir}/storage/logs" ]; then
 fi
 chmod -R 777 ${web_root_dir}/storage/logs
 chown -R apache:apache ${web_root_dir}/storage
+cp -rp ${cur_dir}/conf/favicon.ico ${web_root_dir}/public/
 if [ -f "${cur_dir}/conf/laravel-websock.ini" ]; then
     cp -rp ${cur_dir}/conf/laravel-websock.ini /etc/supervisord.d
     systemctl restart supervisord
@@ -139,9 +140,26 @@ else
     exit 0
 fi
 sleep 1
+if [ ! -f "${apache_location}/conf/vhost/jgoms.conf" ]; then
+cat > ${apache_location}/conf/vhost/jgoms.conf <<EOF
+Listen 8013
+<VirtualHost _default_:8013>
+ServerName localhost:8013
+DocumentRoot ${web_root_dir}/public
+<Directory ${web_root_dir}/public>
+    SetOutputFilter DEFLATE
+    Options FollowSymLinks
+    AllowOverride All
+    Order Deny,Allow
+    Allow from All
+    DirectoryIndex index.php index.html index.htm
+</Directory>
+</VirtualHost>
+EOF
+fi
 n=$(iptables -nL | grep 8804 | wc -l)
 if [ $n -eq 0 ]; then
-    s=$(iptables -I INPUT -p tcp --dport 8804 -j ACCEPT)
+    iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
 fi
 #以上文件执行完成后就可以为网站添加计划任务了，
 FIND_FILE="/var/spool/cron/apache"
@@ -162,19 +180,29 @@ fi
 }
 check_port(){
 if [ "${only_install_www}" == "yes" ]; then 
-read -p "请输入Apache站点配置文件绝对路径：" virtual_site_conf_file
-if [ -f "${virtual_site_conf_file}" ]; then
-FIND_FILE=${virtual_site_conf_file}
-FIND_STR="localhost:8013"
-# 判断匹配函数，匹配函数不为0，则包含给定字符
-if [ -f "$FIND_FILE" ];then
-    f=$(grep -c "$FIND_STR" $FIND_FILE)
+read -p "请输入Apache虚拟站点配置目录绝对路径(如配置文件只有httpd.conf,请按回车键跳过此项设置)：" virtual_site_conf_dir
+if [ -z ${virtual_site_conf_dir} ];then
+    if [ ! -d ${apache_location}/conf/vhost ];then
+        mkdir -p ${apache_location}/conf/vhost/
+    fi
+    FIND_FILE=${apache_location}/conf/extra/httpd-vhosts.conf
+    FIND_STR="conf/vhost/*.conf"
+    # 判断匹配函数，匹配函数不为0，则包含给定字符
+    if [ -f "$FIND_FILE" ];then
+        f=$(grep -c "$FIND_STR" $FIND_FILE)
+    else
+        f=0
+    fi
+    if [ $f -eq 0 ];then
+    echo "
+    Include ${apache_location}/conf/vhost/*.conf
+    "  >> ${FIND_FILE}
+    fi
+virtual_site_conf_file=${apache_location}/conf/vhost/jgoms.conf
 else
-    f=0
+virtual_site_conf_file=${virtual_site_conf_dir}/jgoms.conf
 fi
-$findport=$(netstat -ntlp | grep 8013)
-if [ -z $f ] || [ $f -eq 0 ] || [ ! -f "$FIND_FILE" ] || [ -n "$findport" ] ;then
-
+if [ ! -f "${virtual_site_conf_file}" ]; then
 cat > ${virtual_site_conf_file} <<EOF
 Listen 8013
 <VirtualHost _default_:8013>
@@ -191,12 +219,20 @@ DocumentRoot ${web_root_dir}/public
 </VirtualHost>
 EOF
 else
-echo "Apache端口8013已被占用,请先关闭8013端口,本次安装退出........"
+echo "${www_app_name}虚拟站点配置文件已存在,安装继续........"
+FIND_FILE=${virtual_site_conf_file}
+FIND_STR="localhost:8013"
+# 判断匹配函数，匹配函数不为0，则包含给定字符
+if [ -f "$FIND_FILE" ];then
+    f=$(grep -c "$FIND_STR" $FIND_FILE)
+else
+    f=0
+fi
+findport=$(netstat -ntlp | grep 8013)
+if [ -z $f ] || [ $f -eq 0 ] || [ ! -f "$FIND_FILE" ] || [ -n "$findport" ] ;then
+echo "8013端口已被占用,请先关闭8013端口,本次安装退出........"
 exit 0
 fi
-else
-    echo "Apache站点配置文件不存在,本次安装退出........"
-    exit 0
 fi
 fi
 }

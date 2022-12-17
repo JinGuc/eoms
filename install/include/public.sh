@@ -935,7 +935,7 @@ EOF
         systemctl restart httpd &> /dev/null
     fi
     if [ "${mysql}" != "do_not_install" ] || [ "${mysql_installed}" == "yes" ]; then
-        echo "Starting MySql..."
+        echo "Starting MySQl..."
         systemctl restart mysqld &> /dev/null
     fi
     if if_in_array "${php_memcached_filename}" "${php_modules_install}"; then
@@ -948,12 +948,24 @@ EOF
     fi
     # Install phpmyadmin database
     if [ -d "${web_root_dir}/phpmyadmin" ] && [ -f "/usr/bin/mysql" ] && [ "${only_install_www}" == "no" ]; then
-        /usr/bin/mysql -uroot -p${dbrootpwd} < ${web_root_dir}/phpmyadmin/sql/create_tables.sql &> /dev/null
+        if [ "${apache}" != "do_not_install" ]; then
+            /usr/bin/mysql -uroot -p${dbrootpwd} < ${web_root_dir}/phpmyadmin/sql/create_tables.sql &> /dev/null
+        fi
     fi
-    n=$(iptables -nL | grep 8013 | wc -l)
-    if [ $n -eq 0 ]; then
-        iptables -I INPUT -p tcp --dport 8013 -j ACCEPT
+    apache_num=$(pgrep httpd | wc -l)
+    findserverap=$(whereis apache |awk -F : '{print $2}' | sed '/^$/d')
+    findserverah=$(whereis httpd |awk -F : '{print $2}' | sed '/^$/d')
+    if [ $apache_num -gt 0 ] || [ -n "$findserverap" ] || [ -n "$findserverah" ]; then
+        n=$(iptables -nL | grep 8013 | wc -l)
+        if [ $n -eq 0 ]; then
+            iptables -I INPUT -p tcp --dport 8013 -j ACCEPT
+        fi
+        n=$(iptables -nL | grep 8804 | wc -l)
+        if [ $n -eq 0 ]; then
+            iptables -I INPUT -p tcp --dport 8804 -j ACCEPT
+        fi
     fi
+    iptables-save > /etc/sysconfig/iptables
     sleep 1
     netstat -tunlp
     localIp=$(ip a  | grep inet | grep -v inet6 | grep -E 'ens|eth' | grep -v '127.0.0.1' | awk '{print $2}' | awk -F / '{print$1}'
@@ -1079,7 +1091,7 @@ lamp_install(){
     [ "${supervisord}" != "do_not_install" ] && install_supervisord
     [ "${www}" != "do_not_install" ] && install_www
     [ "${snmp}" != "do_not_install" ] && install_snmp
-    [ "${py-eoms}" != "do_not_install" ] && install_py-eoms
+    [ "${pyeoms}" != "do_not_install" ] && install_py-eoms
     install_finally
 }
 

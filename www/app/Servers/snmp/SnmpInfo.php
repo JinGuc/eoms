@@ -304,6 +304,7 @@ class SnmpInfo
     }
     protected static function serviceStatus($host = "127.0.0.1",$serviceName="")
     {
+        if($serviceName=='httpd') $serviceName = 'apache';
         $oid = config('oid.services.list.'.$serviceName.'Status.oid')??'';
         if(empty($oid)){
             $oid = SnmpOid::where('serverName','=',$serviceName)->where('serverType','=','status')->value('oid');
@@ -737,7 +738,7 @@ class SnmpInfo
             return [];
         }
         $info = self::get($host, 'serviceStatus',$serviceName);
-        $data = $info['result']['Data']['serviceStatus'];
+        $data = $info['result']['Data']['serviceStatus']??[];
         $data['serviceName'] = $serviceName??'';
         $status_ = $data['status'] ?? '';
         if(!empty($status_)&&strpos($status_,'(')!==false){
