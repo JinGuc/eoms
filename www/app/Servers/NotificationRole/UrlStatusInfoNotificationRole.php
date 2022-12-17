@@ -5,6 +5,7 @@ namespace App\Servers\NotificationRole;
 
 use App\Servers\snmp;
 use App\Models\UrlStatusInfo;
+use App\Models\UrlInfo;
 use App\Servers\NotifiCation;
 use Illuminate\Support\Facades\Log;
 use Nette\Schema\Expect;
@@ -34,6 +35,7 @@ class UrlStatusInfoNotificationRole
         $silenceCycle = $notificationInfo['silenceCycle'];
         $noticeSettingId = $notificationInfo['noticeSettingId'];
         $sound_index = $notificationInfo['sound_index'];
+        $http_type = strtolower(UrlInfo::where('id',$url_id)->value('type')??'');
         //$countType_array = ['1' => '最大值', '2' => '最小值', '3' => '平均值'];
         //$operator_array = ['1' => '>', '2' => '>=', '3' => '=', '4' => '<', '5' => '<='];
         //$content = '{告警策略}' . $title . $countType_array[$countType] . $operator_array[$operator] . $value;
@@ -59,7 +61,7 @@ class UrlStatusInfoNotificationRole
                     'value' => $value,
                     'now_value' => $now_value,
                     'sendType' => $sendType,
-                    'content' => $content . '(名称:'.$url_title.',地址:'.$url .'),响应状态:['.$status_code.']。',
+                    'content' => $url_title .$title .',状态码'.$status_code.','.$content,
                     'hostId' => 0,
                     'host' => '',
                     'relate_table' => 'url_info',
@@ -86,7 +88,7 @@ class UrlStatusInfoNotificationRole
                     'value' => $value,
                     'now_value' => $now_value,
                     'sendType' => $sendType,
-                    'content' => $content . '(名称:'.$url_title.',地址:'.$url .'),响应状态:['.$status_code.'],恢复正常',
+                    'content' => $url_title .$title .',恢复正常',
                     'hostId' => 0,
                     'host' => '',
                     'relate_table' => 'url_info',

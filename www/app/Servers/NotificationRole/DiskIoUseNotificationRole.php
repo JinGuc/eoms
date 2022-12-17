@@ -5,6 +5,7 @@ namespace App\Servers\NotificationRole;
 
 use App\Servers\snmp;
 use App\Models\ServerInfo;
+use App\Models\NotificationInfo;
 use App\Servers\NotifiCation;
 use Illuminate\Support\Facades\Log;
 
@@ -104,15 +105,11 @@ class DiskIoUseNotificationRole
                 if (!in_array($type, [3, 4, 5])) {
                     $avg_use_ = $avg_use . '%';
                 }
-                $content1 = $hostName . '(' . $device_ip . ')' . $content . ',当前磁盘IO1秒内用于操作io率为:' . $avg_use . ',达到告警值。';
-                $content2 = $hostName . '(' . $device_ip . ')' . $content . ',当前磁盘IO1秒内用于操作io率为:' . $avg_use . ',';
-                if($type==7){
-                    $content1 = $hostName . '(' . $device_ip . ')' . $content . ',当前磁盘IO每秒读取数据量为:' . $avg_use . '(KB/s),达到告警值。';
-                    $content2 = $hostName . '(' . $device_ip . ')' . $content . ',当前磁盘IO每秒读取数据量为:' . $avg_use . '(KB/s),';
-                }
-                if($type==8){
-                    $content1 = $hostName . '(' . $device_ip . ')' . $content . ',当前磁盘IO每秒写入数据量为:' . $avg_use . '(KB/s),达到告警值。';
-                    $content2 = $hostName . '(' . $device_ip . ')' . $content . ',当前磁盘IO每秒写入数据量为:' . $avg_use . '(KB/s),';
+                $content1 = $hostName . ','.$title . ',当前值为' . $avg_use . ','.$content;
+                $content2 = $hostName . ','.$title . ',当前值为' . $avg_use . ',恢复正常';
+                if($type==7||$type==8){
+                    $content1 = $hostName . ','.$title . ',当前值为' . $avg_use .  '(KB/s),'.$content;
+                    $content2 = $hostName . ','.$title . ',当前值为' . $avg_use .  '(KB/s),恢复正常';
                 }
                 if ($avg_use >= $value) {
                     $params = [
@@ -133,23 +130,26 @@ class DiskIoUseNotificationRole
                     Log::debug("告警", ["hostId" => $server_id, "result" => $params]);
                     NotifiCation::warningInfo($params);
                 } else {
-                    $params = [
-                        'type' => $type,
-                        'operator' => $operator,
-                        'value' => $value,
-                        'now_value' => $avg_use,
-                        'sendType' => $sendType,
-                        'content' => $content2,
-                        'hostId' => $server_id,
-                        'host' => $device_ip,
-                        'ContactId' => $ContactId,
-                        'continueCycle' => $continueCycle,
-                        'silenceCycle' => $silenceCycle,
-                        'noticeSettingId' => $noticeSettingId,
-                        'status' => 1,
-                    ];
-                    Log::debug("恢复", ["hostId" => $server_id, "result" => $params]);
-                    NotifiCation::updateNoticeInfo($params);
+                    $NotificationInfoStatus = NotificationInfo::where('hostId', $server_id)->where('notificationType', $type)->value('status') ?? -1;
+                    if ($NotificationInfoStatus == 0) {
+                        $params = [
+                            'type' => $type,
+                            'operator' => $operator,
+                            'value' => $value,
+                            'now_value' => $avg_use,
+                            'sendType' => $sendType,
+                            'content' => $content2,
+                            'hostId' => $server_id,
+                            'host' => $device_ip,
+                            'ContactId' => $ContactId,
+                            'continueCycle' => $continueCycle,
+                            'silenceCycle' => $silenceCycle,
+                            'noticeSettingId' => $noticeSettingId,
+                            'status' => 1,
+                        ];
+                        Log::debug("恢复", ["hostId" => $server_id, "result" => $params]);
+                        NotifiCation::updateNoticeInfo($params);
+                    }
                 }
             }
         } else {

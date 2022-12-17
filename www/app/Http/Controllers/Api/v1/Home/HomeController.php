@@ -4,9 +4,11 @@ namespace App\Http\Controllers\Api\v1\Home;
 
 use App\Http\Controllers\Controller;
 use App\Models\Contact;
+use App\Models\NotificationInfo;
 use App\Models\NotificationLog;
 use App\Models\NotificationSetting;
 use App\Models\SnmpHost;
+use App\Models\UrlInfo;
 use App\Models\SnmpHostRole;
 use Illuminate\Http\Request;
 
@@ -29,6 +31,14 @@ class HomeController extends Controller
             "onlineCount"=>$onlineCount,
             "offlineCount"=>$count-$onlineCount,
             "errCount"=>NotificationLog::where("status", 1)->whereNotIn('notificationType',[1, 2, 3, 4, 5, 6])->groupBy('hostId')->count(),
+        ];
+        $count = UrlInfo::count();
+        $onlineCount = UrlInfo::where('running', 1)->count();
+        $data["url"] = [
+            "count"=>$count,
+            "onlineCount"=>$onlineCount,
+            "offlineCount"=>$count-$onlineCount,
+            "errCount"=>NotificationInfo::where("status", 0)->where('notificationType',11)->groupBy('relate_id')->count(),
         ];
         $dataInfo = [
             "data"=>$data

@@ -64,7 +64,7 @@ class ServerStatusNotificationRole
                     'value' => $value,
                     'now_value' => $now_value,
                     'sendType' => $sendType,
-                    'content' => $hostName . '(' . $device_ip . ')' . $content . '(服务名称:'.$serviceName.'),状态:[停止服务]。',
+                    'content' => $hostName . ','.$title . ' ,服务'.$serviceName.'停止,'.$content,
                     'hostId' => $server_id,
                     'host' => $device_ip,
                     'relate_table' => 'snmp_host_role',

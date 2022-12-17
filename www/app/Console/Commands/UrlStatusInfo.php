@@ -59,6 +59,7 @@ class UrlStatusInfo extends Command
             $list = $list->toArray();
         }
         $time = date('Y-m-d H:i:s');
+        $status_code = '';
         //for($time=0; $time<1; $time++) {
         foreach ($list as $k => $v) {
             try {
@@ -75,24 +76,48 @@ class UrlStatusInfo extends Command
                 if ($http_type == 'mysql') {
                     $starttime = explode(' ', microtime()) ?? [];
                     // 创建连接
-                    if(!empty($port)){
-                        $con=mysqli_connect($url,$db_username,$db_password,"",$port);
-                    }else{
-                        $con=mysqli_connect($url,$db_username,$db_password);
-                    }
-                    // 检查连接
-                    if (!$con){
-                        $status_msg = mysqli_connect_error();
-                        UrlInfo::find($id)->update(["running" => 0, 'response_time' => '-','status_msg'=>$status_msg, 'gathering_time' => $time]);
-                    }else{
-                        $endtime = explode(' ', microtime()) ?? [];
-                        if (!empty($starttime) && !empty($endtime)) {
-                            $thistime = $endtime[0] + $endtime[1] - ($starttime[0] + $starttime[1]);
-                            $thistime = round($thistime, 3);
+                    try {
+                        if (!empty($port)) {
+                            $con = mysqli_connect($url, $db_username, $db_password, "", $port);
                         } else {
-                            $thistime = '-';
+                            $con = mysqli_connect($url, $db_username, $db_password);
                         }
-                        UrlInfo::find($id)->update(["running" => 1, 'response_time' => $thistime,'status_msg'=>$status_msg, 'gathering_time' => $time]);
+                        // 检查连接
+                        if (!$con) {
+                            $status_msg = mysqli_connect_error();
+                            UrlInfo::find($id)->update(["running" => 0, 'response_time' => '-', 'status_msg' => $status_msg, 'gathering_time' => $time]);
+                        } else {
+                            $endtime = explode(' ', microtime()) ?? [];
+                            if (!empty($starttime) && !empty($endtime)) {
+                                $thistime = $endtime[0] + $endtime[1] - ($starttime[0] + $starttime[1]);
+                                $thistime = round($thistime, 3);
+                            } else {
+                                $thistime = '-';
+                            }
+                            UrlInfo::find($id)->update(["running" => 1, 'response_time' => $thistime, 'status_msg' => $status_msg, 'gathering_time' => $time]);
+                        }
+                    } catch (Exception $e) {
+                        $status_msg = $e->getMessage();
+                        UrlInfo::find($id)->update(["running" => 0, 'response_time' => '-','status_msg'=>$status_msg, 'gathering_time' => $time]);
+                    }
+                    if (!empty($status_msg)) {
+                        $params['url_id'] = $id;
+                        $params['url'] = $url;
+                        $params['url_title'] = $title;
+                        $msg = explode(': ',$status_msg);
+                        $msg_ = str_replace(['(',')'],'',$msg[1]??'');
+                        $msg__ = explode('/',$msg_??'');
+                        if(is_array($msg__)&&count($msg__)>0){
+                            $status_code = $msg__[1];
+                        }else{
+                            $status_code = 0;
+                        }
+                        $notice_ok = 0;
+                        $params['status_code'] = $status_code;
+                        Snmp::insertUrlStatusInfo($params);
+                    }else{
+                        $status_code = 200;
+                        $notice_ok = 1;
                     }
 
                 } else {
@@ -117,62 +142,68 @@ class UrlStatusInfo extends Command
                             $params['status_code'] = intval($http_code);
                             Snmp::insertUrlStatusInfo($params);
                             UrlInfo::find($id)->update(["running" => 0, 'response_time' => '-', 'gathering_time' => $time]);
+                            $notice_ok = 0;
                         } else {
-                            if (!empty($starttime) && !empty($endtime)) {
-                                $thistime = $endtime[0] + $endtime[1] - ($starttime[0] + $starttime[1]);
-                                $thistime = round($thistime, 3);
-                            } else {
-                                $thistime = '-';
-                            }
-                            UrlInfo::find($id)->update(["running" => 1, 'response_time' => $thistime, 'gathering_time' => $time]);
-                            $notificationInfo = [];
-                            $NotificationSettingResult = NotificationSetting::where("type", 11)->where("status", 1)->get();
-                            if (!empty($NotificationSettingResult)) {
-                                $NotificationSettingResult = $NotificationSettingResult->toArray();
-                                if (!empty($NotificationSettingResult)) {
-                                    $notificationInfo = $NotificationSettingResult[0];
-                                    $notificationSettingId = $notificationInfo['id'];
-                                    $nstatus = $notificationInfo['status'];
-                                }
-                            }
-                            $url = $url_ ?? '';
-                            $url_title = $title ?? '';
-                            $title = $notificationInfo['title'] ?? '';
-                            $type = $notificationInfo['type'] ?? '';
-                            $countType = $notificationInfo['countType'] ?? 1;
-                            $operator = $notificationInfo['operator'] ?? 1;
-                            $value = $notificationInfo['value'];
-                            $sendType = $notificationInfo['sendType'];
-                            $content = $notificationInfo['content'];
-                            $ContactId = $notificationInfo['ContactId'];
-                            $continueCycle  = $notificationInfo['continueCycle'];
-                            $silenceCycle = $notificationInfo['silenceCycle'];
-                            $noticeSettingId = $notificationInfo['id'];
-                            $sound_index = $notificationInfo['sound_index'];
-                            $now_value = 1;
-                            $params_ = [
-                                'type' => $type,
-                                'operator' => $operator,
-                                'value' => $value,
-                                'now_value' => $now_value,
-                                'sendType' => $sendType,
-                                'content' => '{' . $content . '}(名称:' . $url_title . ',地址:' . $url . '),响应状态[' . $http_code . '],恢复正常',
-                                'hostId' => 0,
-                                'host' => '',
-                                'relate_table' => 'url_info',
-                                'relate_id' => $id ?? 0,
-                                'ContactId' => $ContactId,
-                                'continueCycle' => $continueCycle,
-                                'silenceCycle' => $silenceCycle,
-                                'noticeSettingId' => $noticeSettingId,
-                                'sound_index' => $sound_index,
-                                'status' => 1,
-                            ];
-                            //Log::debug("检查主机内存告警1", ["hostId" => $server_id, "data" => $params]);
-                            $server = new NotifiCation();
-                            $res = $server->warningInfo($params_);
+                           $notice_ok = 1;
                         }
                     }
+                }
+                if ((!empty($http_code) && $http_code < 500 && $notice_ok == 1)) {
+                    if (!empty($starttime) && !empty($endtime)) {
+                        $thistime = $endtime[0] + $endtime[1] - ($starttime[0] + $starttime[1]);
+                        $thistime = round($thistime, 3);
+                    } else {
+                        $thistime = '-';
+                    }
+                    UrlInfo::find($id)->update(["running" => 1, 'response_time' => $thistime, 'gathering_time' => $time]);
+                    $notificationInfo = [];
+                    $NotificationSettingResult = NotificationSetting::where("type", 11)->where("status", 1)->get();
+                    if (!empty($NotificationSettingResult)) {
+                        $NotificationSettingResult = $NotificationSettingResult->toArray();
+                        if (!empty($NotificationSettingResult)) {
+                            $notificationInfo = $NotificationSettingResult[0];
+                            $notificationSettingId = $notificationInfo['id'];
+                            $nstatus = $notificationInfo['status'];
+                        }
+                    } else {
+                        return false;
+                    }
+                    $url = $url_ ?? '';
+                    $url_title = $title ?? '';
+                    $title = $notificationInfo['title'] ?? '';
+                    $type = $notificationInfo['type'] ?? '';
+                    $countType = $notificationInfo['countType'] ?? 1;
+                    $operator = $notificationInfo['operator'] ?? 1;
+                    $value = $notificationInfo['value'] ?? 0;
+                    $sendType = $notificationInfo['sendType'] ?? 1;
+                    $content = $notificationInfo['content'] ?? '';
+                    $ContactId = $notificationInfo['ContactId'] ?? '';
+                    $continueCycle  = $notificationInfo['continueCycle'] ?? 10;
+                    $silenceCycle = $notificationInfo['silenceCycle'] ?? 60;
+                    $noticeSettingId = $notificationInfo['id'] ?? 0;
+                    $sound_index = $notificationInfo['sound_index'] ?? '';
+                    $now_value = 1;
+                    $params_ = [
+                        'type' => $type,
+                        'operator' => $operator,
+                        'value' => $value,
+                        'now_value' => $now_value,
+                        'sendType' => $sendType,
+                        'content' => $url_title . $title.',恢复正常',
+                        'hostId' => 0,
+                        'host' => '',
+                        'relate_table' => 'url_info',
+                        'relate_id' => $id ?? 0,
+                        'ContactId' => $ContactId,
+                        'continueCycle' => $continueCycle,
+                        'silenceCycle' => $silenceCycle,
+                        'noticeSettingId' => $noticeSettingId,
+                        'sound_index' => $sound_index,
+                        'status' => 1,
+                    ];
+                    //Log::debug("检查主机内存告警1", ["hostId" => $server_id, "data" => $params]);
+                    $server = new NotifiCation();
+                    $res = $server->warningInfo($params_);
                 }
             } catch (Exception $e) {
                 Log::error("获取监控接口状态失败", ["id" => $v["id"], "url" => $v["url"], "message" => $e->getMessage() . ' at File ' . $e->getFile() . ' in Line ' . $e->getLine()]);

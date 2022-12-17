@@ -187,6 +187,7 @@ class NotifiCation{
                 $ContactId = $info[0]['ContactId'];
                 $notificationSettingId = $info[0]['notificationSettingId'];
                 $hostId = $info[0]['hostId'];
+                $notificationSettingId_Content = NotificationSetting::where('id',$notificationSettingId)->value('content');
                 //$stopNoticeTime = date('Y-m-d H:i:s', time() + ($params['continueCycle'] + 1) * 60);
                 $NotificationInfo_created_at = NotificationInfo::where('id', $id)->value('created_at');
                 $stopNoticeTime = date('Y-m-d H:i:s', strtotime($NotificationInfo_created_at) + ($params['continueCycle']) * 60);
@@ -202,7 +203,7 @@ class NotifiCation{
                 ];
                 if ($params['status'] == 1) {
                     $data['status'] = 1;
-                    $data['data'] = $params['content'] . '[恢复时间:' . date('Y-m-d H:i:s') . ']';
+                    $data['data'] = $params['content'];
                     if (!empty($params['relate_table'])) {
                         $notificationList = NotificationInfo::where('relate_id', $params['relate_id'])->where('relate_table', $params['relate_table'])->where('status', 0)->get();
                         if(!empty($notificationList)){
@@ -246,9 +247,8 @@ class NotifiCation{
                 } else {
                     NotificationLog::where('notificationSettingId', $notificationSettingId)->where('status', 0)->update(['info' => $params['content'] ?? '', 'ContactId' => $params['ContactId'] ?? '', 'sendType' => $params['sendType'] ?? 1, 'sound_index' => $params['sound_index'] ?? '']);
                     NotificationSendinfo::where('notificationSettingId', $notificationSettingId)->update(['content' => $params['content'] ?? '', 'sound_index' => $params['sound_index'] ?? '']);
-                    $content = str_replace('达到告警值', '小于告警值', $params['content']);
                 }
-                
+                $content = str_replace(['停止',$notificationSettingId_Content], ['正常','恢复正常'], $params['content']);
                 if ($id > 0 &&  $params['status'] == 1) {
                     /*
                     $ContactIds = explode(',', $ContactId);
@@ -556,6 +556,7 @@ class NotifiCation{
                 $created_at = $vv['created_at'];
                 $notificationLogId = $vv['notificationLogId'];
                 $notificationSettingId = $vv['notificationSettingId'];
+                $notificationId = $vv['notificationId'];
                 $NotificationSettingInfo = NotificationSetting::where('id',$notificationSettingId)->get();
                 if (!empty($NotificationSettingInfo)) {
                     $NotificationSettingInfo = $NotificationSettingInfo->toArray();
@@ -580,9 +581,12 @@ class NotifiCation{
                     NotificationInfo::where('notificationSettingId',$notificationSettingId)->where('status',0)->update(['status'=>'-1']);
                     continue 1;                 
                 }
+                if($notificationId>0){
+                    $relate_id = NotificationInfo::where('id',$notificationId)->value('relate_id');
+                }
                 $params = [
                     'mobile' => $sendTo,
-                    'content' => $content . '告警时间[' . $created_at . ']',
+                    'content' => $content,
                     'sound_index' => $sound_index ?? '',
                 ];
                 if ($type == 1) {
@@ -596,16 +600,20 @@ class NotifiCation{
                 if ($type == 3) {
                     $subject = '主机告警通知';
                     if($hostId==0){
-                        $subject = '接口监控告警通知';
+                        $subject = '接口告警通知';
+                        $type_ = "api";
+                        $hostId = $relate_id??0;
                     }else{
-                        $subject = '主机告警通知';
+                        $subject = '设备告警通知';
+                        $type_ = "host";
                     }
                     NotificationRole::toEmail($ContactId,
                         $hostId,
                         [
                             "subject" => $subject,
                             "message" => $content,
-                            "dateTime" => date("Y-m-d H:i:s")
+                            "dateTime" => date("Y-m-d H:i:s"),
+                            "type" => $type_??'',
                         ]
                     );
                 }

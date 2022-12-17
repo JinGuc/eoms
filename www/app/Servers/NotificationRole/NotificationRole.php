@@ -8,6 +8,7 @@ use App\Mail\NotificationMail;
 use App\Models\Contact;
 use App\Models\WebSetting;
 use App\Models\SnmpHost;
+use App\Models\UrlInfo;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
 
@@ -32,17 +33,36 @@ class NotificationRole
     public static function toEmail($ContactId,$hostId,$content)
     {
         $ContactObj = Contact::find($ContactId);
-        $hostObj = SnmpHost::find($hostId);
+        $type = $content["type"] ?? '';
+        if($type=='api'){
+            $urlObj = UrlInfo::find($hostId);
+        }else{
+            $hostObj = SnmpHost::find($hostId);
+        }
         if($ContactObj->email) {
-            $data = [
-                "subject" => $content["subject"],
-                "toUser" => $ContactObj->email ?? '',
-                "toUserName" => $ContactObj->name ?? '',
-                "hostName" => $hostObj->name ?? '',
-                "hostIP" => $hostObj->host ?? '',
-                "message" => $content["message"] ?? '',
-                "dateTime" => $content["dateTime"] ?? date('Y-m-d H:i:s'),
-            ];
+            if ($type == 'api') {
+                $data = [
+                    "subject" => $content["subject"],
+                    "toUser" => $ContactObj->email ?? '',
+                    "toUserName" => $ContactObj->name ?? '',
+                    "hostName" => $urlObj->titie ?? '',
+                    "hostIP" => $urlObj->url ?? '',
+                    "message" => $content["message"] ?? '',
+                    "dateTime" => $content["dateTime"] ?? date('Y-m-d H:i:s'),
+                    "type" => $content["type"] ?? '',
+                ];
+            } else {
+                $data = [
+                    "subject" => $content["subject"],
+                    "toUser" => $ContactObj->email ?? '',
+                    "toUserName" => $ContactObj->name ?? '',
+                    "hostName" => $hostObj->name ?? '',
+                    "hostIP" => $hostObj->host ?? '',
+                    "message" => $content["message"] ?? '',
+                    "dateTime" => $content["dateTime"] ?? date('Y-m-d H:i:s'),
+                    "type" => $content["type"] ?? '',
+                ];
+            }
             Mail::send(new NotificationMail($data));
         }
     }

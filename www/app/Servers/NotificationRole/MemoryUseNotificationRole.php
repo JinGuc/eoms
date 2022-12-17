@@ -89,7 +89,7 @@ class MemoryUseNotificationRole
                     'value' => $value,
                     'now_value' => $avg_use,
                     'sendType' => $sendType,
-                    'content' => $hostName . '(' . $device_ip . ')' . $content . ',当前值为:' . $avg_use_ . ',达到告警值。',
+                    'content' => $hostName . ','.$title . ',当前值为' . $avg_use .  ','.$content,
                     'hostId' => $server_id,
                     'host' => $device_ip,
                     'ContactId' => $ContactId,

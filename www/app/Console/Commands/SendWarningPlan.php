@@ -50,6 +50,7 @@ class SendWarningPlan extends Command
             $list = $list->toArray();
             foreach($list as $v){
                 $notificationSettingId = $v['notificationSettingId'];
+                $notificationId = $v['notificationId'];
                 $args['notificationSettingId'] = $notificationSettingId??0;
                 $res = NotifiCation::updateNoticeStatus($args);
                 if(!$res){
@@ -69,6 +70,7 @@ class SendWarningPlan extends Command
                 'ContactId'=>$ContactId,
                 'hostId'=>$hostId,
                 'noticeLogId'=>$noticeLogId,
+                'notificationId'=>$notificationId,
                 'notificationSettingId'=>$notificationSettingId ?? 0,
                 'info'=>$info,
                 'sound_index' => $sound_index,
