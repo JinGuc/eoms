@@ -134,6 +134,7 @@ class DiskUseNotificationRole
                     $ii++;
                 }
             }
+            /*
             if (count($storageinfo_) == 0 && $ii == count($diskinfo_)) {
                 
                 $NotificationInfoStatus = NotificationInfo::where('hostId', $server_id)->where('notificationType', $type)->orderBy('id','DESC')->value('status') ?? -1;
@@ -158,6 +159,7 @@ class DiskUseNotificationRole
                     NotifiCation::updateNoticeInfo($params);
                 }
             }
+            */
             //分区使用率
             foreach ($storageinfo_ as $k => $v) {
                 $partition = $storageinfo_[$k]['partition'];
@@ -188,7 +190,7 @@ class DiskUseNotificationRole
                     //
                 }
             }
-            if (empty($storageinfo_) && $ii == 0) {
+            if (empty($storageinfo_) && (!empty($diskinfo_) && $ii == count($diskinfo_))) {
                 $NotificationInfoStatus = NotificationInfo::where('hostId', $server_id)->where('notificationType', $type)->orderBy('id','DESC')->value('status') ?? -1;
                 Log::debug("恢复2", ["hostId" => $server_id, "result" => $NotificationInfoStatus]);
                 if ($NotificationInfoStatus == 0) {
