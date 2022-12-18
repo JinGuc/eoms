@@ -203,7 +203,7 @@ class NotifiCation{
                 ];
                 if ($params['status'] == 1) {
                     $data['status'] = 1;
-                    $data['data'] = $params['content'];
+                    //$data['data'] = $params['content'];
                     if (!empty($params['relate_table'])) {
                         $notificationList = NotificationInfo::where('relate_id', $params['relate_id'])->where('relate_table', $params['relate_table'])->where('status', 0)->get();
                         if(!empty($notificationList)){
