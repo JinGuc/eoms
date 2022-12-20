@@ -144,7 +144,6 @@ class UrlStatusInfo extends Command
                             UrlInfo::find($id)->update(["running" => 0, 'response_time' => '-', 'gathering_time' => $time]);
                             $notice_ok = 0;
                         } else {
-<<<<<<< HEAD
                            $notice_ok = 1;
                         }
                     }
@@ -165,63 +164,6 @@ class UrlStatusInfo extends Command
                             $notificationInfo = $NotificationSettingResult[0];
                             $notificationSettingId = $notificationInfo['id'];
                             $nstatus = $notificationInfo['status'];
-=======
-                            if (!empty($starttime) && !empty($endtime)) {
-                                $thistime = $endtime[0] + $endtime[1] - ($starttime[0] + $starttime[1]);
-                                $thistime = round($thistime, 3);
-                            } else {
-                                $thistime = '-';
-                            }
-                            UrlInfo::find($id)->update(["running" => 1, 'response_time' => $thistime, 'gathering_time' => $time]);
-                            $notificationInfo = [];
-                            $NotificationSettingResult = NotificationSetting::where("type", 11)->where("status", 1)->get();
-                            if (!empty($NotificationSettingResult)) {
-                                $NotificationSettingResult = $NotificationSettingResult->toArray();
-                                if (!empty($NotificationSettingResult)) {
-                                    $notificationInfo = $NotificationSettingResult[0];
-                                    $notificationSettingId = $notificationInfo['id'];
-                                    $nstatus = $notificationInfo['status'];
-                                }
-                            }else{
-                                return false;
-                            }
-                            $url = $url_ ?? '';
-                            $url_title = $title ?? '';
-                            $title = $notificationInfo['title'] ?? '';
-                            $type = $notificationInfo['type'] ?? '';
-                            $countType = $notificationInfo['countType'] ?? 1;
-                            $operator = $notificationInfo['operator'] ?? 1;
-                            $value = $notificationInfo['value']??0;
-                            $sendType = $notificationInfo['sendType']??1;
-                            $content = $notificationInfo['content']??'';
-                            $ContactId = $notificationInfo['ContactId']??'';
-                            $continueCycle  = $notificationInfo['continueCycle']??10;
-                            $silenceCycle = $notificationInfo['silenceCycle']??60;
-                            $noticeSettingId = $notificationInfo['id']??0;
-                            $sound_index = $notificationInfo['sound_index']??'';
-                            $now_value = 1;
-                            $params_ = [
-                                'type' => $type,
-                                'operator' => $operator,
-                                'value' => $value,
-                                'now_value' => $now_value,
-                                'sendType' => $sendType,
-                                'content' => '{' . $content . '}(名称:' . $url_title . ',地址:' . $url . '),响应状态[' . $http_code . '],恢复正常',
-                                'hostId' => 0,
-                                'host' => '',
-                                'relate_table' => 'url_info',
-                                'relate_id' => $id ?? 0,
-                                'ContactId' => $ContactId,
-                                'continueCycle' => $continueCycle,
-                                'silenceCycle' => $silenceCycle,
-                                'noticeSettingId' => $noticeSettingId,
-                                'sound_index' => $sound_index,
-                                'status' => 1,
-                            ];
-                            //Log::debug("检查主机内存告警1", ["hostId" => $server_id, "data" => $params]);
-                            $server = new NotifiCation();
-                            $res = $server->warningInfo($params_);
->>>>>>> ee620a7e30890376557ca6162a178a0cdacad8b0
                         }
                     } else {
                         return false;
@@ -247,7 +189,7 @@ class UrlStatusInfo extends Command
                         'value' => $value,
                         'now_value' => $now_value,
                         'sendType' => $sendType,
-                        'content' => $url_title . $title.',恢复正常',
+                        'content' => $url_title .','. $title.',恢复正常',
                         'hostId' => 0,
                         'host' => '',
                         'relate_table' => 'url_info',
