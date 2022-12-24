@@ -189,7 +189,7 @@ class UrlStatusInfo extends Command
                         'value' => $value,
                         'now_value' => $now_value,
                         'sendType' => $sendType,
-                        'content' => $url_title .','. $title.',恢复正常',
+                        'content' => $url_title . $title.',恢复正常',
                         'hostId' => 0,
                         'host' => '',
                         'relate_table' => 'url_info',

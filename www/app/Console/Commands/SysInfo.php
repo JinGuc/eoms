@@ -82,9 +82,9 @@ class SysInfo extends Command
 
                     #diskinfo = np.array(diskinfo);
                     $hDiskInfo = SnmpInfo::hDiskInfo($device_ip, $server_id);
-                    $params['disk_info'] = $hDiskInfo['disk_info'];;
-                    $hStorageInfo = SnmpInfo::hStorageInfo($device_ip, $server_id);
-                    $params['storage_info'] = $hStorageInfo['storage_info'];
+                    $params['disk_info'] = $hDiskInfo['disk_info']??'{}';
+                    //$hStorageInfo = SnmpInfo::hStorageInfo($device_ip, $server_id);
+                    $params['storage_info'] = $hDiskInfo['storage_info']??'{}';
                     $hDiskIoInfo = SnmpInfo::hDiskIoInfo($device_ip, $server_id);
                     $params['disk_io'] = array_key_exists("diskio_info", $hDiskIoInfo) ? $hDiskIoInfo['diskio_info'] : "{}";
 
