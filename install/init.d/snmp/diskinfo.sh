@@ -4,7 +4,7 @@ i=0
 Disk=""
 IFS_old=$IFS
 IFS=$'\n'
-for line in `fdisk -l |grep '/dev' |grep 'GB' | grep -E 'vd|hd|sd|vg' |grep -v 'mapper' |awk -F , '{print $1}' | sed '/^$/d'`
+for line in `fdisk -l |grep '/dev' |grep 'GB' | grep -E 'vd|hd|sd|vg' |awk -F , '{print $1}' | sed '/^$/d'`
 do
 line=${line/磁盘/Disk};
 line=${line/Disk/};
@@ -80,4 +80,20 @@ disk_info_name_indoes_used_percent=`echo "scale=2; $usedindoessize*100/$totalind
 Disks="$Disks$s:$disk_info_name_used_percent:$disk_info_name_indoes_used_percent@"
 done
 Disks=${Disks::-1}
-echo "{'disks':'$Disks'}"
+
+IFS_old=$IFS
+IFS=$'\n'
+Filesystem=""
+for line in `df | grep -v 'Use%' |awk  '{print $1,$2,$3,$5,$6}'`
+do
+line=${line// /:};
+line=${line//%/};
+echo $line
+if [ ! -n "$Filesystem" ];then
+Filesystem=$line
+else
+Filesystem=$Filesystem@$line
+fi
+done
+
+echo "{'disks':'$Disks','Filesystem':'$Filesystem'}"

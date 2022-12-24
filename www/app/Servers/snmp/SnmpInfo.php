@@ -71,7 +71,23 @@ class SnmpInfo
                             }
                         }
                     }
-                    $result = $disks;
+                    $storage_str = $result['Filesystem']??'';
+                    $storage_ary = explode('@', $storage_str);
+                    $storages = [];
+                    foreach ($storage_ary as $k => $v) {
+                        $storageinfo = explode(':', $v);
+                        $ds['partition'] = $storageinfo[0];
+                        $ds['mounted'] = $storageinfo[4];
+                        $ds['total'] = $storageinfo[1];
+                        $ds['used'] = $storageinfo[2];
+                        if($storageinfo[3]=='0%'||$storageinfo[3]=='0') $storageinfo[3]=0;
+                        $ds['used_percent'] = $storageinfo[3];
+                        if (($ds['mounted'] != '/mnt/cdrom' && strpos($ds['mounted'], '/cdrom') === false) && strpos($ds['mounted'], '/docker') === false) {
+                            $storages[$k] = $ds;
+                        }
+                    }
+                    $storages = array_merge($storages);
+                    $result = ['disks' => $disks,'storages'=>$storages];
                 }
                 if (!empty($result['DiskIo'] ?? '')) {
                     $disksIo_str = $result['DiskIo'];
@@ -304,7 +320,6 @@ class SnmpInfo
     }
     protected static function serviceStatus($host = "127.0.0.1",$serviceName="")
     {
-        if($serviceName=='httpd') $serviceName = 'apache';
         $oid = config('oid.services.list.'.$serviceName.'Status.oid')??'';
         if(empty($oid)){
             $oid = SnmpOid::where('serverName','=',$serviceName)->where('serverType','=','status')->value('oid');
@@ -648,9 +663,11 @@ class SnmpInfo
     public static function hDiskInfo($host = "127.0.0.1", $server_id = 0)
     {
         $diskinfo = self::get($host, 'diskOtherInfo');
-        $hDiskInfo['disk_info'] = json_encode($diskinfo['result']['Data']['diskOtherInfo'], JSON_UNESCAPED_SLASHES);
+        $hDiskInfo['disk_info'] = json_encode($diskinfo['result']['Data']['diskOtherInfo']['disks'], JSON_UNESCAPED_SLASHES);
+        $hDiskInfo['storage_info'] = json_encode($diskinfo['result']['Data']['diskOtherInfo']['storages'], JSON_UNESCAPED_SLASHES);
+        //Log::debug("硬盘信息",['info'=>$diskinfo]);
         $data = [];
-        foreach ($diskinfo['result']['Data']['diskOtherInfo'] as $v) {
+        foreach ($diskinfo['result']['Data']['diskOtherInfo']['disks'] as $v) {
             $tmp = $v;
             $tmp["disk_size"] = getSize($v["disk_size"]);
             $tmp["disk_used_size"] = getSize($v["disk_used_size"]);
@@ -662,6 +679,40 @@ class SnmpInfo
             "host" => $host,
             "type" => "DiskInfo",
             "data" => $data,
+            "time" => time(),
+        ]));
+        $disks = [];
+        foreach ($diskinfo['result']['Data']['diskOtherInfo']['storages'] as $k1 => $v1) {
+            if(($v1['mounted']!='/mnt/cdrom'&&strpos($v1['mounted'],'/cdrom')===false)&&strpos($v1['mounted'],'/docker')===false){
+                $ds = $v1;
+                $disks[$k1] = $ds;
+            }
+
+        }
+        $disks = a_array_unique($disks);
+        //$hStorageInfo['storage_info'] = json_encode($disks, JSON_UNESCAPED_SLASHES);
+        $data = [];
+        foreach ($disks as $v) {
+            $tmp = $v;
+            $tmp["total"] = getSize($v["total"]);
+            $tmp["used"] = getSize($v["used"]);
+            $data[] = $tmp;
+        }
+
+        event(new SysInfoEvent([
+            "status"=>"info",
+            "host_id" => $server_id,
+            "host" => $host,
+            "type" => "StorageInfo",
+            "data" => $data,
+            "time" => time(),
+        ]));
+        event(new SysWarningEvent([
+            "status"=>"info",
+            "host_id" => $server_id,
+            "host" => $host,
+            "type" => "storage",
+            "data" => ["warning"=>self::checkWarning($data,$server_id,6)],
             "time" => time(),
         ]));
         return $hDiskInfo;
@@ -738,7 +789,7 @@ class SnmpInfo
             return [];
         }
         $info = self::get($host, 'serviceStatus',$serviceName);
-        $data = $info['result']['Data']['serviceStatus']??[];
+        $data = $info['result']['Data']['serviceStatus'];
         $data['serviceName'] = $serviceName??'';
         $status_ = $data['status'] ?? '';
         if(!empty($status_)&&strpos($status_,'(')!==false){
