@@ -144,7 +144,7 @@ function request_by_curl($url, $post = null, $opt = [])
         if (isset($opt['header'])) {
             curl_setopt($ch, CURLOPT_HTTPHEADER, $opt['header']);
         }
-        if (isset($post)) {
+        if (isset($post)&&!empty($post)) {
             curl_setopt($ch, CURLOPT_POST, true);
             curl_setopt($ch, CURLOPT_POSTFIELDS, is_array($post) ? http_build_query($post) : $post);
         }
