@@ -8,7 +8,7 @@
 实现主机性能监测（CPU、内存、磁盘及负载等基本基本信息）<br>
 URL接口监测（URL接口状态访问是否正常）<br>
 主机安装应用服务运行监测（应用服务运行是否正常）<br>
-下载地址：http://117.160.193.241:8801/eoms/files/v1.0.0.apk<br>
+下载地址：[下载app安装包](https://gitee.com/jinguc/eoms/releases/download/v1.0.0/v1.0.0.apk)<br>
 
 ### 2、问题修复
 修复磁盘采集信息问题：

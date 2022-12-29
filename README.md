@@ -10,8 +10,9 @@
 
 # 3、演示
 <br>
-演示地址：http://eoms.jinguc.com:8013/<br>
+演示地址：https://eoms.jinguc.com<br>
 演示账号：关注微信公众号后，输入ywdemo获取演示账号<br>
+
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/gzh.png"></p>
 
 # 4、安装与卸载
