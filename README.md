@@ -38,14 +38,13 @@ cd eoms-master/install<br>
 chmod 755  *.sh<br>
 
 ### 一键安装服务端:<br>
-#全量安装，包括apache+php+mysql<br>
+#全量安装(包括apache+php+mysql)<br>
 注：数据库的数据位置默认为安装目录/usr/local/mysql下的 data 目录<br>
       mysql数据库的默认 root 密码为Jingu.com<br>
       Apache的站点目录为/home/data/www<br>
 运行脚本 ./install_server.sh<br>
 
-一键安装金鼓运维管理系统：<br>
-#(仅安装金鼓运维管理系统,适用于已经安装过Apahce、PHP、MySql的服务器)<br>
+#仅安装金鼓运维管理系统(适用于已经安装过Apahce、PHP、MySql的服务器)<br>
 注：系统运行环境要求：（如运行环境版本不一致可能会导致系统程序不兼容）<br>
 Apache 2.4<br>
 PHP 7.4（PHP需要开启snmp扩展）<br>
