@@ -73,7 +73,7 @@ DocumentRoot /home/data/www/public<br>
 #### 第三步：安装APP<br>
 关注微信视频号，收看安装视频讲解<br>
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/sph.png" width="348"></p>
-<p>
+
 ## 升级
 一键升级服务端:<br>
 运行脚本 ./upgrade_server.sh<br>
