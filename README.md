@@ -20,8 +20,8 @@
 <em><a href="#5使用说明">注：详看视频讲解“金鼓运维管理系统的安装”(关注微信视频号，收看视频讲解)</a></em><br>
 环境：CensOS64 7.4及以上（需要服务器能访问外网）<br>
 
-### 事前准备（安装 wget、git）<br>
-yum install -y wget unzip<br>
+### 事前准备（安装 wget、git、unzip）<br>
+yum install -y wget git unzip<br>
 #### 1）在线安装<br>
 注意：双斜杠//后的内容不要复制输入<br>
 yum install -y wget git<br>
