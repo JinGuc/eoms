@@ -5,6 +5,7 @@ namespace App\Servers\NotificationRole;
 
 use App\Servers\snmp;
 use App\Models\ServerInfo;
+use App\Models\NotificationInfo;
 use App\Servers\NotifiCation;
 use Illuminate\Support\Facades\Log;
 
@@ -84,6 +85,7 @@ class DiskUseNotificationRole
             $params_['n'] = $n??0;
             $params_['count'] = $count??0;
             $params_['diskinfo_'] = $diskinfo_;
+            $params_['storageinfo_'] = $storageinfo_;
             Log::debug("INFO",["hostId"=>$server_id,"result"=>$params_]);
             $mm=0;
             foreach ($diskinfo_ as $v) {
@@ -117,7 +119,7 @@ class DiskUseNotificationRole
                         'value' => $value,
                         'now_value' => $avg_use,
                         'sendType' => $sendType,
-                        'content' => $hostName . '(' . $device_ip . ')' . $content . ',当前磁盘使用率为:' . $avg_use . '%,达到告警值。',
+                        'content' => $hostName . ','.$title . ',当前值为' . $avg_use .  '%,'.$content,
                         'hostId' => $server_id,
                         'host' => $device_ip,
                         'ContactId' => $ContactId,
@@ -132,25 +134,32 @@ class DiskUseNotificationRole
                     $ii++;
                 }
             }
+            /*
             if (count($storageinfo_) == 0 && $ii == count($diskinfo_)) {
-                $params = [
-                    'type' => $type,
-                    'operator' => $operator,
-                    'value' => $value,
-                    'now_value' => $avg_use,
-                    'sendType' => $sendType,
-                    'content' => $hostName . '(' . $device_ip . ')' . $content . ',当前磁盘使用率恢复正常,',
-                    'hostId' => $server_id,
-                    'host' => $device_ip,
-                    'ContactId' => $ContactId,
-                    'continueCycle' => $continueCycle,
-                    'silenceCycle' => $silenceCycle,
-                    'noticeSettingId' => $noticeSettingId,
-                    'status' => 1,
-                ];
-                Log::debug("恢复", ["hostId" => $server_id, "result" => $params]);
-                NotifiCation::updateNoticeInfo($params);
+                
+                $NotificationInfoStatus = NotificationInfo::where('hostId', $server_id)->where('notificationType', $type)->orderBy('id','DESC')->value('status') ?? -1;
+                Log::debug("恢复1", ["hostId" => $server_id, "result" => $NotificationInfoStatus]);
+                if ($NotificationInfoStatus == 0) {
+                    $params = [
+                        'type' => $type,
+                        'operator' => $operator,
+                        'value' => $value,
+                        'now_value' => $avg_use,
+                        'sendType' => $sendType,
+                        'content' => $hostName . ','.$title . ',当前值为' . $avg_use .  '%,恢复正常',
+                        'hostId' => $server_id,
+                        'host' => $device_ip,
+                        'ContactId' => $ContactId,
+                        'continueCycle' => $continueCycle,
+                        'silenceCycle' => $silenceCycle,
+                        'noticeSettingId' => $noticeSettingId,
+                        'status' => 1,
+                    ];
+                    Log::debug("恢复", ["hostId" => $server_id, "result" => $params]);
+                    NotifiCation::updateNoticeInfo($params);
+                }
             }
+            */
             //分区使用率
             foreach ($storageinfo_ as $k => $v) {
                 $partition = $storageinfo_[$k]['partition'];
@@ -166,7 +175,7 @@ class DiskUseNotificationRole
                         'value' => $value,
                         'now_value' => $avg_use,
                         'sendType' => $sendType,
-                        'content' => $hostName . '(' . $device_ip . ')' . $content . ',当前磁盘分区目录['.$mounted.']使用率为:' . $avg_use . '%,达到告警值。',
+                        'content' => $hostName . ','.$title . ',当前目录'.$mounted.'值为' . $avg_use .  '%,'.$content,
                         'hostId' => $server_id,
                         'host' => $device_ip,
                         'ContactId' => $ContactId,
@@ -181,24 +190,28 @@ class DiskUseNotificationRole
                     //
                 }
             }
-            if (empty($storageinfo_) && $ii == 0) {
-                $params = [
-                    'type' => $type,
-                    'operator' => $operator,
-                    'value' => $value,
-                    'now_value' => $avg_use,
-                    'sendType' => $sendType,
-                    'content' => $hostName . '(' . $device_ip . ')' . $content . ',当前磁盘使用率恢复正常,',
-                    'hostId' => $server_id,
-                    'host' => $device_ip,
-                    'ContactId' => $ContactId,
-                    'continueCycle' => $continueCycle,
-                    'silenceCycle' => $silenceCycle,
-                    'noticeSettingId' => $noticeSettingId,
-                    'status' => 1,
-                ];
-                Log::debug("恢复", ["hostId" => $server_id, "result" => $params]);
-                NotifiCation::updateNoticeInfo($params);
+            if (empty($storageinfo_) && (!empty($diskinfo_) && $ii == count($diskinfo_))) {
+                $NotificationInfoStatus = NotificationInfo::where('hostId', $server_id)->where('notificationType', $type)->orderBy('id','DESC')->value('status') ?? -1;
+                Log::debug("恢复2", ["hostId" => $server_id, "result" => $NotificationInfoStatus]);
+                if ($NotificationInfoStatus == 0) {
+                    $params = [
+                        'type' => $type,
+                        'operator' => $operator,
+                        'value' => $value,
+                        'now_value' => $avg_use,
+                        'sendType' => $sendType,
+                        'content' => $hostName . ','.$title . ',当前值为' . $avg_use .  '%,恢复正常',
+                        'hostId' => $server_id,
+                        'host' => $device_ip,
+                        'ContactId' => $ContactId,
+                        'continueCycle' => $continueCycle,
+                        'silenceCycle' => $silenceCycle,
+                        'noticeSettingId' => $noticeSettingId,
+                        'status' => 1,
+                    ];
+                    Log::debug("恢复", ["hostId" => $server_id, "result" => $params]);
+                    NotifiCation::updateNoticeInfo($params);
+                }
             }
         }else{
             Log::debug("检查主机硬盘告警记录为0",["hostId"=>$serverInfo["hostId"],"result"=>""]);

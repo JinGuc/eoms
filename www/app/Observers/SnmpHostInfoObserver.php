@@ -50,7 +50,7 @@ class SnmpHostInfoObserver
                 $countType_array = ['1' => '最大值', '2' => '最小值', '3' => '平均值'];
                 $operator_array = ['1' => '>', '2' => '>=', '3' => '=', '4' => '<', '5' => '<='];
                 //$content = '{告警策略}{' . $content .'}'.$title. $countType_array[$countType] . $operator_array[$operator] . $value;
-                $content = '{'.$title.'告警策略}{' . $content .'}';
+                //$content = '{'.$title.'告警策略}{' . $content .'}';
                 $NotificationSettingInfo['content'] = $content;
                 $time2 = date('Y-m-d H:i:s',time());
                 $time1 = date('Y-m-d H:i:s',strtotime($time2)-($NotificationSettingInfo['cycle']*60));

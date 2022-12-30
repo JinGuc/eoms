@@ -10,8 +10,9 @@
 
 # 3、演示
 <br>
-演示地址：http://eoms.jinguc.com:8013/<br>
+演示地址：https://eoms.jinguc.com<br>
 演示账号：关注微信公众号后，输入ywdemo获取演示账号<br>
+
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/gzh.png"></p>
 
 # 4、安装与卸载
@@ -38,14 +39,13 @@ cd eoms-master/install<br>
 chmod 755  *.sh<br>
 
 ### 一键安装服务端:<br>
-#全量安装，包括apache+php+mysql<br>
+#全量安装(包括apache+php+mysql)<br>
 注：数据库的数据位置默认为安装目录/usr/local/mysql下的 data 目录<br>
       mysql数据库的默认 root 密码为Jingu.com<br>
       Apache的站点目录为/home/data/www<br>
 运行脚本 ./install_server.sh<br>
 
-一键安装金鼓运维管理系统：<br>
-#(仅安装金鼓运维管理系统,适用于已经安装过Apahce、PHP、MySql的服务器)<br>
+#仅安装金鼓运维管理系统(适用于已经安装过Apahce、PHP、MySql的服务器)<br>
 注：系统运行环境要求：（如运行环境版本不一致可能会导致系统程序不兼容）<br>
 Apache 2.4<br>
 PHP 7.4（PHP需要开启snmp扩展）<br>
@@ -95,5 +95,4 @@ DocumentRoot /home/data/www/public<br>
 # 7、常见问题
 
 1）如获取不到主机信息，请检查snmp服务是否正常启动<br> 
-
 
