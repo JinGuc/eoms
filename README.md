@@ -46,7 +46,7 @@ chmod 755  *.sh<br>
       Apache的站点目录为/home/data/www<br>
 运行脚本 ./install_server.sh<br>
 
-#仅安装运维管理系统(已经具有apache+php+mysql环境时，应采用本方式安装)<br>
+#方式二：仅安装运维管理系统(已经具有apache+php+mysql环境时，应采用本方式安装)<br>
 注：系统运行环境要求：（如运行环境版本不一致可能会导致系统程序不兼容）<br>
 Apache 2.4<br>
 PHP 7.4（PHP需要开启snmp扩展）<br>
