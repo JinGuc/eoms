@@ -62,7 +62,7 @@ class RoleInfo extends Command
                         $device_ip = $v['host'];
                         $params['hostId'] = $server_id;
                         $params['roleId'] = $vv['id'];
-                        $rdata = '{}';
+                        $rdata = [];
                         if ($vv['type'] == 'elasticsearch') {
                             $port = 0;
                             $akey = '';
@@ -86,6 +86,7 @@ class RoleInfo extends Command
                                 //集群
                                 $url = "http://" . $device_ip . ":" . $port . "/_cluster/health";
                                 $result = request_by_curl($url,'',$opt);
+                                Log::debug("获取主机elasticsearch", ["result" => $result]);
                                 $sArr = json_decode($result??'', true);
                                 $hRoleInfo['status'] = $params['status'] = '';
                                 $params['cpu_use'] = 0;
