@@ -56,7 +56,7 @@ class HostServerController extends Controller
         $es_health_info = json_decode($SnmpHostRoleInfo->es_health_info, true);
         $status = $es_health_info['colony']['status']??'';
         $data = [
-            "running" => !empty($status)?'1':'0',
+            "status" => !empty($status)?true:false,
             "run_status" => $es_health_info['colony']['status']??'',
             "cpu_use" => $SnmpHostRoleObj->running == 1 ? $SnmpHostRoleInfo->cpu_use : 0,
             "memory_use" => $SnmpHostRoleObj->running == 1 ? $SnmpHostRoleInfo->memory_use : 0,
