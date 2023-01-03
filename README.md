@@ -20,32 +20,33 @@
 <em><a href="#5使用说明">注：详看视频讲解“金鼓运维管理系统的安装”(关注微信视频号，收看视频讲解)</a></em><br>
 环境：CensOS64 7.4及以上（需要服务器能访问外网）<br>
 
-### 1）服务器在线安装<br>
-事前准备（安装 wget、git）<br>
+### 事前准备（安装 wget、git、unzip）<br>
+yum install -y wget git unzip<br>
+#### 1）在线安装<br>
 注意：双斜杠//后的内容不要复制输入<br>
 yum install -y wget git<br>
 git clone https://gitee.com/jinguc/eoms.git<br>
 cd eoms/install<br>
 chmod 755  *.sh<br>
 
-### 2）本地下载ZIP安装包后上传服务器安装<br>
+#### 2）ZIP安装包安装<br>
 安装包下载指引<br>
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/download_zip.png"></p>
-事前准备（安装 wget、unzip）<br>
-yum install -y wget unzip<br>
+
 进入压缩包同目录下解压安装包<br>
 unzip eoms-master.zip<br>
 cd eoms-master/install<br>
 chmod 755  *.sh<br>
 
-### 一键安装服务端:<br>
-#全量安装(包括apache+php+mysql)<br>
+### 开始安装
+#### 第一步：一键安装服务端<br>
+#方式一：全量安装(包括运维管理系统+apache+php+mysql。在没有apache+php+mysql环境时，应采用本方式安装)<br>
 注：数据库的数据位置默认为安装目录/usr/local/mysql下的 data 目录<br>
       mysql数据库的默认 root 密码为Jingu.com<br>
       Apache的站点目录为/home/data/www<br>
 运行脚本 ./install_server.sh<br>
 
-#仅安装金鼓运维管理系统(适用于已经安装过Apahce、PHP、MySql的服务器)<br>
+#方式二：仅安装运维管理系统(已经具有apache+php+mysql环境时，应采用本方式安装)<br>
 注：系统运行环境要求：（如运行环境版本不一致可能会导致系统程序不兼容）<br>
 Apache 2.4<br>
 PHP 7.4（PHP需要开启snmp扩展）<br>
@@ -66,8 +67,12 @@ DocumentRoot /home/data/www/public<br>
 <\/VirtualHost><br>
 运行脚本 ./install_server.sh www<br>
 
-### 一键安装客户端：<br>
+#### 第二步：一键安装客户端<br>
 运行脚本 ./install_agent.sh<br>
+
+#### 第三步：安装APP<br>
+关注微信视频号，收看安装视频讲解<br>
+<p style="align:left;"><img src="https://www.jinguc.com/oms/img/sph.png" width="348"></p>
 
 ## 升级
 一键升级服务端:<br>
@@ -95,5 +100,4 @@ DocumentRoot /home/data/www/public<br>
 # 7、常见问题
 
 1）如获取不到主机信息，请检查snmp服务是否正常启动<br> 
-
 
