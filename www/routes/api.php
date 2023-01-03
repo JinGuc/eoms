@@ -91,6 +91,8 @@ $api->version('v1',['middleware'=>['request.id']],function($api){
             $api->post('/host/server/info/{HostId}','HostServer\HostServerController@info');// 获取服务基本信息
             $api->post('/host/server/info/echart/{HostId}','HostServer\HostServerController@EChartList');// 获取服务图表信息
 
+            $api->post('/host/server/elasticsearchinfo/{HostId}','HostServer\HostServerController@elasticsearchinfo');// 获取es服务基本信息
+
             $api->post('/web/viewinterface/list','WebSetting\ViewInterfaceController@list');//接口监控列表
             $api->post('/web/viewinterface/save','WebSetting\ViewInterfaceController@addOrEdit');//接口监控添加或修改
             $api->post('/web/viewinterface/del','WebSetting\ViewInterfaceController@delete');//接口监控删除

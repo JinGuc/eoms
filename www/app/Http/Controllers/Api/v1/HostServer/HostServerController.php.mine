@@ -41,7 +41,6 @@ class HostServerController extends Controller
         ];
         return ["status" => "success", "des" => '获取成功', 'res'=>["data"=>$data]];
     }
-<<<<<<< .mine
     public function elasticsearchinfo(Request $request,$hostId)
     {
         $SnmpHostObj = SnmpHost::find($hostId);
@@ -67,35 +66,6 @@ class HostServerController extends Controller
         ];
         return ["status" => "success", "des" => '获取成功', 'res'=>["data"=>$data]];
     }
-||||||| .r40754
-
-=======
-    public function elasticsearchinfo(Request $request,$hostId)
-    {
-        $SnmpHostObj = SnmpHost::find($hostId);
-        if(!$SnmpHostObj) {
-            return ["status" => "fail", "des" => '未知的主机', 'res'=>[]];
-        }
-        $roleId = $request->get('roleId');
-        $SnmpHostRoleObj = SnmpHostRole::where('id',$roleId)->where('hostId',$SnmpHostObj->id)->first();
-        $SnmpHostRoleInfo = SnmpHostInfo::where('hostId',$SnmpHostObj->id)->where('roleId',$roleId)->orderBy('id','DESC')->first();
-        if(!$SnmpHostRoleInfo || !$SnmpHostRoleObj) {
-            return ["status" => "fail", "des" => '无数据', 'res'=>[]];
-        }
-        $es_health_info = json_decode($SnmpHostRoleInfo->es_health_info, true);
-        $status = $es_health_info['colony']['status']??'';
-        $data = [
-            "status" => !empty($status)?true:false,
-            "run_status" => $es_health_info['colony']['status']??'',
-            "cpu_use" => $SnmpHostRoleObj->running == 1 ? $SnmpHostRoleInfo->cpu_use : 0,
-            "memory_use" => $SnmpHostRoleObj->running == 1 ? $SnmpHostRoleInfo->memory_use : 0,
-            "runtime" => $SnmpHostRoleObj->running == 1 ? $SnmpHostRoleInfo->runtime : '',
-            "es_health_info" => $SnmpHostRoleObj->running == 1 ? $es_health_info:[],
-            "time" => $SnmpHostRoleObj->running == 1 ? strtotime($SnmpHostRoleInfo->created_at) : strtotime($SnmpHostRoleObj->updated_at)
-        ];
-        return ["status" => "success", "des" => '获取成功', 'res'=>["data"=>$data]];
-    }
->>>>>>> .r40800
     public function EChartList(Request $request,$hostId){
         $roleId = $request->get('roleId');
         $type = $request->input('type', "1"); // 1cpu使用率 2内存使用率 3负载 4tcp连接数
