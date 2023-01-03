@@ -45,14 +45,8 @@ class NotificationRole
                     "subject" => $content["subject"],
                     "toUser" => $ContactObj->email ?? '',
                     "toUserName" => $ContactObj->name ?? '',
-<<<<<<< .mine
-                    "hostName" => $urlObj->titie ?? '',
-||||||| .r40754
-                    "hostName" => $urlObj->title ?? '',
-=======
 <<<<<<< HEAD
                     "hostName" => $urlObj->title ?? '',
->>>>>>> .r40800
 =======
                     "hostName" => $urlObj->titie ?? '',
 >>>>>>> 678837628507c07fd4385c1e9d1d83bab1cf4ec4
