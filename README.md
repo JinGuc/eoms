@@ -21,20 +21,23 @@
 环境：CensOS64 7.4及以上（需要服务器能访问外网）<br>
 
 ### 事前准备（安装 wget、git、unzip）<br>
+在安装前，需要下载安装包，有两种方式进行下载
+#### 1）git拉取下载安装包<br>
+第一步：安装wget、unzip和git软件（如果操作系统已经支持，可跳过）<br>
 yum install -y wget git unzip<br>
-#### 1）在线安装<br>
-注意：双斜杠//后的内容不要复制输入<br>
-yum install -y wget git<br>
+第二步：git拉取<br>
 git clone https://gitee.com/jinguc/eoms.git<br>
+第三步：切换到安装目录并赋值执行（X）权限<br>
 cd eoms/install<br>
 chmod 755  *.sh<br>
 
-#### 2）ZIP安装包安装<br>
-安装包下载指引<br>
+#### 2）手动下载ZIP安装包<br>
+第一步：按照如下图示进行下载<br>
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/download_zip.png"></p>
 
-进入压缩包同目录下解压安装包<br>
+第二步：解压安装包<br>
 unzip eoms-master.zip<br>
+第三步：切换到安装目录并赋值执行（X）权限<br>
 cd eoms-master/install<br>
 chmod 755  *.sh<br>
 
