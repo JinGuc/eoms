@@ -101,7 +101,7 @@ class HostServerController extends Controller
         unset($es_health_info['recovery']);
         $shards_ = sortArrByManyField($shards_,'name',SORT_ASC);
         $es_health_info['recovery']['shards'] = $shards_;
-        unset($es_health_info['state']);
+        unset($es_health_info['state']); 
         $data = [
             "status" => !empty($status)?true:false,
             "run_status" => $es_health_info['colony']['status']??'',
