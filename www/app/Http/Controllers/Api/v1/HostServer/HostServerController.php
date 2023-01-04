@@ -53,14 +53,62 @@ class HostServerController extends Controller
         if(!$SnmpHostRoleInfo || !$SnmpHostRoleObj) {
             return ["status" => "fail", "des" => '无数据', 'res'=>[]];
         }
+        //$SnmpHostRoleInfo->es_health_info = file_get_contents(storage_path('es.txt'));
         $es_health_info = json_decode($SnmpHostRoleInfo->es_health_info, true);
         $status = $es_health_info['colony']['status']??'';
+        $indices = $es_health_info['indices']['indices'];
+        $shards_indices = $es_health_info['shards']['indices'];
+        $state_indices = $es_health_info['state']['routing_table']['indices'];
+        $m=0;
+        foreach($indices as $k=>$v){
+            $indices_[$m]['name'] = $k;
+            $indices_[$m]['info'] = $v;
+            $m++;
+        }
+        unset($es_health_info['indices']);
+        $es_health_info['indices'] = $indices_;
+        $m=0;
+        foreach($shards_indices as $k=>$v){
+            $indices_[$m]['name'] = $k;
+            $indices_[$m]['info'] = $v;
+            $m++;
+        }
+        unset($es_health_info['shards']['indices']);
+        $es_health_info['shards']['indices'] = $indices_;
+        $recovery = $es_health_info['recovery'];
+        $m=0;
+        $mm=0;
+        foreach($recovery as $k=>$v){
+            $shards_[$m]['name'] = $k;
+            $shards_[$m]['unassigned'] = [];
+            $target_name=[];
+            foreach($v['shards'] as $kk=>$vv){
+                if(!empty($vv['target']['name']??'')){
+                    $target_name[$vv['target']['name']][]=['id'=>$vv['id'],'primary'=>$vv['primary'],'info'=>$state_indices[$k]['shards'][$vv['id']]];
+                }
+            }
+            $n=0;
+            foreach($target_name as $kk=>$vv){
+                $target_name_[$n]['name'] = $kk;
+                $vv = sortArrByManyField($vv,'primary',SORT_DESC,'id',SORT_ASC);
+                $target_name_[$n]['list'] = $vv; 
+                $n++;
+            }
+            $target_name_ = sortArrByManyField($target_name_,'name',SORT_ASC);
+            $shards_[$m]['nodes'] = $target_name_;
+            $m++;
+        }
+        unset($es_health_info['recovery']);
+        $shards_ = sortArrByManyField($shards_,'name',SORT_ASC);
+        $es_health_info['recovery']['shards'] = $shards_;
+        unset($es_health_info['state']);
         $data = [
             "status" => !empty($status)?true:false,
             "run_status" => $es_health_info['colony']['status']??'',
             "cpu_use" => $SnmpHostRoleObj->running == 1 ? $SnmpHostRoleInfo->cpu_use : 0,
             "memory_use" => $SnmpHostRoleObj->running == 1 ? $SnmpHostRoleInfo->memory_use : 0,
             "runtime" => $SnmpHostRoleObj->running == 1 ? $SnmpHostRoleInfo->runtime : '',
+            'number_of_nodes' => $es_health_info['colony']['number_of_nodes']??0,
             "es_health_info" => $SnmpHostRoleObj->running == 1 ? $es_health_info:[],
             "time" => $SnmpHostRoleObj->running == 1 ? strtotime($SnmpHostRoleInfo->created_at) : strtotime($SnmpHostRoleObj->updated_at)
         ];
