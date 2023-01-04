@@ -194,3 +194,29 @@ function curl_get_url_http_code($url='',$timeout=60)
 	curl_close($ch);
     return $http_code;
 }
+/*
+*多元素排序
+*/
+function sortArrByManyField()
+{
+    $args = func_get_args(); // 获取函数的参数的数组
+    if (empty($args)) {
+        return null;
+    }
+    $arr = array_shift($args);
+    if (!is_array($arr)) {
+        throw new Exception("第一个参数不为数组");
+    }
+    foreach ($args as $key => $field) {
+        if (is_string($field)) {
+            $temp = array();
+            foreach ($arr as $index => $val) {
+                $temp[$index] = $val[$field];
+            }
+            $args[$key] = $temp;
+        }
+    }
+    $args[] = &$arr; //引用值
+    call_user_func_array('array_multisort', $args);
+    return array_pop($args);
+}
