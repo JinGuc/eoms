@@ -5,14 +5,14 @@
 
 ### 移动端APP支持配置多个运维管理系统
 实现移动端APP可配置多个运维管理系统，方便运维人员切换登录不同的运维管理系统。<br>
-下载地址：[下载app安装包]<br>
+下载地址：[下载app安装包](https://gitee.com/jinguc/eoms/releases/download/v1.0.2/v1.0.1.apk)<br>
 ## 1.0.1 2022-12-28
 
 ### 1、运维管理系统移动端上线(仅支持安卓手机)
 实现主机性能监测（CPU、内存、磁盘及负载等基本基本信息）<br>
 URL接口监测（URL接口状态访问是否正常）<br>
 主机安装应用服务运行监测（应用服务运行是否正常）<br>
-下载地址：[下载app安装包](https://gitee.com/jinguc/eoms/releases/download/v1.0.0/v1.0.0.apk)<br>
+下载地址：[下载app安装包](https://gitee.com/jinguc/eoms/releases/download/v1.0.1/v1.0.0.apk)<br>
 
 ### 2、问题修复
 修复磁盘采集信息问题：
