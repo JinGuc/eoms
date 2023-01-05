@@ -15,10 +15,10 @@
 
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/gzh.png"></p>
 
-# 版本更新日志
+# 4、版本更新日志
 升级前必看：<a href="CHANGELOG.md">CHANGELOG.md</a>
 
-# 4、安装与卸载
+# 5、安装与卸载
 ## 安装
 <em><a href="#5使用说明">注：详看视频讲解“金鼓运维管理系统的安装”(关注微信视频号，收看视频讲解)</a></em><br>
 环境：CensOS64 7.4及以上（需要服务器能访问外网）<br>
@@ -94,16 +94,16 @@ DocumentRoot /home/data/www/public<br>
 运行脚本 ./uninstall.sh agent<br>
 <p>
 
-# 5、使用说明
+# 6、使用说明
 关注微信视频号，收看视频讲解<br>
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/sph.png" width="348"></p>
 <p>
 
-# 6、开发者群
+# 7、开发者群
 关注微信公众号后，输入yw获取微信群二维码进群，技术交流<br>
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/kfq.png"></p>
 
-# 7、常见问题
+# 8、常见问题
 
 1）如获取不到主机信息，请检查snmp服务是否正常启动<br> 
 
