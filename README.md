@@ -15,6 +15,9 @@
 
 <p style="align:left;"><img src="https://www.jinguc.com/oms/img/gzh.png"></p>
 
+# 版本更新日志
+升级前必看：<a href="CHANGELOG.md">CHANGELOG.md</a>
+
 # 4、安装与卸载
 ## 安装
 <em><a href="#5使用说明">注：详看视频讲解“金鼓运维管理系统的安装”(关注微信视频号，收看视频讲解)</a></em><br>
