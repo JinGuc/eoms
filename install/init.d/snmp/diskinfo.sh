@@ -84,11 +84,11 @@ Disks=${Disks::-1}
 IFS_old=$IFS
 IFS=$'\n'
 Filesystem=""
-for line in `df | grep -v 'Use%' |awk  '{print $1,$2,$3,$5,$6}'`
+for line in `df | grep -v 'Use%' | grep -v '已用%' |awk  '{print $1,$2,$3,$5,$6}'`
 do
 line=${line// /:};
 line=${line//%/};
-echo $line
+#echo $line
 if [ ! -n "$Filesystem" ];then
 Filesystem=$line
 else
