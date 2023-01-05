@@ -28,7 +28,15 @@ class NotifiCation{
             } else {
                 if ($params['type'] == 11) {
                     self::insertNoticeInfo($params);
-                } else {
+                }else if ($params['type'] == 13) {
+                    if ($now_value >= $value) {
+                        //告警
+                        self::insertNoticeInfo($params);
+                    } else {
+                        $params['status'] = 1;
+                        self::updateNoticeInfo($params);
+                    }
+                }  else {
                     switch ($operator) {
                         case 1:
                             if ($now_value > $value) {
