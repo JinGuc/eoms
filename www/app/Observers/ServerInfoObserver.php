@@ -11,6 +11,7 @@ use App\Servers\NotificationRole\DiskUseNotificationRole;
 use App\Servers\NotificationRole\DiskIoUseNotificationRole;
 use App\Servers\NotificationRole\LoadUseNotificationRole;
 use App\Servers\NotificationRole\MysqlUseNotificationRole;
+use App\Servers\NotificationRole\SystemTimeNotificationRole;
 use Illuminate\Support\Facades\Log;
 
 class ServerInfoObserver
@@ -75,6 +76,9 @@ class ServerInfoObserver
                     break;
                 case 9:
                     DiskIoUseNotificationRole::check($serverInfo, $v);
+                    break;
+                case 13:
+                    SystemTimeNotificationRole::check($serverInfo, $v);
                     break;
             }
         }

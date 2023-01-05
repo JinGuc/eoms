@@ -14,3 +14,6 @@ yarn-error.log
 /.idea
 /.vscode
 /.svn
+/app/Http/Controller/App
+/app/Providers/TRouteServiceProvider.php
+/routes/app.php
