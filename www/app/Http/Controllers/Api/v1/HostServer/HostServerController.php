@@ -98,6 +98,7 @@ class HostServerController extends Controller
             $shards_[$m]['nodes'] = $target_name_;
             $m++;
         }
+        
         unset($es_health_info['recovery']);
         $shards_ = sortArrByManyField($shards_,'name',SORT_ASC);
         $es_health_info['recovery']['shards'] = $shards_;
