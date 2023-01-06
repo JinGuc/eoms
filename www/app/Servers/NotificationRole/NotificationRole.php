@@ -45,11 +45,7 @@ class NotificationRole
                     "subject" => $content["subject"],
                     "toUser" => $ContactObj->email ?? '',
                     "toUserName" => $ContactObj->name ?? '',
-<<<<<<< HEAD
                     "hostName" => $urlObj->title ?? '',
-=======
-                    "hostName" => $urlObj->titie ?? '',
->>>>>>> 678837628507c07fd4385c1e9d1d83bab1cf4ec4
                     "hostIP" => $urlObj->url ?? '',
                     "message" => $content["message"] ?? '',
                     "dateTime" => $content["dateTime"] ?? date('Y-m-d H:i:s'),
