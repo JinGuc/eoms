@@ -108,7 +108,7 @@ class UrlStatusInfo extends Command
                         $msg_ = str_replace(['(',')'],'',$msg[1]??'');
                         $msg__ = explode('/',$msg_??'');
                         if(is_array($msg__)&&count($msg__)>0){
-                            $status_code = $msg__[1];
+                            $status_code = $msg__[1]??intval($msg__[0]??'');
                         }else{
                             $status_code = 0;
                         }
