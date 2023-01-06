@@ -47,6 +47,7 @@ class SnmpInfo
             $m = count($r) - 1;
             $rs = $r[$m];
             $result = json_decode($rs, true);
+            
             if (is_array($result)) {
                 if (!empty($result['disks'] ?? '')) {
                     $disks_str = $result['disks'];
@@ -400,7 +401,7 @@ class SnmpInfo
      */
     public static function hrSWRunNamepy($host = "127.0.0.1")
     {
-        $result = snmp2_walk($host, config('snmp.rocommunity'), config('oid.sysInfo.list.hrSWRunNamepy.oid'), config('snmp.timeout'));
+        $result = snmprealwalk($host, config('snmp.rocommunity'), config('oid.sysInfo.list.hrSWRunNamepy.oid'), config('snmp.timeout'));
         return self::formatResult($result, __FUNCTION__);
     }
     /**
