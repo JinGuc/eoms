@@ -3,6 +3,7 @@
 namespace App\Console\Commands;
 
 use App\Models\ServerInfo;
+use App\Models\SnmpHostInfo;
 use App\Models\WebSetting;
 use Illuminate\Console\Command;
 
@@ -20,7 +21,7 @@ class DeleteServerInfo extends Command
      *
      * @var string
      */
-    protected $description = 'snmp 删除30天前的服务器信息记录';
+    protected $description = 'snmp 删除历史服务器信息记录';
 
     /**
      * Create a new command instance.
@@ -44,6 +45,7 @@ class DeleteServerInfo extends Command
         if($days<=0) $days=30;
         $times = date('Y-m-d',strtotime('-'.$days.' days'));
         $res = ServerInfo::where('created_at','<',$times)->delete();
+        $res = SnmpHostInfo::where('created_at','<',$times)->delete();
         return true;
     }
 }
