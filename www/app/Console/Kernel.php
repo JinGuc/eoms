@@ -22,8 +22,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('snmp:hostInfo')->everyMinute()->runInBackground()->withoutOverlapping(); //每分钟执行一次
         //接口状态监控
         $schedule->command('snmp:UrlStatusInfo')->everyMinute()->runInBackground()->withoutOverlapping(); //每分钟执行一次
-        //删除30天前的服务器采集数据信息
-        $schedule->command('snmp:deleteServerInfo')->daily()->runInBackground()->withoutOverlapping(); //每天凌晨零点运行任务
+        //删除服务器采集数据信息
+        $schedule->command('snmp:deleteServerInfo')->everyMinute()->runInBackground()->withoutOverlapping(); //每天凌晨零点运行任务
         //告警任务记录
         //$schedule->command('notice:HostWarning')->everyMinute()->runInBackground()->withoutOverlapping(); //每分钟执行一次
         //告警日志记录
