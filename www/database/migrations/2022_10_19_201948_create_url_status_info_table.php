@@ -20,6 +20,7 @@ class CreateUrlStatusInfoTable extends Migration
                 $table->string('url',255)->comment("接口地址");
                 $table->string('status_code',20)->comment("接口返回状态码");
                 $table->index('url_id');
+                $table->index('created_at');
                 $table->timestamps();
             });
         }
