@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\ServerInfo;
 use App\Models\SnmpHostInfo;
+use App\Models\UrlStatusInfo;
 use App\Models\WebSetting;
 use Illuminate\Console\Command;
 
@@ -46,6 +47,7 @@ class DeleteServerInfo extends Command
         $times = date('Y-m-d',strtotime('-'.$days.' days'));
         $res = ServerInfo::where('created_at','<',$times)->delete();
         $res = SnmpHostInfo::where('created_at','<',$times)->delete();
+        $res = UrlStatusInfo::where('created_at','<',$times)->delete();
         return true;
     }
 }

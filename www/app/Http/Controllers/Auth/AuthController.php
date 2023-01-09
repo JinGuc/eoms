@@ -10,6 +10,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 class AuthController extends Controller
 {
@@ -88,7 +89,15 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return ['status'=>'success','des' => 'token 更新成功','res'=>$this->respondWithToken($this->guard()->refresh())];
+        try {
+            // 刷新用户的 token
+            $token = $this->guard()->refresh();
+            return ['status'=>'success','des' => 'token 更新成功','res'=>$this->respondWithToken($token)];
+        }
+        catch (JWTException $exception)
+        {
+            return response()->json(["status"=>"fail","des"=>"登录超时,请重新登录","res"=>["message"=>$exception->getMessage()]],419);
+        }
     }
 
     /**
