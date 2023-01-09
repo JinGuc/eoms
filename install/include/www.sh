@@ -95,11 +95,11 @@ if [[ -d "${www_home_dir}" ]]; then
 fi
 chmod -R 777 ${web_root_dir}/storage/
 chmod -R 777 ${web_root_dir}/bootstrap/cache/
+cp -rp ${cur_dir}/conf/.env ${web_root_dir}/.env
 
-sed -i "s|APP_URL=http://47.104.96.84|APP_URL=http://127.0.0.1|g" ${web_root_dir}/.env
 sed -i "s/DB_HOST=127.0.0.1/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
 sed -i "s/DB_USERNAME=root/DB_USERNAME=${dbname}/g" ${web_root_dir}/.env
-sed -i "s/Jg_123456!@#/${password}/g" ${web_root_dir}/.env
+sed -i "s/123456/${password}/g" ${web_root_dir}/.env
 curl -sS https://getcomposer.org/installer | php
 mv composer.phar /usr/local/bin/composer
 composer install
