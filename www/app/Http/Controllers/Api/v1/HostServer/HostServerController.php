@@ -232,6 +232,7 @@ class HostServerController extends Controller
         ]);
         if($response->status() == 200) {
             $result = $response->json();
+            $result['msg'] = str_replace(["\r\n","\n"],PHP_EOL,$result['msg']);
             return ['status'=>'success','des'=>'操作成功','res'=>["data"=>$result['msg']]];
         }
         return ['status'=>'fail','des'=>'操作失败','res'=>[]];
