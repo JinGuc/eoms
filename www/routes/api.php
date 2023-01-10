@@ -83,7 +83,8 @@ $api->version('v1',['middleware'=>['request.id']],function($api){
             $api->post('/host/server/logDir/{HostId}','HostServer\HostServerController@getLogDir');// 获取服务日志目录
             $api->post('/host/server/log/{HostId}','HostServer\HostServerController@getLog');// 获取服务日志文件
             $api->post('/host/server/confDir/{HostId}','HostServer\HostServerController@getConfigDir');// 获取服务配置目录
-            $api->post('/host/server/conf/{HostId}','HostServer\HostServerController@getConfig');// 获取服务配置目录
+            $api->post('/host/server/conf/{HostId}','HostServer\HostServerController@getConfig');// 获取服务配置文件
+            $api->post('/host/server/setconf/{HostId}','HostServer\HostServerController@setConfig');// 服务配置文件保存
 
             $api->post('/host/server/py/info/{HostId}','HostServer\HostServerController@getPyServerData');// 获取服务配置目录
             $api->post('/host/server/py/server/operation/{HostId}','HostServer\HostServerController@serverOperation');// 获取服务配置目录

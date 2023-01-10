@@ -24,6 +24,7 @@ class SnmpHostInfo extends Migration
                 $table->datetime('runtime')->comment("运行时间");
                 $table->index("hostId");
                 $table->index("roleId");
+                $table->index('created_at');
                 $table->timestamps();
             });
         }
