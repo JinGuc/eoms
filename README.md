@@ -102,7 +102,7 @@ MySql 5.7
 
 ```
 Listen 8013
-< VirtualHost _default_:8013>
+<VirtualHost _default_:8013>
 ServerName localhost:8013
 DocumentRoot /home/data/www/public
 <Directory /home/data/www/public>
@@ -112,8 +112,8 @@ DocumentRoot /home/data/www/public
     Order Deny,Allow
     Allow from All
     DirectoryIndex index.php index.html index.htm
-<\/Directory>
-<\/VirtualHost>
+</Directory>
+</VirtualHost>
 ```
 
 ```
