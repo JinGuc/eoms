@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\testController;
+use App\WebSocket\SshWebSocketHandler;
+use BeyondCode\LaravelWebSockets\Facades\WebSocketsRouter;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +23,7 @@ Route::post('/iptables_notify', [Controller::class, 'iptablesNotify']);
 
 //供外部访问的接口
 Route::group(['namespace'=>'App\Http\Controllers'],function(){
+    Route::get('/test/ssh',[testController::class, 'testSsh']);//
     Route::get('/test/sys_info',[testController::class, 'sysInfo']);//
     Route::get('/test/snmp_info',[testController::class, 'snmpInfo']);//
     Route::get('/test/snmp_info2',[testController::class, 'snmpInfo2']);
@@ -34,3 +37,5 @@ Route::group(['namespace'=>'App\Http\Controllers'],function(){
     Route::get('/test/iptables_rules', [testController::class, 'iptablesRules']);
     Route::get('/test/warningEvent', [testController::class, 'warningEvent']);
 });
+// WebSocketsRouter::get('/ssh-websocket/{appKey}', SshWebSocketHandler::class);
+WebSocketsRouter::webSocket('/ssh-websocket/{appKey}', SshWebSocketHandler::class);

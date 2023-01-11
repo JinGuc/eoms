@@ -6,6 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^7.3|^8.0",
+        "ext-bcmath": "*",
+        "ext-json": "*",
         "beyondcode/laravel-websockets": "^1.13",
         "dingo/api": "^3.0",
         "fruitcake/laravel-cors": "^2.0",
@@ -15,14 +17,12 @@
         "laravel/tinker": "^2.5",
         "nesbot/carbon": "^2.58",
         "opensolutions/oss-snmp": "^1.0",
+        "phpseclib/phpseclib": "^3.0",
         "pusher/pusher-php-server": "~3.0",
         "rap2hpoutre/laravel-log-viewer": "^2.2",
         "studio/laravel-totem": "^8.3",
         "tymon/jwt-auth": "^1.0",
-        "webpatser/laravel-uuid": "^4.0",
-        "ext-json": "*",
-        "ext-snmp": "*",
-        "ext-bcmath": "*"
+        "webpatser/laravel-uuid": "^4.0"
     },
     "require-dev": {
         "facade/ignition": "^2.5",
