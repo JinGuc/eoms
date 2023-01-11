@@ -190,12 +190,36 @@ class HostServerController extends Controller
         if(!$SnmpHostObj) {
             return ["status" => "fail", "des" => '未知的主机', 'res'=>[]];
         }
-        $response = Http::withBasicAuth($this->auth['username'],$this->auth['password'])->asForm()->post('http://'.$SnmpHostObj->host.':'.$this->port.'/service/config/dir',[
+        $response = Http::withBasicAuth($this->auth['username'],$this->auth['password'])->asForm()->post('http://'.$SnmpHostObj->host.':'.$this->port.'/service/conf/dir',[
             "service_name"=>$server=="httpd"?"apache":$server,
         ]);
         if($response->status() == 200) {
             $result = $response->json();
-            return ['status'=>'success','des'=>'操作成功','res'=>["data"=>$result['msg']]];
+            if (!empty($result['msg'] ?? [])) {
+                foreach ($result['msg'] as $k=>&$v) {
+                    if (!empty($v['lastModificationTime'] ?? '')&&is_numeric($v['lastModificationTime'])) {
+                        $v['lastModificationTime'] = $v['LastStateChangTime'] = date('Y-m-d H:i:s', $v['lastModificationTime']);
+                    }
+                    //$v['dir'] = '/';
+                    if (!empty($v['vhost'] ?? [])) {
+                        foreach ($v['vhost'] as &$vv) {
+                            if (!empty($vv['lastModificationTime'] ?? '')&&is_numeric($vv['lastModificationTime'])) {
+                                $vv['lastModificationTime'] = $vv['LastStateChangTime'] = date('Y-m-d H:i:s', $vv['lastModificationTime']);
+                            }
+                            //$vv['fileName'] = 'vhost/'.$vv['fileName'];
+                            //$vv['dir'] = '/vhost';
+                            if(!empty($vv??[])){
+                                array_push($result['msg'],$vv);
+                            }
+                        }
+                    }
+                    if(!empty($v['vhost']??[])){
+                        unset($result['msg'][$k]);
+                    }
+                }
+                $result['msg'] = array_values($result['msg']);
+            }
+            return ['status'=>'success','des'=>'操作成功','res'=>["data"=>$result['msg']??[]]];
         }
         return ['status'=>'fail','des'=>'操作失败','res'=>[]];
     }
@@ -203,6 +227,7 @@ class HostServerController extends Controller
     public function getConfig(Request $request,$hostId)
     {
         $server = $request->get('server');
+        $fileName = $request->get('fileName')??'';
         if(!in_array($server,['mysql','nginx','httpd','ipcc','redis','php','php-fpm','snmp','docker'])) {
             return ["status" => "fail", "des" => '未知的服务', 'res'=>[]];
         }
@@ -210,8 +235,42 @@ class HostServerController extends Controller
         if(!$SnmpHostObj) {
             return ["status" => "fail", "des" => '未知的主机', 'res'=>[]];
         }
+        if(empty($fileName)){
+            return ["status" => "fail", "des" => '未知的文件', 'res'=>[]]; 
+        }
         $response = Http::withBasicAuth($this->auth['username'],$this->auth['password'])->asForm()->post('http://'.$SnmpHostObj->host.':'.$this->port.'/service/config',[
             "service_name"=>$server=="httpd"?"apache":$server,
+            "fileName"=>$fileName,
+        ]);
+        if($response->status() == 200) {
+            $result = $response->json();
+            $result['msg'] = str_replace(["\r\n","\n"],PHP_EOL,$result['msg']);
+            return ['status'=>'success','des'=>'操作成功','res'=>["data"=>$result['msg']]];
+        }
+        return ['status'=>'fail','des'=>'操作失败','res'=>[]];
+    }
+    public function setConfig(Request $request,$hostId)
+    {
+        $server = $request->get('server');
+        $fileName = $request->get('fileName')??'';
+        $data = $request->get('data')??'';
+        if(!in_array($server,['mysql','nginx','httpd','ipcc','redis','php','php-fpm','snmp','docker'])) {
+            return ["status" => "fail", "des" => '未知的服务', 'res'=>[]];
+        }
+        if(empty($fileName)){
+            return ["status" => "fail", "des" => '未知的文件', 'res'=>[]]; 
+        }
+        if(empty($data)){
+            return ["status" => "fail", "des" => '配置内容不能为空', 'res'=>[]]; 
+        }
+        $SnmpHostObj = SnmpHost::find($hostId);
+        if(!$SnmpHostObj) {
+            return ["status" => "fail", "des" => '未知的主机', 'res'=>[]];
+        }
+        $response = Http::withBasicAuth($this->auth['username'],$this->auth['password'])->asForm()->post('http://'.$SnmpHostObj->host.':'.$this->port.'/service/setconfig',[
+            "service_name"=>$server=="httpd"?"apache":$server,
+            "fileName"=>$fileName,
+            "data"=>$data,
         ]);
         if($response->status() == 200) {
             $result = $response->json();
@@ -219,7 +278,6 @@ class HostServerController extends Controller
         }
         return ['status'=>'fail','des'=>'操作失败','res'=>[]];
     }
-
     public function getLog(Request $request,$hostId)
     {
         $server = $request->get('server');

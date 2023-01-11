@@ -315,13 +315,16 @@ class HostController extends Controller
                 $role = [];
                 foreach($host["role"] as $SnmpHostRole)
                 {
-                    $SnmpRole = SnmpRole::where("key",$SnmpHostRole["type"])->first()->toArray();
-                    $role[] = [
-                        "roleId"=>$SnmpHostRole["id"],
-                        "type"=>$SnmpHostRole["type"],
-                        "running"=>$SnmpHostRole["running"],
-                        "name"=>$SnmpRole["name"],
-                    ];
+                    $SnmpRole = SnmpRole::where("key",$SnmpHostRole["type"])->first();
+                    if($SnmpRole) {
+                        $SnmpRole = $SnmpRole->toArray();
+                        $role[] = [
+                            "roleId"=>$SnmpHostRole["id"],
+                            "type"=>$SnmpHostRole["type"],
+                            "running"=>$SnmpHostRole["running"],
+                            "name"=>$SnmpRole["name"],
+                        ];
+                    }
                 }
                 $HostList[$key]["role"] = $role;
                 unset($HostList[$key]["last_server_info"]);

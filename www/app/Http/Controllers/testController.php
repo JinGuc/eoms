@@ -16,6 +16,7 @@ use App\Servers\Snmp;
 use App\Servers\NotifiCation;
 use Illuminate\Http\Request;
 use App\Events\Snmp\SysInfoEvent;
+use phpseclib3\Net\SSH2;
 
 class testController extends Controller
 {
@@ -254,4 +255,16 @@ class testController extends Controller
             "time" => time(),
         ]));
     }
+
+    public function testSsh() {
+        $host = new SSH2("47.104.96.84", 22);
+        if($host == false) {
+            return false;
+        }
+        if($host->login("root","{Jg@2022^&*}")) {
+            return true;
+        }
+        return false;
+    }
+
 }

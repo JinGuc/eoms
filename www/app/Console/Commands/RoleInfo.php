@@ -86,7 +86,6 @@ class RoleInfo extends Command
                                 //集群
                                 $url = "http://" . $device_ip . ":" . $port . "/_cluster/health";
                                 $result = request_by_curl($url,'',$opt);
-                                Log::debug("获取主机服务信息_", ["result" => $result]);
                                 Log::debug("获取主机elasticsearch", ["result" => $result]);
                                 $sArr = json_decode($result??'', true);
                                 $hRoleInfo['status'] = $params['status'] = '';
