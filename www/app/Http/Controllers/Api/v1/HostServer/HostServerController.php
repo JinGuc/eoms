@@ -195,6 +195,7 @@ class HostServerController extends Controller
         ]);
         if($response->status() == 200) {
             $result = $response->json();
+<<<<<<< HEAD
             if (!empty($result['msg'] ?? [])) {
                 foreach ($result['msg'] as $k=>&$v) {
                     if (!empty($v['lastModificationTime'] ?? '')&&is_numeric($v['lastModificationTime'])) {
@@ -220,6 +221,21 @@ class HostServerController extends Controller
                 $result['msg'] = array_values($result['msg']);
             }
             return ['status'=>'success','des'=>'操作成功','res'=>["data"=>$result['msg']??[]]];
+=======
+            foreach($result['msg'] as &$v){
+                if(!empty($v['lastModificationTime']??'')){
+                    $v['lastModificationTime'] = $v['LastStateChangTime'] = date('Y-m-d H:i:s',$v['lastModificationTime']);
+                }
+                if(!empty($v['vhost']??[])){
+                    foreach($v['vhost'] as &$vv){
+                        if(!empty($vv['lastModificationTime']??'')){
+                            $vv['lastModificationTime'] = $vv['LastStateChangTime'] = date('Y-m-d H:i:s',$vv['lastModificationTime']);
+                        }
+                    }
+                }
+            }
+            return ['status'=>'success','des'=>'操作成功','res'=>["data"=>$result['msg']]];
+>>>>>>> 1b19bc02a8fcaa1b762c2e2a298c0645515e2149
         }
         return ['status'=>'fail','des'=>'操作失败','res'=>[]];
     }
