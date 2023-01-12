@@ -272,6 +272,7 @@ class HostServerController extends Controller
             "fileName"=>$fileName,
             "data"=>$data,
         ]);
+        sleep(1);
         if($response->status() == 200) {
             $result = $response->json();
             return ['status'=>'success','des'=>'操作成功','res'=>["data"=>$result['msg']]];
@@ -352,8 +353,10 @@ class HostServerController extends Controller
         if(!$SnmpHostObj) {
             return ["status" => "fail", "des" => '未知的主机', 'res'=>[]];
         }
+        $act  = $request->get('act')??'';
         $uri = "/service_".$request->get('act');
         $service = $request->get('service');
+        $ctr = $request->get('ctr')??'';
         if(empty($service)) {
             return ["status" => "fail", "des" => '服务名必填', 'res'=>[]];
         }
@@ -365,7 +368,13 @@ class HostServerController extends Controller
         if($response->status() == 200) {
             $result = $response->json();
             if($result["state"]=="success") {
-                return ['status'=>'success','des'=>'操作成功','res'=>["data"=>$result["res"]]];
+                $des = "操作成功";
+                if(!empty($ctr)&&in_array($ctr,['start','restart','reload'])){
+                    if(strpos($result["res"]['data']['status'],'run')!==false){
+
+                    }
+                }
+                return ['status'=>'success','des'=>$des??'操作成功','res'=>["data"=>$result["res"]]];
             }
             return ['status'=>'fail','des'=>$result["des"] ?? '操作失败','res'=>["data"=>$result["res"]]];
         }
