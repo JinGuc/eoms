@@ -195,19 +195,31 @@ class HostServerController extends Controller
         ]);
         if($response->status() == 200) {
             $result = $response->json();
-            foreach($result['msg'] as &$v){
-                if(!empty($v['lastModificationTime']??'')){
-                    $v['lastModificationTime'] = $v['LastStateChangTime'] = date('Y-m-d H:i:s',$v['lastModificationTime']);
-                }
-                if(!empty($v['vhost']??[])){
-                    foreach($v['vhost'] as &$vv){
-                        if(!empty($vv['lastModificationTime']??'')){
-                            $vv['lastModificationTime'] = $vv['LastStateChangTime'] = date('Y-m-d H:i:s',$vv['lastModificationTime']);
+            if (!empty($result['msg'] ?? [])) {
+                foreach ($result['msg'] as $k=>&$v) {
+                    if (!empty($v['lastModificationTime'] ?? '')&&is_numeric($v['lastModificationTime'])) {
+                        $v['lastModificationTime'] = $v['LastStateChangTime'] = date('Y-m-d H:i:s', $v['lastModificationTime']);
+                    }
+                    //$v['dir'] = '/';
+                    if (!empty($v['vhost'] ?? [])) {
+                        foreach ($v['vhost'] as &$vv) {
+                            if (!empty($vv['lastModificationTime'] ?? '')&&is_numeric($vv['lastModificationTime'])) {
+                                $vv['lastModificationTime'] = $vv['LastStateChangTime'] = date('Y-m-d H:i:s', $vv['lastModificationTime']);
+                            }
+                            //$vv['fileName'] = 'vhost/'.$vv['fileName'];
+                            //$vv['dir'] = '/vhost';
+                            if(!empty($vv??[])){
+                                array_push($result['msg'],$vv);
+                            }
                         }
                     }
+                    if(!empty($v['vhost']??[])){
+                        unset($result['msg'][$k]);
+                    }
                 }
+                $result['msg'] = array_values($result['msg']);
             }
-            return ['status'=>'success','des'=>'操作成功','res'=>["data"=>$result['msg']]];
+            return ['status'=>'success','des'=>'操作成功','res'=>["data"=>$result['msg']??[]]];
         }
         return ['status'=>'fail','des'=>'操作失败','res'=>[]];
     }
