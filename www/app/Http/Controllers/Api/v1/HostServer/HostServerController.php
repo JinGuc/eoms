@@ -372,7 +372,7 @@ class HostServerController extends Controller
                 if (!empty($ctr)) {
                     if (in_array($ctr, ['start', 'restart', 'reload'])) {
                         if (strpos($result["res"]['status'], 'run') !== false) {
-                            switch ($act) {
+                            switch ($ctr) {
                                 case 'start':
                                     $des = "启动成功";
                                     break;
@@ -389,7 +389,7 @@ class HostServerController extends Controller
                             $des = "操作失败";
                         }
                     }else{
-                        if($act=='stop'){
+                        if($ctr=='stop'){
                             if (strpos($result["res"]['status'], 'run') === false) { 
                                 $des = "停止成功";
                             }else{
