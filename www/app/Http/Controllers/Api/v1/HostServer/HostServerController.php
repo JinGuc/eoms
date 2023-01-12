@@ -369,9 +369,33 @@ class HostServerController extends Controller
             $result = $response->json();
             if($result["state"]=="success") {
                 $des = "操作成功";
-                if(!empty($ctr)&&in_array($ctr,['start','restart','reload'])){
-                    if(strpos($result["res"]['data']['status'],'run')!==false){
-
+                if (!empty($ctr)) {
+                    if (in_array($ctr, ['start', 'restart', 'reload'])) {
+                        if (strpos($result["res"]['data']['status'], 'run') !== false) {
+                            switch ($act) {
+                                case 'start':
+                                    $des = "启动成功";
+                                    break;
+                                case 'restart':
+                                    $des = "重启成功";
+                                    break;
+                                case 'reload':
+                                    $des = "重载成功";
+                                    break;
+                                default:
+                                    $des = "启动成功";
+                            }
+                        }else{
+                            $des = "操作失败";
+                        }
+                    }else{
+                        if($act=='stop'){
+                            if (strpos($result["res"]['data']['status'], 'run') === false) { 
+                                $des = "停止成功";
+                            }else{
+                                $des = "停止失败"; 
+                            }
+                        }
                     }
                 }
                 return ['status'=>'success','des'=>$des??'操作成功','res'=>["data"=>$result["res"]]];
