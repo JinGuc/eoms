@@ -34,7 +34,8 @@ class SystemTimeNotificationRole
         $server_id = $HostIfo['id'];
         $device_ip = $HostIfo['host'];
         $hostName = $HostIfo['name'];
-        $sinfo = ServerInfo::where('created_at', '>=', $time1)->where('created_at', '<=', $time2)->where('hostId', '=', $server_id)->limit(1)->order('id desc')->get();
+        
+        $sinfo = ServerInfo::where('created_at', '>=', $time1)->where('created_at', '<=', $time2)->where('hostId', '=', $server_id)->limit(1)->orderby('id','desc')->get();
         if(!empty($sinfo)){
             $sinfo = $sinfo->toArray();
         }
