@@ -73,12 +73,16 @@ class HostController extends Controller
             $SnmpHostObj = $SnmpHostObj->toArray();
             if(mb_strlen($SnmpHostObj["username"])>0)
             {
-                $SnmpHostObj["username"] = Crypt::encryptString($SnmpHostObj["username"]);
+                try {
+                    $SnmpHostObj["username"] = Crypt::decryptString($SnmpHostObj["username"]);
+                }
+                catch (DecryptException $e) {
+                    Log::error("主机信息解密失败，数据将直接展示");
+                }
             }
-            if(mb_strlen($SnmpHostObj["password"])>0)
-            {
-                $SnmpHostObj["password"] = Crypt::encryptString($SnmpHostObj["password"]);
-            }
+            $SnmpHostObj["hasUsername"] = strlen($SnmpHostObj["username"])>0;
+            $SnmpHostObj["hasPassword"] = strlen($SnmpHostObj["password"])>0;
+            $SnmpHostObj["has_ssh_connect_secret"] = strlen($SnmpHostObj["ssh_connect_secret"])>0;
             $role = [];
             foreach($SnmpHostObj["role"] as $SnmpHostRole)
             {
@@ -119,18 +123,38 @@ class HostController extends Controller
 
         }
         else{
+            try {
+                $request->merge([
+                    'password' => $request->filled('password')?Crypt::decryptString($request->input('password')):"",
+                    'ssh_connect_secret' => $request->filled('ssh_connect_secret')?Crypt::decryptString($request->input('ssh_connect_secret')):""
+                ]);
+            }
+            catch (DecryptException $e) {
+                Log::error("主机信息解密失败");
+            }
             $validate = Validator::make($request->all(),[
                 "host"=>[
                     "required",
                     "ip",
                 ],
+                "username"=>"required",
+                "password"=>"required",
+                "ssh_port"=>"required",
                 "name"=>"required",
                 "type"=>"required",
+                "ssh_connect_secret"=>['required','min:6', 'max:8','alpha_num']
             ],[
                 "host.required"=>"ip地址不能为空",
                 "host.ip"=>"ip地址非法",
                 "name.required"=>"主机名称不能为空",
                 "type.required"=>"主机类型不能为空",
+                "username.required"=>"主机用户名不能为空",
+                "password.required"=>"主机密码不能为空",
+                "ssh_port.required"=>"ssh端口不能为空",
+                "ssh_connect_secret.required"=>"二次验证口令不能为空",
+                "ssh_connect_secret.min"=>"二次验证口令最少6位",
+                "ssh_connect_secret.max"=>"二次验证口令最多8位",
+                "ssh_connect_secret.alpha_num"=>"二次验证口令只能包含字母数字",
             ]);
             if($validate->fails()){
                 return ["status" => "fail", "des" => $validate->errors()->first(), 'res'=>[]];
@@ -146,8 +170,10 @@ class HostController extends Controller
             $SnmpHostObj->name = $request->input('name');
             $SnmpHostObj->host = $request->input('host');
             $SnmpHostObj->type = $request->input('type','1');
-            $SnmpHostObj->username = $request->input('username','');
-            $SnmpHostObj->password = $request->input('password','');
+            $SnmpHostObj->ssh_port = $request->input('ssh_port','0');
+            $SnmpHostObj->username = $request->filled('username')?Crypt::encryptString($request->input('username')):"";
+            $SnmpHostObj->password = $request->filled('password')?Crypt::encryptString($request->input('password')):"";
+            $SnmpHostObj->ssh_connect_secret = $request->filled('ssh_connect_secret')?Crypt::encryptString($request->input('ssh_connect_secret')):"";
             $SnmpHostObj->status = $request->input('status',SnmpHost::$_status['on']['code']);
             $SnmpHostObj->running = 0;
         }
@@ -396,23 +422,21 @@ class HostController extends Controller
      */
     public function getEncryptData(Request $request)
     {
-        $password = Rsa::deRSA_private($request->input("password"));
-        if($password){
-            $userInfo = $user = auth()->user();
-            if(Hash::check($password,$userInfo->password))
+        $SnmpHostObj = SnmpHost::find($request->input('hostId'));
+        if($SnmpHostObj){
+            $encodeData = $SnmpHostObj->{$request->input("name")};
+            if($encodeData)
             {
                 try{
-                    $hostUserName = Crypt::decryptString($request->input("hostUserName"));
-                    $hostPassword = Crypt::decryptString($request->input("hostPassword"));
-                    $data = ["username"=>$hostUserName,"hostPassword"=>$hostPassword];
-                    return ["status" => "success", "des" => "获取成功", "res" => ["data"=>$data]];
+                    $decodeData = Crypt::decryptString($encodeData);
+                    return ["status" => "success", "des" => "获取成功", "res" => ["data"=>$decodeData]];
                 } catch (DecryptException $e) {
                     return ["status" => "success", "des" => "解密失败,数据不完整", "res" => ["message"=>$e->getMessage()]];
                 }
             }
-            return ["status" => "fail", "des" => "效验失败", "res" => []];
+            return ["status" => "success", "des" => "获取成功", "res" => ["data"=>[]]];
         }
-        return ["status" => "fail", "des" => "请输入密码", "res" => []];
+        return ["status" => "fail", "des" => "未知的主机", "res" => []];
     }
 
 

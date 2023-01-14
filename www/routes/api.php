@@ -100,6 +100,9 @@ $api->version('v1',['middleware'=>['request.id']],function($api){
             $api->post('/web/viewinterface/detail','WebSetting\ViewInterfaceController@detail');//接口监控详情
             $api->post('/web/viewinterface/statusList','WebSetting\ViewInterfaceController@urlstatusList');//接口状态监控列表
 
+
+            $api->post('/host/ssh/connectionid','Host\HostSshController@createConnectionId'); // 主机ssh连接id生产
+
         });
     });
 });

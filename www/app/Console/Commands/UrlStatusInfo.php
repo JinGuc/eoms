@@ -112,11 +112,12 @@ class UrlStatusInfo extends Command
                         }else{
                             $status_code = 0;
                         }
+                        $http_code = $status_code??0;
                         $notice_ok = 0;
                         $params['status_code'] = $status_code;
                         Snmp::insertUrlStatusInfo($params);
                     }else{
-                        $status_code = 200;
+                        $http_code = 200;
                         $notice_ok = 1;
                     }
 

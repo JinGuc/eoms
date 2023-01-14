@@ -1,6 +1,8 @@
 <?php
 namespace App\WebSocket;
 
+use App\Models\SnmpHost;
+use Illuminate\Support\Facades\Crypt;
 use Ratchet\ConnectionInterface;
 use Ratchet\RFC6455\Messaging\MessageInterface;
 use Ratchet\WebSocket\MessageComponentInterface;
@@ -50,7 +52,6 @@ class SshWebSocketHandler implements MessageComponentInterface
         }
         switch (key($data)) {
             case 'data':
-                echo $data['data']['data']."\n";
                 if($this->connection[$from->resourceId]){
                     $this->connection[$from->resourceId]->write($data['data']['data']."\n");
                     $this->connection[$from->resourceId]->setTimeout(0.01);
@@ -66,20 +67,34 @@ class SshWebSocketHandler implements MessageComponentInterface
                 break;
             case 'auth':
                 echo "1\n";
-                $from->send(mb_convert_encoding("Connecting to ".$data['auth']['server']."....\r\n", "UTF-8"));
-                if ($this->connectSSH($data['auth']['idconnection'], $data['auth']['server'], $data['auth']['port'], $data['auth']['user'], $data['auth']['password'], $from, $data['auth']['type'] ?? 1, $data['auth']['certificate'] ?? '')) {
-                    echo "3\n";
-
-                    $from->send(mb_convert_encoding("Connected....", "UTF-8"));
-                    $this->connection[$from->resourceId]->setTimeout(1);
-                    if ($line = $this->connection[$from->resourceId]->read()) {
-                        $from->send(mb_convert_encoding($line, "UTF-8"));
-                        $this->resend($line, $from);
-                    }
-                    echo "4\n";
-                } else {
-                    $from->send(mb_convert_encoding("Error, can not connect to the server. Check the credentials\r\n", "UTF-8"));
+                $hostInfo = $this->getHostInfo($data['auth']["hostId"]);
+                if(!$this->checkHostInfo($hostInfo)) {
+                    $from->send(mb_convert_encoding("连接错误, 主机id:{$data['auth']["hostId"]} 服务器连接信息未设置\r\n", "UTF-8"));
                     $from->close();
+                }
+                else
+                {
+                    if($hostInfo["ssh_connect_secret"] == $data['auth']['ssh_connect_secret']) {
+                        $from->send(mb_convert_encoding("Connecting to ".$hostInfo['server']."....\r\n", "UTF-8"));
+                        if ($this->connectSSH($data['auth']['idconnection'], $hostInfo['server'], $hostInfo['port'], $hostInfo['username'], $hostInfo['password'], $from, $data['auth']['type'] ?? 1, $data['auth']['certificate'] ?? '')) {
+                            echo "3\n";
+
+                            $from->send(mb_convert_encoding("Connected....", "UTF-8"));
+                            $this->connection[$from->resourceId]->setTimeout(1);
+                            if ($line = $this->connection[$from->resourceId]->read()) {
+                                $from->send(mb_convert_encoding($line, "UTF-8"));
+                                $this->resend($line, $from);
+                            }
+                            echo "4\n";
+                        } else {
+                            $from->send(mb_convert_encoding("Error, can not connect to the server. Check the credentials\r\n", "UTF-8"));
+                            $from->close();
+                        }
+                    }
+                    else {
+                        $from->send(mb_convert_encoding("Error, can not connect to the server. Check your connect_secret\r\n", "UTF-8"));
+                        $from->close();
+                    }
                 }
                 break;
             case 'sharessh':
@@ -173,5 +188,31 @@ class SshWebSocketHandler implements MessageComponentInterface
     {
         var_dump($e->getMessage());
         $conn->close();
+    }
+
+    protected function getHostInfo($hostId) {
+        $SnmpHostObj = SnmpHost::find($hostId);
+        if($SnmpHostObj) {
+            return [
+                "server"=>$SnmpHostObj->host,
+                "port"=>$SnmpHostObj->ssh_port,
+                "username"=>$SnmpHostObj->username?Crypt::decryptString($SnmpHostObj->username):"",
+                "password"=>$SnmpHostObj->password?Crypt::decryptString($SnmpHostObj->password):"",
+                "ssh_connect_secret"=>$SnmpHostObj->ssh_connect_secret?Crypt::decryptString($SnmpHostObj->ssh_connect_secret):"",
+            ];
+        }
+        return [];
+    }
+
+    protected function checkHostInfo($data) {
+        if(count($data)>0) {
+            foreach($data as $key=>$value) {
+                if(strlen($value)==0) {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return false;
     }
 }
