@@ -137,12 +137,19 @@ class NotifiCation{
                     }
                 }
             }
-            $id = NotificationInfo::where('relate_id', '=', $params['relate_id'])->where('relate_table', '=', $params['relate_table'])->where('notificationType', '=', $params['type'])->where('status', '=', 0)->orderBy('id', 'desc')->limit(1)->value('id');
-            $id = intval($id);
+            $NotificationInfo = NotificationInfo::where('relate_id', '=', $params['relate_id'])->where('relate_table', '=', $params['relate_table'])->where('notificationType', '=', $params['type'])->where('status', '=', 0)->orderBy('id', 'desc')->limit(1)->get();
+            if (!empty($NotificationInfo)) {
+                $NotificationInfo = $NotificationInfo->toArray();
+                $id = intval($NotificationInfo[0]['id']??0);
+            }
         }else{
-            $id = NotificationInfo::where('hostId', '=', $params['hostId'])->where('notificationType', '=', $params['type'])->where('status', '=', 0)->orderBy('id', 'desc')->limit(1)->value('id');
-            $id = intval($id);
+            $NotificationInfo = NotificationInfo::where('hostId', '=', $params['hostId'])->where('notificationType', '=', $params['type'])->where('status', '=', 0)->orderBy('id', 'desc')->limit(1)->get();
+            if (!empty($NotificationInfo)) {
+                $NotificationInfo = $NotificationInfo->toArray();
+                $id = intval($NotificationInfo[0]['id']??0);
+            }
         }
+        Log::debug('INFO',['data'=>$id]);
         if ($id == 0) {
             $data = [
                 'hostId' => $params['hostId']??0,
@@ -162,8 +169,13 @@ class NotifiCation{
             $infoId = NotificationInfo::insertGetId($data);
         } else {
             //
-            $NotificationInfo_created_at = NotificationInfo::where('id', $id)->value('created_at');
-            $stopNoticeTime = date('Y-m-d H:i:s', strtotime($NotificationInfo_created_at) + ($params['continueCycle']) * 60);
+            $NotificationInfo_created_at = $NotificationInfo['created_at']??'';
+            $NotificationInfo_stopNoticeTime = $NotificationInfo['stopNoticeTime']??'';
+            if($NotificationInfo_stopNoticeTime<date('Y-m-d')){
+                $stopNoticeTime = date('Y-m-d H:i:s', strtotime($NotificationInfo_created_at) + ($params['continueCycle']) * 60);
+            }else{
+                $stopNoticeTime = date('Y-m-d H:i:s', time() + ($params['continueCycle']) * 60);
+            }
             $data = [
                 'notificationType' => $params['type'],
                 'sendType' => $params['sendType'],
