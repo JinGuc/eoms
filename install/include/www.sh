@@ -95,7 +95,9 @@ if [[ -d "${www_home_dir}" ]]; then
 fi
 chmod -R 777 ${web_root_dir}/storage/
 chmod -R 777 ${web_root_dir}/bootstrap/cache/
-cp -rp ${cur_dir}/conf/.env ${web_root_dir}/.env
+cp -rp ${web_root_dir}/.env.example ${web_root_dir}/.env
+cd ${web_root_dir} && /usr/local/php/bin/php artisan key:generate
+
 
 sed -i "s/DB_HOST=127.0.0.1/DB_HOST=${dbhost}/g" ${web_root_dir}/.env
 sed -i "s/DB_USERNAME=root/DB_USERNAME=${dbname}/g" ${web_root_dir}/.env
